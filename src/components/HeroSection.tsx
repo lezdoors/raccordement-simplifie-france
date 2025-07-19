@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Zap, Clock, Shield, Award } from "lucide-react";
-import heroIllustration from "@/assets/hero-illustration.png";
+import heroIllustration from "@/assets/hero-electrical-infrastructure.svg";
 
 const HeroSection = () => {
   return (
