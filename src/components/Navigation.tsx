@@ -9,33 +9,39 @@ const Navigation = () => {
     <nav className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
+          {/* Logo Section */}
           <div className="flex items-center">
-            <Zap className="h-8 w-8 text-primary mr-2" />
-            <h1 className="text-xl font-bold text-foreground">raccordement.net</h1>
+            {/* Reserve space for logo - h-12 (48px) is optimal for header logos */}
+            <div className="h-12 w-auto mr-4">
+              {/* Your logo will go here */}
+              <div className="h-full w-24 bg-muted rounded flex items-center justify-center text-xs text-muted-foreground">
+                Logo Here
+              </div>
+            </div>
+            <div className="hidden sm:block">
+              <h1 className="text-lg font-bold text-foreground">Service Raccordement Électricité</h1>
+              <p className="text-sm text-muted-foreground">Votre partenaire raccordement au réseau d'électricité d'Enedis</p>
+            </div>
           </div>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-8">
-              <a href="#" className="text-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors">
-                Accueil
-              </a>
-              <a href="#" className="text-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors">
-                Services
-              </a>
-              <a href="#" className="text-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors">
-                Tarifs
-              </a>
-              <a href="#" className="text-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors">
-                Contact
-              </a>
-            </div>
+          <div className="hidden lg:flex items-center space-x-8">
+            <a href="/contact" className="text-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors">
+              Contact
+            </a>
+            <a href="#" className="text-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors">
+              Foire aux questions
+            </a>
+            <a href="/a-propos" className="text-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors">
+              Qui sommes-nous
+            </a>
           </div>
 
-          <div className="hidden md:block">
-            <Button variant="hero" size="lg">
-              Démarrer ma demande
-            </Button>
+          {/* Contact Info */}
+          <div className="hidden md:block text-right">
+            <p className="text-sm text-muted-foreground">Appelez nous au</p>
+            <p className="text-lg font-bold text-primary">01 88 61 50 00</p>
+            <p className="text-xs text-muted-foreground">Du lundi au vendredi de 9h à 19h</p>
           </div>
 
           {/* Mobile menu button */}
