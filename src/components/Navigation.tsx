@@ -11,16 +11,16 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo Section */}
           <div className="flex items-center">
-            {/* Reserve space for logo - h-16 (64px) is better for professional headers */}
             <div className="h-16 w-auto mr-4">
-              {/* Your logo will go here */}
-              <div className="h-full w-32 bg-muted rounded flex items-center justify-center text-sm text-muted-foreground">
-                Logo Here
-              </div>
+              <img 
+                src="/lovable-uploads/07de93d6-9367-486b-8b5d-f050c8703a3e.png" 
+                alt="Logo" 
+                className="h-full w-auto object-contain"
+              />
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-lg font-bold text-foreground">Service Raccordement Électricité</h1>
-              <p className="text-sm text-muted-foreground">Votre partenaire raccordement au réseau d'électricité d'Enedis</p>
+              <h1 className="text-lg font-bold text-foreground">EnerConnect Pro</h1>
+              <p className="text-sm text-muted-foreground">Solutions de raccordement électrique professionnelles</p>
             </div>
           </div>
           
