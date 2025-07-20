@@ -9,7 +9,7 @@ const Navigation = () => {
           {/* Logo Section */}
           <div className="flex items-center">
             <div className="h-16 w-auto mr-4">
-              <img src="/lovable-uploads/07de93d6-9367-486b-8b5d-f050c8703a3e.png" alt="Logo" className="h-full w-auto object-contain" />
+              <img src="/lovable-uploads/55f86fce-e7c0-4a55-95e2-4c1c19dcbc0f.png" alt="Logo" className="h-full w-auto object-contain" />
             </div>
             <div className="hidden sm:block">
               
