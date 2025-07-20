@@ -2,9 +2,15 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import EnedisRaccordement from "./pages/EnedisRaccordement";
+import Merci from "./pages/Merci";
+import APropos from "./pages/APropos";
+import Contact from "./pages/Contact";
+import MentionsLegales from "./pages/MentionsLegales";
+import Confidentialite from "./pages/Confidentialite";
 
 const queryClient = new QueryClient();
 
@@ -16,6 +22,13 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/enedis-raccordement" element={<EnedisRaccordement />} />
+          <Route path="/commencer" element={<Navigate to="/enedis-raccordement" replace />} />
+          <Route path="/merci" element={<Merci />} />
+          <Route path="/a-propos" element={<APropos />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/mentions-legales" element={<MentionsLegales />} />
+          <Route path="/confidentialite" element={<Confidentialite />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
