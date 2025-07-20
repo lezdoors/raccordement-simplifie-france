@@ -11,10 +11,10 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo Section */}
           <div className="flex items-center">
-            {/* Reserve space for logo - h-12 (48px) is optimal for header logos */}
-            <div className="h-12 w-auto mr-4">
+            {/* Reserve space for logo - h-16 (64px) is better for professional headers */}
+            <div className="h-16 w-auto mr-4">
               {/* Your logo will go here */}
-              <div className="h-full w-24 bg-muted rounded flex items-center justify-center text-xs text-muted-foreground">
+              <div className="h-full w-32 bg-muted rounded flex items-center justify-center text-sm text-muted-foreground">
                 Logo Here
               </div>
             </div>
