@@ -10,21 +10,13 @@ const Navigation = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo Section */}
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate("/")}>
-            <div className="h-12 w-auto">
+          <div className="flex items-center cursor-pointer" onClick={() => navigate("/")}>
+            <div className="h-16 w-auto">
               <img 
-                src="/lovable-uploads/18768f4f-172e-4185-83a0-540b1ab070ce.png" 
+                src="/src/assets/logo-full.svg" 
                 alt="Logo Raccordement Connect" 
                 className="h-full w-auto object-contain" 
               />
-            </div>
-            <div className="hidden sm:block">
-              <div className="text-base font-bold text-white uppercase tracking-wide">
-                VOTRE PARTENAIRE
-              </div>
-              <div className="text-xs text-white/90 italic font-light tracking-wider">
-                Raccordement au réseau d'électricité d'Enedis
-              </div>
             </div>
           </div>
           
