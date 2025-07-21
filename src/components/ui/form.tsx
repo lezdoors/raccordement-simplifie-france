@@ -51,6 +51,12 @@ const useFormField = () => {
     throw new Error("useFormField should be used within <FormItem>")
   }
 
+  // Debug logging to understand the structure
+  if (!itemContext.id) {
+    console.error('itemContext missing id:', itemContext)
+    throw new Error("useFormField: itemContext is missing id property")
+  }
+
   const { getFieldState, formState } = useFormContext()
   const fieldState = getFieldState(fieldContext.name, formState)
   const { id } = itemContext
