@@ -42,7 +42,7 @@ const ServiceTypesSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-12">
           {services.map((service) => (
             <div key={service.title} className="text-center p-6 bg-background rounded-lg border hover:shadow-lg transition-shadow duration-300">
               <div className="mx-auto mb-4 p-4 bg-primary/10 rounded-lg w-16 h-16 flex items-center justify-center">
