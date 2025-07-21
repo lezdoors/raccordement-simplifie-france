@@ -8,31 +8,31 @@
 
 @layer base {
   :root {
-    /* Royal Blue & Gold Premium Palette */
+    /* Deep Navy Monochrome Professional Palette */
     --background: 0 0% 100%;
-    --foreground: 220 26% 14%;
+    --foreground: 210 24% 16%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 26% 14%;
+    --card-foreground: 210 24% 16%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 26% 14%;
+    --popover-foreground: 210 24% 16%;
 
-    /* Royal Blue Primary */
-    --primary: 220 91% 24%;
+    /* Deep Navy Primary */
+    --primary: 210 24% 16%;
     --primary-foreground: 0 0% 100%;
 
-    /* Sophisticated Secondary */
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 220 26% 14%;
+    /* Light Gray Secondary */
+    --secondary: 0 0% 98%;
+    --secondary-foreground: 210 24% 16%;
 
-    /* Elegant Muted */
-    --muted: 220 14% 98%;
-    --muted-foreground: 220 9% 46%;
+    /* Clean Muted */
+    --muted: 0 0% 97%;
+    --muted-foreground: 210 10% 46%;
 
-    /* Luxury Gold Accent */
-    --accent: 42 78% 60%;
-    --accent-foreground: 220 26% 14%;
+    /* Subtle Accent - Light Gray */
+    --accent: 0 0% 95%;
+    --accent-foreground: 210 24% 16%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
@@ -41,25 +41,24 @@
     --input: 220 13% 91%;
     --ring: 220 91% 24%;
 
-    /* Premium Design Tokens */
-    --royal-blue: 220 91% 24%;
-    --royal-blue-light: 220 91% 35%;
-    --royal-blue-dark: 220 91% 18%;
-    --luxury-gold: 42 78% 60%;
-    --luxury-gold-light: 42 78% 70%;
-    --luxury-gold-dark: 42 78% 50%;
+    /* Professional Design Tokens */
+    --deep-navy: 210 24% 16%;
+    --deep-navy-light: 210 24% 25%;
+    --deep-navy-dark: 210 24% 12%;
+    --clean-white: 0 0% 100%;
+    --light-gray: 0 0% 98%;
+    --medium-gray: 0 0% 95%;
     
-    /* Premium Gradients */
-    --gradient-royal: linear-gradient(135deg, hsl(220 91% 24%), hsl(220 91% 35%));
-    --gradient-luxury: linear-gradient(135deg, hsl(220 91% 24%), hsl(42 78% 60%));
-    --gradient-hero: linear-gradient(135deg, hsl(220 91% 18%) 0%, hsl(220 91% 24%) 50%, hsl(220 91% 35%) 100%);
+    /* Professional Gradients */
+    --gradient-navy: linear-gradient(135deg, hsl(210 24% 16%), hsl(210 24% 25%));
+    --gradient-hero: linear-gradient(135deg, hsl(210 24% 12%) 0%, hsl(210 24% 16%) 50%, hsl(210 24% 20%) 100%);
     --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
     
-    /* Premium Shadows & Effects */
-    --shadow-luxury: 0 20px 40px -10px hsl(220 91% 24% / 0.15);
-    --shadow-floating: 0 32px 64px -12px hsl(220 91% 24% / 0.20);
-    --shadow-glass: 0 8px 32px hsl(220 91% 24% / 0.12);
-    --shadow-premium: 0 4px 16px hsl(220 91% 24% / 0.08);
+    /* Professional Shadows & Effects */
+    --shadow-luxury: 0 20px 40px -10px hsl(210 24% 16% / 0.15);
+    --shadow-floating: 0 32px 64px -12px hsl(210 24% 16% / 0.20);
+    --shadow-glass: 0 8px 32px hsl(210 24% 16% / 0.12);
+    --shadow-premium: 0 4px 16px hsl(210 24% 16% / 0.08);
     
     /* Glass Morphism */
     --glass-bg: rgba(255, 255, 255, 0.08);
@@ -75,10 +74,10 @@
     --font-display: 'Playfair Display', serif;
     --font-body: 'Inter', sans-serif;
     
-    /* Luxury Spacing */
-    --space-luxury: 6rem;
-    --space-premium: 4rem;
-    --space-elegant: 2.5rem;
+    /* Mobile-Optimized Spacing */
+    --space-luxury: 4rem;
+    --space-premium: 2.5rem;
+    --space-elegant: 1.5rem;
     
     --radius: 1rem;
 
@@ -110,17 +109,17 @@
     --popover: 220 26% 9%;
     --popover-foreground: 0 0% 95%;
 
-    --primary: 220 91% 45%;
-    --primary-foreground: 220 26% 7%;
+    --primary: 210 24% 25%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 26% 12%;
+    --secondary: 210 24% 12%;
     --secondary-foreground: 0 0% 95%;
 
-    --muted: 220 26% 12%;
-    --muted-foreground: 220 9% 65%;
+    --muted: 210 24% 12%;
+    --muted-foreground: 210 10% 65%;
 
-    --accent: 42 78% 65%;
-    --accent-foreground: 220 26% 7%;
+    --accent: 0 0% 90%;
+    --accent-foreground: 210 24% 16%;
 
     --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 98%;
@@ -280,16 +279,35 @@
 /* Mobile-First Responsive Design */
 @media (max-width: 768px) {
   .space-luxury {
-    padding: calc(var(--space-luxury) * 0.6);
+    padding: calc(var(--space-luxury) * 0.5);
   }
   
   .space-premium {
-    padding: calc(var(--space-premium) * 0.7);
+    padding: calc(var(--space-premium) * 0.6);
+  }
+  
+  .space-elegant {
+    padding: calc(var(--space-elegant) * 0.7);
+  }
+  
+  /* Mobile spacing utilities */
+  .mobile-tight {
+    padding: 1rem 0;
+  }
+  
+  .mobile-section {
+    padding: 1.5rem 1rem;
   }
   
   /* Ensure readability on mobile */
   body {
     font-size: 16px;
     line-height: 1.6;
+  }
+  
+  /* Touch targets */
+  .touch-target {
+    min-height: 48px;
+    min-width: 48px;
   }
 }

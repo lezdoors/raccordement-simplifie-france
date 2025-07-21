@@ -8,12 +8,12 @@ const Navigation = () => {
   const navigate = useNavigate();
 
   return (
-    <nav className="bg-gradient-to-r from-primary to-primary/90 text-white sticky top-0 z-50 shadow-lg">
+    <nav className="bg-primary text-white sticky top-0 z-50 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex justify-between items-center h-16 md:h-20">
           {/* Logo Section */}
           <div className="flex items-center cursor-pointer" onClick={() => navigate("/")}>
-            <div className="h-16 w-auto mr-4">
+            <div className="h-12 md:h-16 w-auto mr-3 md:mr-4">
               <img 
                 src="/lovable-uploads/55f86fce-e7c0-4a55-95e2-4c1c19dcbc0f.png" 
                 alt="Portail en ligne - Raccordement électrique" 
@@ -21,8 +21,8 @@ const Navigation = () => {
               />
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-xl font-bold text-white">Portail en ligne</h1>
-              <p className="text-sm text-white/80">Service Raccordement Électrique</p>
+              <h1 className="text-lg md:text-xl font-bold text-white">Portail en ligne</h1>
+              <p className="text-xs md:text-sm text-white/80">Service Raccordement</p>
             </div>
           </div>
           
@@ -43,31 +43,35 @@ const Navigation = () => {
           </div>
 
           {/* Contact Info & CTA */}
-          <div className="hidden md:flex items-center space-x-6">
-            <div className="text-right">
+          <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
+            <a href="tel:0977405060" className="text-right hover:text-white/90 transition-colors">
               <div className="flex items-center gap-2 text-sm text-white/90">
                 <Phone className="w-4 h-4" />
-                <span>Appelez nous au</span>
+                <span className="hidden lg:inline">Appelez nous au</span>
               </div>
-              <p className="text-lg font-bold text-white">09 70 70 95 70</p>
-              <p className="text-xs text-white/80">Du lundi au vendredi de 9h à 19h</p>
-            </div>
+              <p className="text-lg font-bold text-white">09 77 40 50 60</p>
+              <p className="text-xs text-white/80 hidden lg:block">Lun-Ven 9h-19h</p>
+            </a>
             
             <Button 
               variant="secondary"
               size="lg"
               onClick={() => navigate("/raccordement-enedis")}
-              className="bg-white text-primary hover:bg-white/90 font-semibold"
+              className="bg-white text-primary hover:bg-white/90 font-semibold touch-target px-4 lg:px-6"
             >
-              Démarrer ma demande
+              <span className="hidden lg:inline">Démarrer ma demande</span>
+              <span className="lg:hidden">Demande</span>
             </Button>
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center gap-2">
+            <a href="tel:0977405060" className="text-white/90 hover:text-white transition-colors touch-target">
+              <Phone className="h-5 w-5" />
+            </a>
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)} 
-              className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-white/80 hover:bg-white/10"
+              className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-white/80 hover:bg-white/10 touch-target"
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
@@ -92,13 +96,14 @@ const Navigation = () => {
               À propos
             </a>
             <div className="px-3 py-4 border-t border-white/20">
-              <div className="text-center mb-3">
+              <a href="tel:0977405060" className="block text-center mb-3 touch-target hover:bg-white/5 rounded-lg py-2">
                 <p className="text-sm text-white/90">Appelez nous au</p>
-                <p className="text-lg font-bold text-white">09 70 70 95 70</p>
-              </div>
+                <p className="text-lg font-bold text-white">09 77 40 50 60</p>
+                <p className="text-xs text-white/70">Lun-Ven 9h-19h</p>
+              </a>
               <Button 
                 onClick={() => navigate("/raccordement-enedis")}
-                className="w-full bg-white text-primary hover:bg-white/90"
+                className="w-full bg-white text-primary hover:bg-white/90 touch-target"
               >
                 Démarrer ma demande
               </Button>
@@ -109,4 +114,5 @@ const Navigation = () => {
     </nav>
   );
 };
+
 export default Navigation;
