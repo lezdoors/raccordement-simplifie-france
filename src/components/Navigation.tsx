@@ -44,11 +44,11 @@ const Navigation = () => {
                 <Phone className="w-4 h-4" />
                 <span>Appelez nous au</span>
               </div>
-              <a href="tel:0970709570" className="text-lg font-bold text-white hover:text-white/90 transition-colors">09 70 70 95 70</a>
+              <a href="tel:0970959570" className="text-lg font-bold text-white hover:text-white/90 transition-colors">09 70 95 95 70</a>
               <p className="text-xs text-white/80">Du lundi au vendredi de 9h à 19h</p>
             </div>
             
-            <Button variant="default" size="lg" onClick={() => navigate("/raccordement-enedis")} className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold">
+            <Button variant="default" size="lg" onClick={() => navigate("/raccordement-enedis")} className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold min-h-[48px] touch-target">
               Démarrer ma demande
             </Button>
           </div>
@@ -80,9 +80,9 @@ const Navigation = () => {
             <div className="px-3 py-4 border-t border-white/20">
               <div className="text-center mb-3">
                 <p className="text-sm text-white/90">Appelez nous au</p>
-                <a href="tel:0970709570" className="text-lg font-bold text-white hover:text-white/90 transition-colors">09 70 70 95 70</a>
+                <a href="tel:0970959570" className="text-lg font-bold text-white hover:text-white/90 transition-colors">09 70 95 95 70</a>
               </div>
-              <Button onClick={() => navigate("/raccordement-enedis")} className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
+              <Button onClick={() => navigate("/raccordement-enedis")} className="w-full bg-primary text-primary-foreground hover:bg-primary/90 min-h-[48px] touch-target">
                 Démarrer ma demande
               </Button>
             </div>

@@ -115,7 +115,7 @@ const ServiceTypesSection = () => {
                   <Button 
                     size="lg" 
                     onClick={() => navigate("/raccordement-enedis")}
-                    className="btn-luxury bg-gradient-luxury text-white hover:shadow-floating px-10 py-6 text-lg h-auto touch-target font-semibold rounded-xl border-0"
+                    className="btn-luxury bg-gradient-luxury text-white hover:shadow-floating px-10 py-6 text-lg h-auto touch-target font-semibold rounded-xl border-0 min-h-[48px]"
                   >
                     Accéder au formulaire premium →
                   </Button>

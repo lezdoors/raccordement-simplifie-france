@@ -11,6 +11,7 @@ import APropos from "./pages/APropos";
 import Contact from "./pages/Contact";
 import MentionsLegales from "./pages/MentionsLegales";
 import Confidentialite from "./pages/Confidentialite";
+import MobileContactBar from "./components/MobileContactBar";
 
 const queryClient = new QueryClient();
 
@@ -19,11 +20,13 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      <MobileContactBar />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/enedis-raccordement" element={<EnedisRaccordement />} />
-          <Route path="/commencer" element={<Navigate to="/enedis-raccordement" replace />} />
+          <Route path="/raccordement-enedis" element={<EnedisRaccordement />} />
+          <Route path="/enedis-raccordement" element={<Navigate to="/raccordement-enedis" replace />} />
+          <Route path="/commencer" element={<Navigate to="/raccordement-enedis" replace />} />
           <Route path="/merci" element={<Merci />} />
           <Route path="/a-propos" element={<APropos />} />
           <Route path="/contact" element={<Contact />} />
