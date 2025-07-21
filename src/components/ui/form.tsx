@@ -54,6 +54,12 @@ const useFormField = () => {
     throw new Error("useFormField should be used within <FormItem>")
   }
 
+  // Additional safety check for destructuring
+  if (typeof itemContext !== 'object' || !('id' in itemContext)) {
+    console.error('Invalid itemContext:', itemContext)
+    throw new Error("useFormField: itemContext does not have expected structure")
+  }
+
   const { id } = itemContext
 
   return {
