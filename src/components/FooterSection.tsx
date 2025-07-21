@@ -24,18 +24,37 @@ const FooterSection = () => {
 
   return (
     <footer className="bg-slate-800 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Logo Section */}
-        <div className="flex items-center justify-center mb-12">
-          <div className="h-16 w-auto mr-4">
-            <img 
-              src="/lovable-uploads/55f86fce-e7c0-4a55-95e2-4c1c19dcbc0f.png" 
-              alt="raccordement.net" 
-              className="h-full w-auto object-contain brightness-0 invert" 
-            />
+      {/* New Top Section with Logo and Description */}
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8 bg-slate-900">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center gap-6">
+          <div className="flex items-center">
+            <div className="h-12 w-auto mr-3">
+              <img 
+                src="/lovable-uploads/55f86fce-e7c0-4a55-95e2-4c1c19dcbc0f.png" 
+                alt="raccordement.net" 
+                className="h-full w-auto object-contain brightness-0 invert" 
+              />
+            </div>
+            <h2 className="text-xl font-bold">raccordement.net</h2>
           </div>
-          <h2 className="text-2xl font-bold">raccordement.net</h2>
+          <div className="flex-1">
+            <p className="text-gray-300 text-sm md:text-base leading-relaxed">
+              Gestionnaire du réseau de distribution d'électricité en France, nous raccordons tous types de bâtiments au réseau public.
+            </p>
+            <div className="flex items-center mt-3">
+              <Phone className="w-4 h-4 mr-2 text-blue-400" />
+              <a 
+                href="tel:0970709570" 
+                className="text-blue-400 hover:text-blue-300 transition-colors duration-200 font-semibold"
+              >
+                09 70 70 95 70
+              </a>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
 
         {/* Three Column Layout */}
         <div className="grid md:grid-cols-3 gap-12">
