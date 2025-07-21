@@ -2,27 +2,20 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, Phone } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
-
-  return (
-    <nav className="bg-gradient-to-r from-primary to-primary/90 text-white sticky top-0 z-50 shadow-lg">
+  return <nav className="bg-gradient-to-r from-primary to-primary/90 text-white sticky top-0 z-50 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo Section */}
           <div className="flex items-center cursor-pointer" onClick={() => navigate("/")}>
             <div className="h-16 w-auto mr-4">
-              <img 
-                src="/lovable-uploads/55f86fce-e7c0-4a55-95e2-4c1c19dcbc0f.png" 
-                alt="Portail en ligne - Raccordement électrique" 
-                className="h-full w-auto object-contain brightness-0 invert" 
-              />
+              <img src="/lovable-uploads/55f86fce-e7c0-4a55-95e2-4c1c19dcbc0f.png" alt="Portail en ligne - Raccordement électrique" className="h-full w-auto object-contain brightness-0 invert" />
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-xl font-bold text-white">Portail en ligne</h1>
-              <p className="text-sm text-white/80">Service Raccordement Électrique</p>
+              
+              
             </div>
           </div>
           
@@ -53,22 +46,14 @@ const Navigation = () => {
               <p className="text-xs text-white/80">Du lundi au vendredi de 9h à 19h</p>
             </div>
             
-            <Button 
-              variant="secondary"
-              size="lg"
-              onClick={() => navigate("/raccordement-enedis")}
-              className="bg-white text-primary hover:bg-white/90 font-semibold"
-            >
+            <Button variant="secondary" size="lg" onClick={() => navigate("/raccordement-enedis")} className="bg-white text-primary hover:bg-white/90 font-semibold">
               Démarrer ma demande
             </Button>
           </div>
 
           {/* Mobile menu button */}
           <div className="md:hidden">
-            <button 
-              onClick={() => setIsMenuOpen(!isMenuOpen)} 
-              className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-white/80 hover:bg-white/10"
-            >
+            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-white/80 hover:bg-white/10">
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
@@ -76,8 +61,7 @@ const Navigation = () => {
       </div>
 
       {/* Mobile Navigation */}
-      {isMenuOpen && (
-        <div className="md:hidden border-t border-white/20">
+      {isMenuOpen && <div className="md:hidden border-t border-white/20">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-primary/95">
             <a href="/" className="text-white hover:text-white/80 block px-3 py-2 rounded-md text-base font-medium">
               Accueil
@@ -96,17 +80,12 @@ const Navigation = () => {
                 <p className="text-sm text-white/90">Appelez nous au</p>
                 <p className="text-lg font-bold text-white">09 70 70 95 70</p>
               </div>
-              <Button 
-                onClick={() => navigate("/raccordement-enedis")}
-                className="w-full bg-white text-primary hover:bg-white/90"
-              >
+              <Button onClick={() => navigate("/raccordement-enedis")} className="w-full bg-white text-primary hover:bg-white/90">
                 Démarrer ma demande
               </Button>
             </div>
           </div>
-        </div>
-      )}
-    </nav>
-  );
+        </div>}
+    </nav>;
 };
 export default Navigation;
