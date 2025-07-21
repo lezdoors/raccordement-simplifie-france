@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, Phone } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import logoFull from "@/assets/logo-full.svg";
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const Navigation = () => {
           <div className="flex items-center cursor-pointer" onClick={() => navigate("/")}>
             <div className="h-16 w-auto">
               <img 
-                src="/src/assets/logo-full.svg" 
+                src={logoFull}
                 alt="Logo Raccordement Connect" 
                 className="h-full w-auto object-contain" 
               />
