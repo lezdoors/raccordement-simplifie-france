@@ -7,15 +7,15 @@ const Navigation = () => {
   const navigate = useNavigate();
   return <nav className="bg-gradient-to-r from-primary to-primary/90 text-white sticky top-0 z-50 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex justify-between items-center h-28">
           {/* Logo Section */}
           <div className="flex items-center cursor-pointer" onClick={() => navigate("/")}>
-            <div className="h-16 w-auto mr-4">
+            <div className="h-24 w-auto mr-6">
               <img src="/lovable-uploads/55f86fce-e7c0-4a55-95e2-4c1c19dcbc0f.png" alt="Portail en ligne - Raccordement électrique" className="h-full w-auto object-contain brightness-0 invert" />
             </div>
             <div className="hidden sm:block">
-              
-              
+              <h1 className="text-xl font-bold text-white">raccordement.net</h1>
+              <p className="text-white/80 text-sm">Raccordement électrique</p>
             </div>
           </div>
           
@@ -46,7 +46,7 @@ const Navigation = () => {
               <p className="text-xs text-white/80">Du lundi au vendredi de 9h à 19h</p>
             </div>
             
-            <Button variant="secondary" size="lg" onClick={() => navigate("/raccordement-enedis")} className="bg-white text-primary hover:bg-white/90 font-semibold">
+            <Button variant="default" size="lg" onClick={() => navigate("/raccordement-enedis")} className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold">
               Démarrer ma demande
             </Button>
           </div>
@@ -80,7 +80,7 @@ const Navigation = () => {
                 <p className="text-sm text-white/90">Appelez nous au</p>
                 <p className="text-lg font-bold text-white">09 70 70 95 70</p>
               </div>
-              <Button onClick={() => navigate("/raccordement-enedis")} className="w-full bg-white text-primary hover:bg-white/90">
+              <Button onClick={() => navigate("/raccordement-enedis")} className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
                 Démarrer ma demande
               </Button>
             </div>

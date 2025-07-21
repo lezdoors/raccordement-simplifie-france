@@ -106,7 +106,7 @@ const ConnectionTypesSection = () => {
             <p className="text-muted-foreground mb-6">
               Interface claire et démarches administratives simplifiées.
             </p>
-            <Button size="lg" className="bg-primary hover:bg-primary/90">
+            <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
               Accéder au formulaire →
             </Button>
           </div>

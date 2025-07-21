@@ -9,14 +9,16 @@ const FooterSection = () => {
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center">
-              <Zap className="h-8 w-8 text-primary mr-2" />
+              <div className="h-12 w-auto mr-3">
+                <img src="/lovable-uploads/55f86fce-e7c0-4a55-95e2-4c1c19dcbc0f.png" alt="raccordement.net" className="h-full w-auto object-contain brightness-0 invert" />
+              </div>
               <h3 className="text-xl font-bold">raccordement.net</h3>
             </div>
             <p className="text-background/70 text-sm">
               Votre partenaire de confiance pour tous vos raccordements électriques. 
               Service rapide, transparent et professionnel.
             </p>
-            <Button variant="secondary" size="sm">
+            <Button variant="default" size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
               Demande express
             </Button>
           </div>

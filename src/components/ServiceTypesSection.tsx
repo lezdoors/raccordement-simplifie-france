@@ -43,7 +43,7 @@ const ServiceTypesSection = () => {
           
           <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
             Types de raccordement 
-            <span className="gradient-text block">Enedis</span>
+            <span className="text-primary block">Enedis</span>
           </h2>
           
           <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed font-body">
@@ -56,7 +56,7 @@ const ServiceTypesSection = () => {
           {services.map((service, index) => (
             <div key={service.title} className="group floating-card bg-card rounded-2xl p-8 border border-border/50 hover:border-gold/30 transition-luxury">
               <div className="text-center space-y-6">
-                <div className={`mx-auto w-20 h-20 rounded-2xl bg-gradient-to-br ${service.gradient} p-1 shadow-luxury`}>
+                <div className="mx-auto w-20 h-20 rounded-2xl bg-primary p-1 shadow-lg">
                   <div className="w-full h-full bg-card rounded-xl flex items-center justify-center">
                     <service.icon className="w-8 h-8 text-royal" />
                   </div>
@@ -72,7 +72,7 @@ const ServiceTypesSection = () => {
                 </div>
                 
                 <div className="pt-4">
-                  <div className="w-12 h-1 bg-gradient-luxury rounded-full mx-auto opacity-60 group-hover:opacity-100 transition-opacity"></div>
+                  <div className="w-12 h-1 bg-primary rounded-full mx-auto opacity-60 group-hover:opacity-100 transition-opacity"></div>
                 </div>
               </div>
             </div>
@@ -84,14 +84,14 @@ const ServiceTypesSection = () => {
             <div className="floating-card glass-card p-12 rounded-3xl border border-white/20 backdrop-blur-xl">
               <div className="space-y-8">
                 <div className="flex items-center justify-center mb-8">
-                  <div className="w-24 h-24 bg-gradient-luxury rounded-3xl flex items-center justify-center shadow-luxury">
+                  <div className="w-24 h-24 bg-primary rounded-3xl flex items-center justify-center shadow-lg">
                     <FileText className="w-12 h-12 text-white" />
                   </div>
                 </div>
                 
                 <div className="space-y-4">
                   <h3 className="font-display text-3xl md:text-4xl font-bold text-foreground">
-                    Formulaire <span className="gradient-text">unifié</span>
+                    Formulaire <span className="text-primary">unifié</span>
                   </h3>
                   <p className="text-lg text-muted-foreground leading-relaxed font-body max-w-2xl mx-auto">
                     Un seul formulaire pour tous types de raccordement. Interface claire et 
@@ -111,15 +111,15 @@ const ServiceTypesSection = () => {
                 
                 <div className="flex items-center justify-center space-x-8 pt-6 text-sm text-muted-foreground">
                   <div className="flex items-center">
-                    <CheckCircle className="w-4 h-4 mr-2 text-gold" />
+                    <CheckCircle className="w-4 h-4 mr-2 text-primary" />
                     Interface simplifiée
                   </div>
                   <div className="flex items-center">
-                    <CheckCircle className="w-4 h-4 mr-2 text-gold" />
+                    <CheckCircle className="w-4 h-4 mr-2 text-primary" />
                     Suivi en temps réel
                   </div>
                   <div className="flex items-center">
-                    <CheckCircle className="w-4 h-4 mr-2 text-gold" />
+                    <CheckCircle className="w-4 h-4 mr-2 text-primary" />
                     Support dédié
                   </div>
                 </div>
