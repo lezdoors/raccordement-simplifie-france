@@ -4,11 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Mobile-first Enedis-inspired design system */
+/* Premium McKinsey-level design system with Royal Blue & Gold palette */
 
 @layer base {
   :root {
-    /* Clean Professional Palette */
+    /* Royal Blue & Gold Premium Palette */
     --background: 0 0% 100%;
     --foreground: 220 26% 14%;
 
@@ -18,21 +18,21 @@
     --popover: 0 0% 100%;
     --popover-foreground: 220 26% 14%;
 
-    /* Deep Blue Primary (Keeping current blue) */
+    /* Royal Blue Primary */
     --primary: 220 91% 24%;
     --primary-foreground: 0 0% 100%;
 
-    /* Light Gray Secondary */
-    --secondary: 210 20% 96%;
+    /* Sophisticated Secondary */
+    --secondary: 220 14% 96%;
     --secondary-foreground: 220 26% 14%;
 
-    /* Subtle Muted */
-    --muted: 210 20% 98%;
+    /* Elegant Muted */
+    --muted: 220 14% 98%;
     --muted-foreground: 220 9% 46%;
 
-    /* Enedis Green Success/Trust */
-    --accent: 142 71% 45%;
-    --accent-foreground: 0 0% 100%;
+    /* Luxury Gold Accent */
+    --accent: 42 78% 60%;
+    --accent-foreground: 220 26% 14%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
@@ -41,45 +41,46 @@
     --input: 220 13% 91%;
     --ring: 220 91% 24%;
 
-    /* Enedis-Inspired Design Tokens */
-    --enedis-blue: 220 91% 24%;
-    --enedis-blue-light: 220 91% 35%;
-    --enedis-blue-dark: 220 91% 18%;
-    --enedis-green: 142 71% 45%;
-    --enedis-green-light: 142 71% 55%;
-    --secondary-gray: 210 20% 96%;
-    --background-gray: 210 20% 98%;
+    /* Premium Design Tokens */
+    --royal-blue: 220 91% 24%;
+    --royal-blue-light: 220 91% 35%;
+    --royal-blue-dark: 220 91% 18%;
+    --luxury-gold: 42 78% 60%;
+    --luxury-gold-light: 42 78% 70%;
+    --luxury-gold-dark: 42 78% 50%;
     
-    /* Clean Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(220 91% 24%), hsl(220 91% 35%));
+    /* Premium Gradients */
+    --gradient-royal: linear-gradient(135deg, hsl(220 91% 24%), hsl(220 91% 35%));
+    --gradient-luxury: linear-gradient(135deg, hsl(220 91% 24%), hsl(42 78% 60%));
     --gradient-hero: linear-gradient(135deg, hsl(220 91% 18%) 0%, hsl(220 91% 24%) 50%, hsl(220 91% 35%) 100%);
     --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
     
-    /* Mobile-Optimized Shadows */
-    --shadow-elegant: 0 10px 25px -5px hsl(220 91% 24% / 0.15);
-    --shadow-floating: 0 20px 40px -8px hsl(220 91% 24% / 0.20);
-    --shadow-glass: 0 4px 16px hsl(220 91% 24% / 0.12);
-    --shadow-premium: 0 2px 8px hsl(220 91% 24% / 0.08);
+    /* Premium Shadows & Effects */
+    --shadow-luxury: 0 20px 40px -10px hsl(220 91% 24% / 0.15);
+    --shadow-floating: 0 32px 64px -12px hsl(220 91% 24% / 0.20);
+    --shadow-glass: 0 8px 32px hsl(220 91% 24% / 0.12);
+    --shadow-premium: 0 4px 16px hsl(220 91% 24% / 0.08);
     
     /* Glass Morphism */
     --glass-bg: rgba(255, 255, 255, 0.08);
     --glass-border: rgba(255, 255, 255, 0.12);
     --glass-blur: blur(12px);
     
-    /* Smooth Mobile Transitions */
+    /* Premium Transitions */
+    --transition-luxury: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-elastic: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     
     /* Typography Scale */
     --font-display: 'Playfair Display', serif;
     --font-body: 'Inter', sans-serif;
     
-    /* Mobile-First Spacing */
-    --space-mobile: 1rem;
-    --space-section: 2rem;
-    --space-large: 3rem;
+    /* Luxury Spacing */
+    --space-luxury: 6rem;
+    --space-premium: 4rem;
+    --space-elegant: 2.5rem;
     
-    --radius: 0.75rem;
+    --radius: 1rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -99,7 +100,7 @@
   }
 
   .dark {
-    /* Dark Mode Clean Palette */
+    /* Dark Mode Premium Palette */
     --background: 220 26% 7%;
     --foreground: 0 0% 95%;
 
@@ -118,7 +119,7 @@
     --muted: 220 26% 12%;
     --muted-foreground: 220 9% 65%;
 
-    --accent: 142 71% 55%;
+    --accent: 42 78% 65%;
     --accent-foreground: 220 26% 7%;
 
     --destructive: 0 62% 50%;
@@ -163,17 +164,17 @@
     font-family: var(--font-body);
   }
   
-  /* Mobile-First Spacing Utilities */
-  .space-mobile {
-    padding: var(--space-mobile);
+  /* Luxury Spacing Utilities */
+  .space-luxury {
+    padding: var(--space-luxury);
   }
   
-  .space-section {
-    padding: var(--space-section);
+  .space-premium {
+    padding: var(--space-premium);
   }
   
-  .space-large {
-    padding: var(--space-large);
+  .space-elegant {
+    padding: var(--space-elegant);
   }
 }
 
@@ -197,16 +198,14 @@
     box-shadow: var(--shadow-floating), 0 0 0 1px hsl(var(--luxury-gold) / 0.1);
   }
   
-  /* Clean Mobile Button Animations */
-  .btn-mobile {
+  /* Premium Button Animations */
+  .btn-luxury {
     position: relative;
     overflow: hidden;
-    transition: var(--transition-smooth);
-    min-height: 48px;
-    min-width: 48px;
+    transition: var(--transition-luxury);
   }
   
-  .btn-mobile::before {
+  .btn-luxury::before {
     content: '';
     position: absolute;
     top: 0;
@@ -214,10 +213,10 @@
     width: 100%;
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: var(--transition-fast);
+    transition: var(--transition-smooth);
   }
   
-  .btn-mobile:hover::before {
+  .btn-luxury:hover::before {
     left: 100%;
   }
   
@@ -230,17 +229,17 @@
     animation: slideIn 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   }
   
-  /* Clean Gradient Text */
+  /* Luxury Gradient Text */
   .gradient-text {
-    background: var(--gradient-primary);
+    background: var(--gradient-luxury);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   
-  /* Clean Borders */
-  .border-accent {
-    border: 1px solid hsl(var(--enedis-green) / 0.3);
+  /* Premium Borders */
+  .border-luxury {
+    border: 1px solid hsl(var(--luxury-gold) / 0.3);
   }
   
   /* Touch-Optimized Mobile Elements */
@@ -280,40 +279,17 @@
 
 /* Mobile-First Responsive Design */
 @media (max-width: 768px) {
-  .space-large {
-    padding: calc(var(--space-large) * 0.7);
+  .space-luxury {
+    padding: calc(var(--space-luxury) * 0.6);
   }
   
-  .space-section {
-    padding: calc(var(--space-section) * 0.8);
+  .space-premium {
+    padding: calc(var(--space-premium) * 0.7);
   }
   
-  /* Mobile optimization */
+  /* Ensure readability on mobile */
   body {
     font-size: 16px;
-    line-height: 1.5;
-  }
-  
-  /* Sticky mobile header */
-  .mobile-header {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background: hsl(var(--background));
-    border-bottom: 1px solid hsl(var(--border));
-    backdrop-filter: blur(8px);
-  }
-  
-  /* Bottom action bar */
-  .bottom-action-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 40;
-    background: hsl(var(--background));
-    border-top: 1px solid hsl(var(--border));
-    padding: 12px 16px;
-    box-shadow: 0 -4px 16px hsl(220 91% 24% / 0.1);
+    line-height: 1.6;
   }
 }
