@@ -107,7 +107,16 @@ const STEPS = [
   { id: 6, title: "Résumé et validation", component: StepSummary },
 ];
 
-export const MultiStepForm = () => {
+interface MultiStepFormProps {
+  initialData?: {
+    prenom?: string;
+    nom?: string;
+    email?: string;
+    telephone?: string;
+  };
+}
+
+export const MultiStepForm = ({ initialData }: MultiStepFormProps) => {
   const [currentStep, setCurrentStep] = useState(1);
   const navigate = useNavigate();
   
@@ -115,10 +124,10 @@ export const MultiStepForm = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       clientType: "particulier" as const,
-      firstName: "",
-      lastName: "",
-      email: "",
-      phone: "",
+      firstName: initialData?.prenom || "",
+      lastName: initialData?.nom || "",
+      email: initialData?.email || "",
+      phone: initialData?.telephone || "",
       workAddress: "",
       workCity: "",
       workPostalCode: "",

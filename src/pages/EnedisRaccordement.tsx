@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -11,6 +11,8 @@ import { MultiStepForm } from "@/components/form/MultiStepForm";
 
 const EnedisRaccordement = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const initialData = location.state?.initialData || {};
   
   return (
     <div className="min-h-screen bg-background">
@@ -26,7 +28,7 @@ const EnedisRaccordement = () => {
             </p>
           </div>
           
-          <MultiStepForm />
+          <MultiStepForm initialData={initialData} />
         </div>
       </div>
     </div>
