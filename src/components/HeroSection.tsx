@@ -45,11 +45,11 @@ const HeroSection = () => {
             <div className="space-y-6">
               <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-sm font-medium">
                 <Award className="w-4 h-4 mr-2" />
-                Excellence McKinsey-niveau
+                Partenaire N°1 en France
               </div>
               
-              <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight">
-                Raccordement <span className="gradient-text">électrique</span> Enedis
+              <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight text-center lg:text-left">
+                Raccordement <span className="text-primary">électrique</span> Enedis
               </h1>
               
               <p className="text-xl sm:text-2xl text-white/90 font-light leading-relaxed">
@@ -108,15 +108,15 @@ const HeroSection = () => {
             {/* Trust indicators */}
             <div className="flex flex-wrap gap-6 pt-4">
               <div className="flex items-center text-white/80 text-sm">
-                <CheckCircle className="w-4 h-4 mr-2 text-gold" />
+                <CheckCircle className="w-4 h-4 mr-2 text-accent" />
                 Traitement sous 48h
               </div>
               <div className="flex items-center text-white/80 text-sm">
-                <CheckCircle className="w-4 h-4 mr-2 text-gold" />
+                <CheckCircle className="w-4 h-4 mr-2 text-accent" />
                 Conformité réglementaire
               </div>
               <div className="flex items-center text-white/80 text-sm">
-                <CheckCircle className="w-4 h-4 mr-2 text-gold" />
+                <CheckCircle className="w-4 h-4 mr-2 text-accent" />
                 Accompagnement dédié
               </div>
             </div>
@@ -126,7 +126,7 @@ const HeroSection = () => {
           <div className="lg:flex justify-center items-center hidden">
             <div className="floating-card glass-card p-8 rounded-2xl w-full max-w-md animate-fade-up" style={{ animationDelay: '1s' }}>
               <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-gradient-luxury rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Phone className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="font-display text-2xl font-semibold text-white mb-2">
@@ -139,7 +139,7 @@ const HeroSection = () => {
 
               <div className="space-y-4">
                 <div className="flex items-center p-4 rounded-xl bg-white/5 border border-white/10">
-                  <Phone className="w-5 h-5 text-gold mr-3" />
+                  <Phone className="w-5 h-5 text-accent mr-3" />
                   <div>
                     <div className="text-white font-medium">09 77 40 50 60</div>
                     <div className="text-white/60 text-xs">Lun-Ven 9h-18h</div>
@@ -147,7 +147,7 @@ const HeroSection = () => {
                 </div>
                 
                 <div className="flex items-center p-4 rounded-xl bg-white/5 border border-white/10">
-                  <Mail className="w-5 h-5 text-gold mr-3" />
+                  <Mail className="w-5 h-5 text-accent mr-3" />
                   <div>
                     <div className="text-white font-medium">Expert dédié</div>
                     <div className="text-white/60 text-xs">Réponse sous 2h</div>
@@ -157,7 +157,7 @@ const HeroSection = () => {
                 <div className="flex items-center justify-center pt-4">
                   <div className="flex">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 text-gold fill-current" />
+                      <Star key={i} className="w-4 h-4 text-accent fill-current" />
                     ))}
                   </div>
                   <span className="text-white/80 text-sm ml-2">4.9/5 (2,847 avis)</span>
