@@ -37,12 +37,12 @@ const Navigation = () => {
 
           {/* Contact Info & CTA */}
           <div className="hidden md:flex items-center space-x-6">
-            <div className="text-right">
-              <div className="flex items-center gap-2 text-sm text-white/90">
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-2 text-sm text-white/90">
                 <Phone className="w-4 h-4" />
                 <span>Appelez nous au</span>
               </div>
-              <p className="text-lg font-bold text-white">09 70 70 95 70</p>
+              <a href="tel:0970709570" className="text-lg font-bold text-white hover:text-white/90 transition-colors">09 70 70 95 70</a>
               <p className="text-xs text-white/80">Du lundi au vendredi de 9h à 19h</p>
             </div>
             
@@ -78,7 +78,7 @@ const Navigation = () => {
             <div className="px-3 py-4 border-t border-white/20">
               <div className="text-center mb-3">
                 <p className="text-sm text-white/90">Appelez nous au</p>
-                <p className="text-lg font-bold text-white">09 70 70 95 70</p>
+                <a href="tel:0970709570" className="text-lg font-bold text-white hover:text-white/90 transition-colors">09 70 70 95 70</a>
               </div>
               <Button onClick={() => navigate("/raccordement-enedis")} className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
                 Démarrer ma demande

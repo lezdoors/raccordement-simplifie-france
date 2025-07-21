@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Home, Building, Zap, FileText, CheckCircle } from "lucide-react";
+import { Home, Building, Zap, FileText, CheckCircle, Calendar, Landmark, Plug, Network, Sun } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const ServiceTypesSection = () => {
@@ -8,27 +8,39 @@ const ServiceTypesSection = () => {
   const services = [
     {
       icon: Home,
-      title: "Maison neuve",
-      description: "Raccordement électrique pour construction neuve",
+      title: "Raccordement Enedis Définitif / ajout de compteur linky",
+      description: "Raccordement électrique pour construction neuve et ajout de compteur Linky",
       gradient: "from-royal to-royal-light"
     },
     {
-      icon: Building,
-      title: "Raccordement provisoire",
-      description: "Solution temporaire pour travaux",
+      icon: Calendar,
+      title: "Raccordement Enedis provisoire",
+      description: "Solution temporaire pour travaux et besoins ponctuels",
       gradient: "from-gold to-gold-light"
     },
     {
-      icon: Zap,
-      title: "Viabilisation",
-      description: "Raccordement pour terrain à viabiliser",
+      icon: Landmark,
+      title: "Viabilisation d'un terrain",
+      description: "Raccordement pour terrain à viabiliser et aménagement",
       gradient: "from-royal-light to-gold"
     },
     {
-      icon: Zap,
-      title: "Augmentation de puissance",
-      description: "Modification d'abonnement existant",
+      icon: Plug,
+      title: "Modification de raccordement Enedis",
+      description: "Changement de puissance ou modification d'installation existante",
       gradient: "from-gold-dark to-royal"
+    },
+    {
+      icon: Network,
+      title: "Raccordement Enedis collectif",
+      description: "Raccordement pour bâtiments collectifs et copropriétés",
+      gradient: "from-royal to-gold"
+    },
+    {
+      icon: Sun,
+      title: "Raccordement Enedis photovoltaïque",
+      description: "Raccordement pour installation solaire et injection réseau",
+      gradient: "from-gold-light to-royal-light"
     },
   ];
 
@@ -52,7 +64,7 @@ const ServiceTypesSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-20">
           {services.map((service, index) => (
             <div key={service.title} className="group floating-card bg-card rounded-2xl p-8 border border-border/50 hover:border-gold/30 transition-luxury">
               <div className="text-center space-y-6">
