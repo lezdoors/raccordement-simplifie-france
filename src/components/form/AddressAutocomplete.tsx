@@ -94,7 +94,7 @@ export const AddressAutocomplete = ({
       </PopoverTrigger>
       
       {suggestions.length > 0 && (
-        <PopoverContent className="w-full p-0" align="start">
+        <PopoverContent className="w-full p-0 z-50 bg-popover" align="start">
           <Command>
             <CommandList>
               {loading ? (
@@ -108,7 +108,7 @@ export const AddressAutocomplete = ({
                       key={suggestion.properties.id}
                       value={suggestion.properties.label}
                       onSelect={() => handleSelect(suggestion)}
-                      className="flex items-start space-x-2 p-3"
+                      className="flex items-start space-x-2 p-3 cursor-pointer hover:bg-accent"
                     >
                       <MapPin className="w-4 h-4 mt-1 text-muted-foreground flex-shrink-0" />
                       <div className="flex-1">

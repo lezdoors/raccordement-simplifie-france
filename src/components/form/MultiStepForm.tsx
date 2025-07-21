@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Form } from "@/components/ui/form";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { StepClientType } from "./steps/StepClientType";
 import { StepPersonalInfo } from "./steps/StepPersonalInfo";
@@ -262,10 +263,11 @@ export const MultiStepForm = () => {
       </div>
 
       {/* Step Content */}
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-        <div className="min-h-[400px]">
-          {getCurrentComponent()}
-        </div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+          <div className="min-h-[400px]">
+            {getCurrentComponent()}
+          </div>
 
         {/* Navigation Buttons */}
         <div className="flex justify-between pt-6 border-t">
@@ -299,7 +301,8 @@ export const MultiStepForm = () => {
             </Button>
           )}
         </div>
-      </form>
+        </form>
+      </Form>
     </Card>
   );
 };

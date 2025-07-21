@@ -55,7 +55,7 @@ export const StepBillingAddress = ({ form }: StepBillingAddressProps) => {
                 <FormLabel className="text-base font-medium">Adresse de facturation *</FormLabel>
                 <FormControl>
                   <AddressAutocomplete
-                    value={field.value}
+                    value={field.value || ""}
                     onChange={(address, city, postalCode) => {
                       field.onChange(address);
                       if (city) form.setValue("billingCity", city);

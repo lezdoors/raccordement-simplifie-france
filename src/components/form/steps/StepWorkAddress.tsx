@@ -28,7 +28,7 @@ export const StepWorkAddress = ({ form }: StepWorkAddressProps) => {
               <FormLabel className="text-base font-medium">Adresse complète *</FormLabel>
               <FormControl>
                 <AddressAutocomplete
-                  value={field.value}
+                  value={field.value || ""}
                   onChange={(address, city, postalCode) => {
                     field.onChange(address);
                     if (city) form.setValue("workCity", city);
