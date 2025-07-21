@@ -7,7 +7,7 @@ import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { MultiStepForm } from "@/components/form/MultiStepForm";
+import { ThreeStepForm } from "@/components/form/ThreeStepForm";
 
 const EnedisRaccordement = () => {
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ const EnedisRaccordement = () => {
             </p>
           </div>
           
-          <MultiStepForm initialData={initialData} />
+          <ThreeStepForm initialData={initialData} />
         </div>
       </div>
     </div>
