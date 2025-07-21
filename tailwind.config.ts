@@ -61,18 +61,48 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Premium Royal Blue & Gold Palette
+				royal: {
+					DEFAULT: 'hsl(var(--royal-blue))',
+					light: 'hsl(var(--royal-blue-light))',
+					dark: 'hsl(var(--royal-blue-dark))'
+				},
+				gold: {
+					DEFAULT: 'hsl(var(--luxury-gold))',
+					light: 'hsl(var(--luxury-gold-light))',
+					dark: 'hsl(var(--luxury-gold-dark))'
 				}
 			},
+			fontFamily: {
+				'display': ['var(--font-display)'],
+				'body': ['var(--font-body)'],
+				'sans': ['var(--font-body)'],
+				'serif': ['var(--font-display)']
+			},
 			backgroundImage: {
-				'gradient-primary': 'var(--gradient-primary)',
-				'gradient-hero': 'var(--gradient-hero)'
+				'gradient-royal': 'var(--gradient-royal)',
+				'gradient-luxury': 'var(--gradient-luxury)',
+				'gradient-hero': 'var(--gradient-hero)',
+				'gradient-glass': 'var(--gradient-glass)'
 			},
 			boxShadow: {
-				'elegant': 'var(--shadow-elegant)',
-				'card': 'var(--shadow-card)'
+				'luxury': 'var(--shadow-luxury)',
+				'floating': 'var(--shadow-floating)',
+				'glass': 'var(--shadow-glass)',
+				'premium': 'var(--shadow-premium)'
 			},
-			transitionProperty: {
-				'smooth': 'var(--transition-smooth)'
+			backdropBlur: {
+				'glass': '12px'
+			},
+			spacing: {
+				'luxury': 'var(--space-luxury)',
+				'premium': 'var(--space-premium)',
+				'elegant': 'var(--space-elegant)'
+			},
+			transitionTimingFunction: {
+				'luxury': 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+				'elastic': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

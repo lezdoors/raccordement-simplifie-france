@@ -1,50 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Premium McKinsey-level design system with Royal Blue & Gold palette */
 
 @layer base {
   :root {
+    /* Royal Blue & Gold Premium Palette */
     --background: 0 0% 100%;
-    --foreground: 200 100% 11%;
+    --foreground: 220 26% 14%;
 
     --card: 0 0% 100%;
-    --card-foreground: 200 100% 11%;
+    --card-foreground: 220 26% 14%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 200 100% 11%;
+    --popover-foreground: 220 26% 14%;
 
-    --primary: 200 100% 21%;
+    /* Royal Blue Primary */
+    --primary: 220 91% 24%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 212 100% 40%;
-    --secondary-foreground: 0 0% 100%;
+    /* Sophisticated Secondary */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 26% 14%;
 
-    --muted: 210 40% 96%;
-    --muted-foreground: 200 50% 40%;
+    /* Elegant Muted */
+    --muted: 220 14% 98%;
+    --muted-foreground: 220 9% 46%;
 
-    --accent: 212 100% 95%;
-    --accent-foreground: 200 100% 21%;
+    /* Luxury Gold Accent */
+    --accent: 42 78% 60%;
+    --accent-foreground: 220 26% 14%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 200 100% 21%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 220 91% 24%;
 
-    /* Custom Enedis design tokens */
-    --primary-glow: 212 100% 50%;
-    --gradient-primary: linear-gradient(135deg, hsl(200 100% 21%), hsl(212 100% 50%));
-    --gradient-hero: linear-gradient(135deg, hsl(200 100% 21%) 0%, hsl(212 100% 40%) 100%);
-    --shadow-elegant: 0 10px 30px -10px hsl(200 100% 21% / 0.3);
-    --shadow-glow: 0 0 40px hsl(212 100% 50% / 0.4);
+    /* Premium Design Tokens */
+    --royal-blue: 220 91% 24%;
+    --royal-blue-light: 220 91% 35%;
+    --royal-blue-dark: 220 91% 18%;
+    --luxury-gold: 42 78% 60%;
+    --luxury-gold-light: 42 78% 70%;
+    --luxury-gold-dark: 42 78% 50%;
+    
+    /* Premium Gradients */
+    --gradient-royal: linear-gradient(135deg, hsl(220 91% 24%), hsl(220 91% 35%));
+    --gradient-luxury: linear-gradient(135deg, hsl(220 91% 24%), hsl(42 78% 60%));
+    --gradient-hero: linear-gradient(135deg, hsl(220 91% 18%) 0%, hsl(220 91% 24%) 50%, hsl(220 91% 35%) 100%);
+    --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    
+    /* Premium Shadows & Effects */
+    --shadow-luxury: 0 20px 40px -10px hsl(220 91% 24% / 0.15);
+    --shadow-floating: 0 32px 64px -12px hsl(220 91% 24% / 0.20);
+    --shadow-glass: 0 8px 32px hsl(220 91% 24% / 0.12);
+    --shadow-premium: 0 4px 16px hsl(220 91% 24% / 0.08);
+    
+    /* Glass Morphism */
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-blur: blur(12px);
+    
+    /* Premium Transitions */
+    --transition-luxury: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-    --radius: 0.75rem;
+    --transition-elastic: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    
+    /* Typography Scale */
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+    
+    /* Luxury Spacing */
+    --space-luxury: 6rem;
+    --space-premium: 4rem;
+    --space-elegant: 2.5rem;
+    
+    --radius: 1rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -64,41 +100,47 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 200 100% 4%;
+    /* Dark Mode Premium Palette */
+    --background: 220 26% 7%;
     --foreground: 0 0% 95%;
 
-    --card: 200 50% 8%;
+    --card: 220 26% 9%;
     --card-foreground: 0 0% 95%;
 
-    --popover: 200 50% 8%;
+    --popover: 220 26% 9%;
     --popover-foreground: 0 0% 95%;
 
-    --primary: 212 100% 50%;
-    --primary-foreground: 200 100% 4%;
+    --primary: 220 91% 45%;
+    --primary-foreground: 220 26% 7%;
 
-    --secondary: 212 100% 40%;
+    --secondary: 220 26% 12%;
     --secondary-foreground: 0 0% 95%;
 
-    --muted: 200 50% 15%;
-    --muted-foreground: 200 20% 65%;
+    --muted: 220 26% 12%;
+    --muted-foreground: 220 9% 65%;
 
-    --accent: 200 50% 15%;
-    --accent-foreground: 0 0% 95%;
+    --accent: 42 78% 65%;
+    --accent-foreground: 220 26% 7%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 200 50% 15%;
-    --input: 200 50% 15%;
-    --ring: 212 100% 50%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --border: 220 26% 15%;
+    --input: 220 26% 15%;
+    --ring: 220 91% 45%;
+    
+    /* Dark Mode Glass */
+    --glass-bg: rgba(0, 0, 0, 0.2);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    
+    --sidebar-background: 220 26% 7%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 220 91% 45%;
+    --sidebar-primary-foreground: 220 26% 7%;
+    --sidebar-accent: 220 26% 12%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 220 26% 15%;
+    --sidebar-ring: 220 91% 45%;
   }
 }
 
@@ -108,6 +150,146 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-body antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+    font-variation-settings: 'opsz' 32;
+  }
+  
+  /* Premium Typography Classes */
+  .font-display {
+    font-family: var(--font-display);
+  }
+  
+  .font-body {
+    font-family: var(--font-body);
+  }
+  
+  /* Luxury Spacing Utilities */
+  .space-luxury {
+    padding: var(--space-luxury);
+  }
+  
+  .space-premium {
+    padding: var(--space-premium);
+  }
+  
+  .space-elegant {
+    padding: var(--space-elegant);
+  }
+}
+
+@layer components {
+  /* Glass Morphism Effects */
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-glass);
+  }
+  
+  .floating-card {
+    box-shadow: var(--shadow-floating);
+    transform: translateY(0px);
+    transition: var(--transition-luxury);
+  }
+  
+  .floating-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-floating), 0 0 0 1px hsl(var(--luxury-gold) / 0.1);
+  }
+  
+  /* Premium Button Animations */
+  .btn-luxury {
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition-luxury);
+  }
+  
+  .btn-luxury::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: var(--transition-smooth);
+  }
+  
+  .btn-luxury:hover::before {
+    left: 100%;
+  }
+  
+  /* Elegant Typography Animations */
+  .animate-fade-up {
+    animation: fadeUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+  
+  .animate-slide-in {
+    animation: slideIn 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+  
+  /* Luxury Gradient Text */
+  .gradient-text {
+    background: var(--gradient-luxury);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Premium Borders */
+  .border-luxury {
+    border: 1px solid hsl(var(--luxury-gold) / 0.3);
+  }
+  
+  /* Touch-Optimized Mobile Elements */
+  .touch-target {
+    min-height: 48px;
+    min-width: 48px;
+  }
+  
+  /* Smooth Scroll */
+  .smooth-scroll {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Mobile-First Responsive Design */
+@media (max-width: 768px) {
+  .space-luxury {
+    padding: calc(var(--space-luxury) * 0.6);
+  }
+  
+  .space-premium {
+    padding: calc(var(--space-premium) * 0.7);
+  }
+  
+  /* Ensure readability on mobile */
+  body {
+    font-size: 16px;
+    line-height: 1.6;
   }
 }
