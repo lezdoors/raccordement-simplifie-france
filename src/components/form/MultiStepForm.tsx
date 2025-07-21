@@ -111,41 +111,19 @@ export const MultiStepForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const navigate = useNavigate();
   
-  // Check for pre-filled data from mini form
-  const getMiniFormData = () => {
-    const miniData = localStorage.getItem('mini-form-data');
-    if (miniData) {
-      try {
-        const parsed = JSON.parse(miniData);
-        localStorage.removeItem('mini-form-data'); // Clear after use
-        return {
-          email: parsed.email || "",
-          phone: parsed.phone || "",
-          connectionType: parsed.projectType || "definitif",
-          workCity: parsed.city || "",
-        };
-      } catch (error) {
-        console.error('Error parsing mini form data:', error);
-      }
-    }
-    return {};
-  };
-
-  const prefilledData = getMiniFormData();
-  
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       clientType: "particulier" as const,
       firstName: "",
       lastName: "",
-      email: prefilledData.email || "",
-      phone: prefilledData.phone || "",
+      email: "",
+      phone: "",
       workAddress: "",
-      workCity: prefilledData.workCity || "",
+      workCity: "",
       workPostalCode: "",
       sameAsBilling: true,
-      connectionType: (prefilledData.connectionType as any) || "definitif",
+      connectionType: "definitif" as const,
       power: "",
       urgent: false,
       rgpdConsent: false,
@@ -212,27 +190,6 @@ export const MultiStepForm = () => {
         console.error("Supabase error:", error);
         toast.error("Erreur lors de l'envoi de votre demande. Veuillez réessayer.");
         return;
-      }
-
-      // Send notification email for full form submission
-      try {
-        await supabase.functions.invoke('send-form-notification', {
-          body: {
-            type: 'full-form',
-            data: {
-              firstName: data.firstName,
-              lastName: data.lastName,
-              email: data.email,
-              phone: data.phone,
-              projectType: data.connectionType,
-              city: data.workCity,
-              timestamp: new Date().toISOString(),
-            }
-          }
-        });
-      } catch (emailError) {
-        console.error('Failed to send notification email:', emailError);
-        // Don't block the form submission if email fails
       }
 
       // Clear saved data
