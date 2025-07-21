@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Home, Building, Zap, Wrench } from "lucide-react";
+import { Home, Building, Zap, FileText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const ServiceTypesSection = () => {
@@ -10,31 +10,27 @@ const ServiceTypesSection = () => {
     {
       icon: Home,
       title: "Maison neuve",
-      description: "Raccordement électrique pour construction neuve",
-      link: "/raccordement-definitif",
+      description: "Raccordement électrique pour construction neuve"
     },
     {
       icon: Building,
       title: "Raccordement provisoire",
-      description: "Solution temporaire pour travaux",
-      link: "/raccordement-provisoire",
+      description: "Solution temporaire pour travaux"
     },
     {
-      icon: Wrench,
+      icon: Zap,
       title: "Viabilisation",
-      description: "Raccordement pour terrain à viabiliser",
-      link: "/viabilisation-terrain",
+      description: "Raccordement pour terrain à viabiliser"
     },
     {
       icon: Zap,
       title: "Augmentation de puissance",
-      description: "Modification d'abonnement existant",
-      link: "/augmentation-puissance",
+      description: "Modification d'abonnement existant"
     },
   ];
 
   return (
-    <section className="py-16 bg-background">
+    <section className="py-16 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
@@ -46,59 +42,44 @@ const ServiceTypesSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {services.map((service) => (
-            <Card key={service.title} className="hover:shadow-lg transition-shadow duration-300">
-              <CardHeader className="text-center">
-                <div className="mx-auto mb-4 p-3 bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center">
-                  <service.icon className="w-8 h-8 text-primary" />
-                </div>
-                <CardTitle className="text-xl font-semibold text-foreground">
-                  {service.title}
-                </CardTitle>
-                <CardDescription className="text-muted-foreground">
-                  {service.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="text-center">
-                <Button 
-                  variant="outline" 
-                  onClick={() => navigate(service.link)}
-                  className="w-full"
-                >
-                  En savoir plus
-                </Button>
-              </CardContent>
-            </Card>
+            <div key={service.title} className="text-center p-6 bg-background rounded-lg border hover:shadow-lg transition-shadow duration-300">
+              <div className="mx-auto mb-4 p-4 bg-primary/10 rounded-lg w-16 h-16 flex items-center justify-center">
+                <service.icon className="w-8 h-8 text-primary" />
+              </div>
+              <h3 className="text-lg font-semibold text-foreground mb-2">
+                {service.title}
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                {service.description}
+              </p>
+            </div>
           ))}
         </div>
 
-        <div className="text-center mt-12">
-          <Card className="max-w-2xl mx-auto p-6 bg-primary/5 border-primary/20">
-            <CardHeader>
-              <div className="flex items-center justify-center mb-4">
-                <div className="p-3 bg-primary/10 rounded-full">
-                  <Wrench className="w-8 h-8 text-primary" />
-                </div>
+        <div className="text-center">
+          <div className="max-w-2xl mx-auto p-8 bg-background rounded-lg border">
+            <div className="flex items-center justify-center mb-6">
+              <div className="p-4 bg-primary/10 rounded-lg">
+                <FileText className="w-8 h-8 text-primary" />
               </div>
-              <CardTitle className="text-2xl font-bold text-foreground">
-                Formulaire unifié
-              </CardTitle>
-              <CardDescription className="text-lg">
-                Un seul formulaire pour tous types de raccordement. Interface claire et 
-                démarches administratives simplifiées.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button 
-                size="lg" 
-                onClick={() => navigate("/raccordement-enedis")}
-                className="bg-primary hover:bg-primary/90"
-              >
-                Accéder au formulaire →
-              </Button>
-            </CardContent>
-          </Card>
+            </div>
+            <h3 className="text-2xl font-bold text-foreground mb-4">
+              Formulaire unifié
+            </h3>
+            <p className="text-lg text-muted-foreground mb-8">
+              Un seul formulaire pour tous types de raccordement. Interface claire et 
+              démarches administratives simplifiées.
+            </p>
+            <Button 
+              size="lg" 
+              onClick={() => navigate("/raccordement-enedis")}
+              className="bg-primary hover:bg-primary/90 px-8"
+            >
+              Accéder au formulaire →
+            </Button>
+          </div>
         </div>
       </div>
     </section>
