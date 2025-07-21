@@ -291,7 +291,7 @@
   body {
     font-size: 16px;
     line-height: 1.6;
-    padding-bottom: 80px; /* Space for mobile contact bar */
+    padding-bottom: 90px; /* Increased space for mobile contact bar */
   }
   
   /* Mobile form optimizations */
@@ -307,7 +307,7 @@
   
   /* Form container with bottom padding */
   .mobile-form-container {
-    padding-bottom: 80px;
+    padding-bottom: 90px;
   }
   
   /* Mobile navigation optimizations */
