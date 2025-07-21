@@ -1,140 +1,132 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { MapPin } from "lucide-react";
-
-interface AddressResult {
-  properties: {
-    label: string;
-    city: string;
-    postcode: string;
-  };
-}
+import { cn } from "@/lib/utils";
 
 interface AddressAutocompleteProps {
   value: string;
   onChange: (address: string, city?: string, postalCode?: string) => void;
   placeholder?: string;
+  className?: string;
+}
+
+interface AddressSuggestion {
+  properties: {
+    label: string;
+    score: number;
+    housenumber?: string;
+    id: string;
+    name: string;
+    postcode: string;
+    citycode: string;
+    x: number;
+    y: number;
+    city: string;
+    context: string;
+    type: string;
+    importance: number;
+  };
+  geometry: {
+    type: string;
+    coordinates: [number, number];
+  };
 }
 
 export const AddressAutocomplete = ({ 
   value, 
   onChange, 
-  placeholder = "Tapez votre adresse..." 
+  placeholder = "Tapez votre adresse...",
+  className 
 }: AddressAutocompleteProps) => {
-  const [query, setQuery] = useState(value);
-  const [suggestions, setSuggestions] = useState<AddressResult[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout>();
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false);
+  const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setQuery(value);
-  }, [value]);
+    const searchAddresses = async () => {
+      if (!value || value.length < 3) {
+        setSuggestions([]);
+        return;
+      }
 
-  const searchAddresses = async (searchQuery: string) => {
-    if (searchQuery.length < 3) {
-      setSuggestions([]);
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      const response = await fetch(
-        `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(searchQuery)}&limit=5`
-      );
-      const data = await response.json();
-      setSuggestions(data.features || []);
-    } catch (error) {
-      console.error("Error fetching addresses:", error);
-      setSuggestions([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newQuery = e.target.value;
-    setQuery(newQuery);
-    setIsOpen(true);
-
-    // Clear previous timeout
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
-    // Debounce search
-    timeoutRef.current = setTimeout(() => {
-      searchAddresses(newQuery);
-    }, 300);
-  };
-
-  const handleSelectAddress = (address: AddressResult) => {
-    const fullAddress = address.properties.label;
-    setQuery(fullAddress);
-    onChange(
-      fullAddress,
-      address.properties.city,
-      address.properties.postcode
-    );
-    setIsOpen(false);
-    setSuggestions([]);
-  };
-
-  const handleInputBlur = () => {
-    // Delay closing to allow click on suggestion
-    setTimeout(() => {
-      setIsOpen(false);
-    }, 200);
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
+      setLoading(true);
+      try {
+        const response = await fetch(
+          `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(value)}&limit=5`
+        );
+        const data = await response.json();
+        setSuggestions(data.features || []);
+      } catch (error) {
+        console.error("Error fetching addresses:", error);
+        setSuggestions([]);
+      } finally {
+        setLoading(false);
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+    const debounceTimer = setTimeout(searchAddresses, 300);
+    return () => clearTimeout(debounceTimer);
+  }, [value]);
+
+  const handleSelect = (suggestion: AddressSuggestion) => {
+    const { properties } = suggestion;
+    onChange(properties.label, properties.city, properties.postcode);
+    setOpen(false);
+  };
 
   return (
-    <div ref={containerRef} className="relative">
-      <div className="relative">
-        <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-        <Input
-          value={query}
-          onChange={handleInputChange}
-          onFocus={() => setIsOpen(true)}
-          onBlur={handleInputBlur}
-          placeholder={placeholder}
-          className="pl-10"
-        />
-      </div>
-
-      {isOpen && (suggestions.length > 0 || isLoading) && (
-        <div className="absolute z-50 w-full mt-1 bg-background border border-border rounded-md shadow-lg max-h-60 overflow-auto">
-          {isLoading && (
-            <div className="p-3 text-sm text-muted-foreground">
-              Recherche en cours...
-            </div>
-          )}
-          {suggestions.map((address, index) => (
-            <button
-              key={index}
-              type="button"
-              className="w-full text-left p-3 hover:bg-muted border-b border-border last:border-b-0 flex items-center gap-2"
-              onClick={() => handleSelectAddress(address)}
-            >
-              <MapPin className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-              <span className="text-sm">{address.properties.label}</span>
-            </button>
-          ))}
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <div className="relative">
+          <Input
+            value={value}
+            onChange={(e) => {
+              onChange(e.target.value);
+              setOpen(true);
+            }}
+            placeholder={placeholder}
+            className={cn("pr-10", className)}
+          />
+          <MapPin className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         </div>
+      </PopoverTrigger>
+      
+      {suggestions.length > 0 && (
+        <PopoverContent className="w-full p-0" align="start">
+          <Command>
+            <CommandList>
+              {loading ? (
+                <CommandEmpty>Recherche en cours...</CommandEmpty>
+              ) : suggestions.length === 0 ? (
+                <CommandEmpty>Aucune adresse trouvée</CommandEmpty>
+              ) : (
+                <CommandGroup>
+                  {suggestions.map((suggestion) => (
+                    <CommandItem
+                      key={suggestion.properties.id}
+                      value={suggestion.properties.label}
+                      onSelect={() => handleSelect(suggestion)}
+                      className="flex items-start space-x-2 p-3"
+                    >
+                      <MapPin className="w-4 h-4 mt-1 text-muted-foreground flex-shrink-0" />
+                      <div className="flex-1">
+                        <div className="font-medium text-sm">
+                          {suggestion.properties.label}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          {suggestion.properties.context}
+                        </div>
+                      </div>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              )}
+            </CommandList>
+          </Command>
+        </PopoverContent>
       )}
-    </div>
+    </Popover>
   );
 };

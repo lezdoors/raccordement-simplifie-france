@@ -9,25 +9,24 @@ interface StepBillingAddressProps {
 }
 
 export const StepBillingAddress = ({ form }: StepBillingAddressProps) => {
-  const { control, watch } = form;
-  const sameAsBilling = watch("sameAsBilling");
+  const sameAsBilling = form.watch("sameAsBilling");
 
   return (
     <div className="space-y-6">
-      <div className="text-center">
-        <h3 className="text-2xl font-semibold text-foreground mb-2">
+      <div className="text-center space-y-2">
+        <h2 className="text-2xl font-semibold text-foreground">
           Adresse de facturation
-        </h3>
+        </h2>
         <p className="text-muted-foreground">
           Où souhaitez-vous recevoir vos factures ?
         </p>
       </div>
 
       <FormField
-        control={control}
+        control={form.control}
         name="sameAsBilling"
         render={({ field }) => (
-          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+          <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
             <FormControl>
               <Checkbox
                 checked={field.value}
@@ -35,31 +34,35 @@ export const StepBillingAddress = ({ form }: StepBillingAddressProps) => {
               />
             </FormControl>
             <div className="space-y-1 leading-none">
-              <FormLabel>
-                Même adresse que le chantier
+              <FormLabel className="text-base font-medium">
+                Identique à l'adresse des travaux
               </FormLabel>
+              <p className="text-sm text-muted-foreground">
+                Cochez cette case si l'adresse de facturation est la même que l'adresse des travaux
+              </p>
             </div>
           </FormItem>
         )}
       />
 
       {!sameAsBilling && (
-        <div className="space-y-4 border-l-2 border-primary/20 pl-4">
+        <div className="space-y-6">
           <FormField
-            control={control}
+            control={form.control}
             name="billingAddress"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Adresse de facturation *</FormLabel>
+                <FormLabel className="text-base font-medium">Adresse de facturation *</FormLabel>
                 <FormControl>
                   <AddressAutocomplete
-                    value={field.value || ""}
+                    value={field.value}
                     onChange={(address, city, postalCode) => {
                       field.onChange(address);
                       if (city) form.setValue("billingCity", city);
                       if (postalCode) form.setValue("billingPostalCode", postalCode);
                     }}
-                    placeholder="Tapez l'adresse de facturation..."
+                    placeholder="Tapez votre adresse de facturation..."
+                    className="h-12 text-base"
                   />
                 </FormControl>
                 <FormMessage />
@@ -67,15 +70,21 @@ export const StepBillingAddress = ({ form }: StepBillingAddressProps) => {
             )}
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
-              control={control}
-              name="billingCity"
+              control={form.control}
+              name="billingPostalCode"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Ville *</FormLabel>
+                  <FormLabel className="text-base font-medium">Code postal *</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ville" {...field} />
+                    <Input
+                      {...field}
+                      placeholder="75001"
+                      className="h-12 text-base"
+                      maxLength={5}
+                      pattern="[0-9]{5}"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -83,19 +92,41 @@ export const StepBillingAddress = ({ form }: StepBillingAddressProps) => {
             />
 
             <FormField
-              control={control}
-              name="billingPostalCode"
+              control={form.control}
+              name="billingCity"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Code postal *</FormLabel>
+                  <FormLabel className="text-base font-medium">Ville *</FormLabel>
                   <FormControl>
-                    <Input placeholder="12345" {...field} />
+                    <Input
+                      {...field}
+                      placeholder="Paris"
+                      className="h-12 text-base"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
+
+          <FormField
+            control={form.control}
+            name="billingAddressComplement"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-medium">Complément d'adresse</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="Bâtiment, étage, appartement... (optionnel)"
+                    className="h-12 text-base"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
       )}
     </div>

@@ -13,8 +13,10 @@ import { StepWorkAddress } from "./steps/StepWorkAddress";
 import { StepBillingAddress } from "./steps/StepBillingAddress";
 import { StepAdditionalInfo } from "./steps/StepAdditionalInfo";
 import { StepSummary } from "./steps/StepSummary";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
-// Form schema
+// Form schema with enhanced validation
 const formSchema = z.object({
   // Step 1: Client Type
   clientType: z.enum(["particulier", "professionnel", "collectivite"]),
@@ -23,20 +25,28 @@ const formSchema = z.object({
   firstName: z.string().min(1, "Le prénom est requis"),
   lastName: z.string().min(1, "Le nom est requis"),
   email: z.string().email("Email invalide"),
-  phone: z.string().min(10, "Numéro de téléphone invalide"),
+  phone: z.string()
+    .min(10, "Le numéro de téléphone doit contenir 10 chiffres")
+    .regex(/^[0-9]{10}$/, "Format de téléphone invalide"),
   companyName: z.string().optional(),
   siret: z.string().optional(),
+  collectivityName: z.string().optional(),
   
   // Step 3: Work Address
   workAddress: z.string().min(1, "L'adresse du chantier est requise"),
   workCity: z.string().min(1, "La ville est requise"),
-  workPostalCode: z.string().min(5, "Code postal invalide"),
+  workPostalCode: z.string()
+    .min(5, "Le code postal doit contenir 5 chiffres")
+    .max(5, "Le code postal doit contenir 5 chiffres")
+    .regex(/^[0-9]{5}$/, "Code postal invalide"),
+  workAddressComplement: z.string().optional(),
   
   // Step 4: Billing Address
   sameAsBilling: z.boolean(),
   billingAddress: z.string().optional(),
   billingCity: z.string().optional(),
   billingPostalCode: z.string().optional(),
+  billingAddressComplement: z.string().optional(),
   
   // Step 5: Additional Info
   connectionType: z.enum(["definitif", "provisoire", "augmentation", "collectif"]),
@@ -47,6 +57,42 @@ const formSchema = z.object({
   
   // RGPD
   rgpdConsent: z.boolean().refine(val => val === true, "Vous devez accepter le traitement de vos données"),
+}).refine((data) => {
+  // Conditional validation for billing address
+  if (!data.sameAsBilling) {
+    return !!(data.billingAddress && data.billingCity && data.billingPostalCode);
+  }
+  return true;
+}, {
+  message: "L'adresse de facturation est requise",
+  path: ["billingAddress"],
+}).refine((data) => {
+  // Conditional validation for professional fields
+  if (data.clientType === "professionnel") {
+    return !!data.companyName;
+  }
+  return true;
+}, {
+  message: "La raison sociale est requise pour les professionnels",
+  path: ["companyName"],
+}).refine((data) => {
+  // Conditional validation for collectivity fields
+  if (data.clientType === "collectivite") {
+    return !!data.collectivityName;
+  }
+  return true;
+}, {
+  message: "Le nom de la collectivité est requis",
+  path: ["collectivityName"],
+}).refine((data) => {
+  // Conditional validation for collective housing
+  if (data.connectionType === "collectif") {
+    return !!data.dwellings;
+  }
+  return true;
+}, {
+  message: "Le nombre de logements est requis pour un raccordement collectif",
+  path: ["dwellings"],
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -110,16 +156,51 @@ export const MultiStepForm = () => {
 
   const handleSubmit = async (data: FormData) => {
     try {
-      // TODO: Send to Supabase when connected
-      console.log("Form submitted:", data);
-      
+      // Save to Supabase
+      const { error } = await supabase
+        .from('form_submissions')
+        .insert({
+          client_type: data.clientType,
+          nom: data.lastName,
+          prenom: data.firstName,
+          email: data.email,
+          telephone: data.phone,
+          raison_sociale: data.companyName,
+          nom_collectivite: data.collectivityName,
+          adresse: data.workAddress,
+          complement_adresse: data.workAddressComplement,
+          ville: data.workCity,
+          code_postal: data.workPostalCode,
+          different_billing_address: !data.sameAsBilling,
+          billing_address: data.sameAsBilling ? null : data.billingAddress,
+          billing_city: data.sameAsBilling ? null : data.billingCity,
+          billing_postal_code: data.sameAsBilling ? null : data.billingPostalCode,
+          connection_type: data.connectionType,
+          power_kva: data.power,
+          desired_timeline: data.urgent ? "urgent" : "normal",
+          additional_comments: data.comments,
+          project_type: data.connectionType,
+          project_status: "submitted",
+          form_status: "completed",
+          payment_status: "pending"
+        });
+
+      if (error) {
+        console.error("Supabase error:", error);
+        toast.error("Erreur lors de l'envoi de votre demande. Veuillez réessayer.");
+        return;
+      }
+
       // Clear saved data
       localStorage.removeItem('raccordement-form-data');
+      
+      toast.success("Votre demande a été envoyée avec succès !");
       
       // Redirect to thank you page
       navigate("/merci");
     } catch (error) {
       console.error("Error submitting form:", error);
+      toast.error("Une erreur est survenue. Veuillez réessayer.");
     }
   };
 
@@ -130,7 +211,9 @@ export const MultiStepForm = () => {
       case 2:
         const fields: (keyof FormData)[] = ["firstName", "lastName", "email", "phone"];
         if (watchedValues.clientType === "professionnel") {
-          fields.push("companyName", "siret");
+          fields.push("companyName");
+        } else if (watchedValues.clientType === "collectivite") {
+          fields.push("collectivityName");
         }
         return fields;
       case 3:

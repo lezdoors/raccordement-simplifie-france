@@ -1,115 +1,177 @@
 import { UseFormReturn } from "react-hook-form";
-import { Input } from "@/components/ui/input";
+import { Card } from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Card } from "@/components/ui/card";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
-import { AlertCircle } from "lucide-react";
+import { Zap, Clock, TrendingUp, Building } from "lucide-react";
 
 interface StepAdditionalInfoProps {
   form: UseFormReturn<any>;
 }
 
 export const StepAdditionalInfo = ({ form }: StepAdditionalInfoProps) => {
-  const { control, watch, setValue } = form;
-  const connectionType = watch("connectionType");
-  const urgent = watch("urgent");
+  const connectionType = form.watch("connectionType");
 
   const connectionTypes = [
-    { value: "definitif", label: "Définitif", description: "Raccordement permanent" },
-    { value: "provisoire", label: "Provisoire", description: "Raccordement temporaire" },
-    { value: "augmentation", label: "Augmentation puissance", description: "Modification raccordement existant" },
-    { value: "collectif", label: "Collectif", description: "Raccordement collectivités" },
+    {
+      value: "definitif",
+      label: "Raccordement définitif",
+      description: "Installation permanente avec compteur définitif",
+      icon: Zap,
+    },
+    {
+      value: "provisoire",
+      label: "Raccordement provisoire",
+      description: "Installation temporaire (chantier, événement...)",
+      icon: Clock,
+    },
+    {
+      value: "augmentation",
+      label: "Augmentation de puissance",
+      description: "Modification d'un raccordement existant",
+      icon: TrendingUp,
+    },
+    {
+      value: "collectif",
+      label: "Raccordement collectif",
+      description: "Immeuble ou copropriété",
+      icon: Building,
+    },
+  ];
+
+  const powerOptions = [
+    { value: "3", label: "3 kVA" },
+    { value: "6", label: "6 kVA" },
+    { value: "9", label: "9 kVA" },
+    { value: "12", label: "12 kVA" },
+    { value: "15", label: "15 kVA" },
+    { value: "18", label: "18 kVA" },
+    { value: "24", label: "24 kVA" },
+    { value: "30", label: "30 kVA" },
+    { value: "36", label: "36 kVA" },
+    { value: "autre", label: "Autre puissance" },
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="text-center">
-        <h3 className="text-2xl font-semibold text-foreground mb-2">
-          Informations complémentaires
-        </h3>
+    <div className="space-y-8">
+      <div className="text-center space-y-2">
+        <h2 className="text-2xl font-semibold text-foreground">
+          Détails du raccordement
+        </h2>
         <p className="text-muted-foreground">
-          Précisez les détails techniques de votre raccordement
+          Précisez vos besoins pour votre raccordement électrique
         </p>
       </div>
 
-      <FormField
-        control={control}
-        name="connectionType"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Type de raccordement *</FormLabel>
-            <FormControl>
-              <RadioGroup
-                value={field.value}
-                onValueChange={field.onChange}
-                className="grid grid-cols-1 md:grid-cols-2 gap-3"
-              >
-                {connectionTypes.map((type) => (
-                  <Card 
-                    key={type.value}
-                    className={`p-4 cursor-pointer hover:border-primary transition-colors ${
-                      connectionType === type.value ? "border-primary bg-primary/5" : ""
-                    }`}
-                  >
-                    <Label 
-                      htmlFor={type.value} 
-                      className="cursor-pointer flex items-center space-x-3"
-                    >
-                      <RadioGroupItem value={type.value} id={type.value} />
-                      <div>
-                        <div className="font-medium text-foreground">{type.label}</div>
-                        <div className="text-sm text-muted-foreground">{type.description}</div>
-                      </div>
-                    </Label>
-                  </Card>
-                ))}
-              </RadioGroup>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* Type de raccordement */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-medium">Type de raccordement *</h3>
         <FormField
-          control={control}
-          name="power"
+          control={form.control}
+          name="connectionType"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Puissance souhaitée (kVA) *</FormLabel>
               <FormControl>
-                <Input placeholder="Ex: 12" {...field} />
+                <RadioGroup
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                >
+                  {connectionTypes.map((type) => (
+                    <div key={type.value} className="relative">
+                      <RadioGroupItem
+                        value={type.value}
+                        id={type.value}
+                        className="peer sr-only"
+                      />
+                      <Label
+                        htmlFor={type.value}
+                        className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border border-border rounded-xl p-4 flex items-start space-x-3 cursor-pointer hover:bg-accent/50 transition-all duration-200"
+                      >
+                        <div className="p-2 rounded-lg bg-primary/10 text-primary">
+                          <type.icon className="w-5 h-5" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-medium mb-1">{type.label}</h4>
+                          <p className="text-sm text-muted-foreground">{type.description}</p>
+                        </div>
+                      </Label>
+                    </div>
+                  ))}
+                </RadioGroup>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-
-        {connectionType === "collectif" && (
-          <FormField
-            control={control}
-            name="dwellings"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Nombre de logements</FormLabel>
-                <FormControl>
-                  <Input placeholder="Ex: 10" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        )}
       </div>
 
+      {/* Puissance souhaitée */}
+      <div className="space-y-4">
+        <FormField
+          control={form.control}
+          name="power"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-lg font-medium">Puissance souhaitée *</FormLabel>
+              <Select value={field.value} onValueChange={field.onChange}>
+                <FormControl>
+                  <SelectTrigger className="h-12 text-base">
+                    <SelectValue placeholder="Sélectionnez la puissance" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {powerOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+
+      {/* Nombre de logements pour collectif */}
+      {connectionType === "collectif" && (
+        <FormField
+          control={form.control}
+          name="dwellings"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-lg font-medium">Nombre de logements *</FormLabel>
+              <Select value={field.value} onValueChange={field.onChange}>
+                <FormControl>
+                  <SelectTrigger className="h-12 text-base">
+                    <SelectValue placeholder="Nombre de logements" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
+                    <SelectItem key={num} value={num.toString()}>
+                      {num} logement{num > 1 ? "s" : ""}
+                    </SelectItem>
+                  ))}
+                  <SelectItem value="plus20">Plus de 20 logements</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      )}
+
+      {/* Demande urgente */}
       <FormField
-        control={control}
+        control={form.control}
         name="urgent"
         render={({ field }) => (
-          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+          <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
             <FormControl>
               <Checkbox
                 checked={field.value}
@@ -117,38 +179,29 @@ export const StepAdditionalInfo = ({ form }: StepAdditionalInfoProps) => {
               />
             </FormControl>
             <div className="space-y-1 leading-none">
-              <FormLabel className="flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 text-orange-500" />
+              <FormLabel className="text-base font-medium">
                 Demande urgente
               </FormLabel>
               <p className="text-sm text-muted-foreground">
-                Cocher si vous avez besoin d'un traitement prioritaire
+                Cochez si vous avez besoin d'un traitement prioritaire (supplément applicable)
               </p>
             </div>
           </FormItem>
         )}
       />
 
-      {urgent && (
-        <Card className="p-4 border-orange-200 bg-orange-50">
-          <p className="text-sm text-orange-800">
-            <strong>Demande urgente:</strong> Votre dossier sera traité en priorité. 
-            Des frais supplémentaires peuvent s'appliquer.
-          </p>
-        </Card>
-      )}
-
+      {/* Commentaires */}
       <FormField
-        control={control}
+        control={form.control}
         name="comments"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Commentaires (optionnel)</FormLabel>
+            <FormLabel className="text-lg font-medium">Commentaires ou précisions</FormLabel>
             <FormControl>
-              <Textarea 
-                placeholder="Précisions sur votre projet, contraintes particulières..."
-                rows={4}
+              <Textarea
                 {...field}
+                placeholder="Ajoutez toute information utile concernant votre projet..."
+                className="min-h-[100px] text-base"
               />
             </FormControl>
             <FormMessage />
