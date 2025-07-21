@@ -5,17 +5,26 @@ import { useNavigate } from "react-router-dom";
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
-  return <nav className="bg-gradient-to-r from-primary to-primary/90 text-white sticky top-0 z-50 shadow-lg">
+  return <header>
+    <nav className="bg-gradient-to-r from-primary to-primary/90 text-white sticky top-0 z-50 shadow-lg" aria-label="Navigation principale">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-28">
+        <div className="flex justify-between items-center h-20">
           {/* Logo Section */}
-          <div className="flex items-center cursor-pointer" onClick={() => navigate("/")}>
-            <div className="h-24 w-auto mr-6">
-              <img src="/lovable-uploads/55f86fce-e7c0-4a55-95e2-4c1c19dcbc0f.png" alt="Portail en ligne - Raccordement électrique" className="h-full w-auto object-contain brightness-0 invert" />
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate("/")}>
+            <div className="h-12 w-auto">
+              <img 
+                src="/lovable-uploads/18768f4f-172e-4185-83a0-540b1ab070ce.png" 
+                alt="Logo Raccordement Connect" 
+                className="h-full w-auto object-contain" 
+              />
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-xl font-bold text-white">raccordement.net</h1>
-              <p className="text-white/80 text-sm">Raccordement électrique</p>
+              <div className="text-base font-bold text-white uppercase tracking-wide">
+                VOTRE PARTENAIRE
+              </div>
+              <div className="text-xs text-white/90 italic font-light tracking-wider">
+                Raccordement au réseau d'électricité d'Enedis
+              </div>
             </div>
           </div>
           
@@ -86,6 +95,7 @@ const Navigation = () => {
             </div>
           </div>
         </div>}
-    </nav>;
+    </nav>
+  </header>;
 };
 export default Navigation;
