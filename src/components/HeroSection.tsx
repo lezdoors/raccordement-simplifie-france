@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Headphones, Phone, Mail, Star, Users, CheckCircle, Award } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { MiniForm } from "./MiniForm";
 const HeroSection = () => {
   const navigate = useNavigate();
   const [stats, setStats] = useState({
@@ -121,48 +122,9 @@ const HeroSection = () => {
             </div>
           </div>
 
-          {/* Right Column - Floating Contact Card */}
+          {/* Right Column - Mini Form */}
           <div className="lg:flex justify-center items-center hidden">
-            <div className="floating-card glass-card p-8 rounded-2xl w-full max-w-md animate-fade-up" style={{
-            animationDelay: '1s'
-          }}>
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Phone className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="font-display text-2xl font-semibold text-white mb-2">
-                  Contact Premium
-                </h3>
-                <p className="text-white/80 text-sm">
-                  Assistance dédiée pour votre projet
-                </p>
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex items-center p-4 rounded-xl bg-white/5 border border-white/10">
-                  <Phone className="w-5 h-5 text-accent mr-3" />
-                  <div>
-                    <div className="text-white font-medium">09 77 40 50 60</div>
-                    <div className="text-white/60 text-xs">Lun-Ven 9h-18h</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center p-4 rounded-xl bg-white/5 border border-white/10">
-                  <Mail className="w-5 h-5 text-accent mr-3" />
-                  <div>
-                    <div className="text-white font-medium">Expert dédié</div>
-                    <div className="text-white/60 text-xs">Réponse sous 2h</div>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-center pt-4">
-                  <div className="flex">
-                    {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 text-accent fill-current" />)}
-                  </div>
-                  <span className="text-white/80 text-sm ml-2">4.9/5 (2,847 avis)</span>
-                </div>
-              </div>
-            </div>
+            <MiniForm />
           </div>
         </div>
       </div>
