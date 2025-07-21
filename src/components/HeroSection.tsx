@@ -2,10 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Headphones, Phone, Mail, Star, Users, CheckCircle, Award } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-
 const HeroSection = () => {
   const navigate = useNavigate();
-  const [stats, setStats] = useState({ clients: 0, satisfaction: 0, projects: 0 });
+  const [stats, setStats] = useState({
+    clients: 0,
+    satisfaction: 0,
+    projects: 0
+  });
 
   // Animated counter effect
   useEffect(() => {
@@ -15,23 +18,21 @@ const HeroSection = () => {
         const elapsed = currentTime - start;
         const progress = Math.min(elapsed / duration, 1);
         const current = Math.floor(progress * target);
-        
-        setStats(prev => ({ ...prev, [key]: current }));
-        
+        setStats(prev => ({
+          ...prev,
+          [key]: current
+        }));
         if (progress < 1) {
           requestAnimationFrame(animate);
         }
       };
       requestAnimationFrame(animate);
     };
-
     setTimeout(() => animateNumber(15000, 'clients'), 500);
     setTimeout(() => animateNumber(98, 'satisfaction'), 800);
     setTimeout(() => animateNumber(25000, 'projects'), 1100);
   }, []);
-
-  return (
-    <section className="relative min-h-screen bg-gradient-hero overflow-hidden">
+  return <section className="relative min-h-screen bg-gradient-hero overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 opacity-30">
         <div className="absolute inset-0 bg-gradient-to-br from-royal/10 to-transparent"></div>
@@ -49,7 +50,7 @@ const HeroSection = () => {
               </div>
               
               <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight text-center lg:text-left">
-                Raccordement <span className="text-primary">électrique</span> Enedis
+                Raccordement <span className="text-slate-100">électrique</span> Enedis
               </h1>
               
               <p className="text-xl sm:text-2xl text-white/90 font-light leading-relaxed">
@@ -65,19 +66,11 @@ const HeroSection = () => {
 
             {/* Premium CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button 
-                size="lg" 
-                className="btn-luxury bg-white text-primary hover:bg-white/95 font-semibold px-8 py-6 text-lg h-auto touch-target transform hover:scale-105 transition-luxury shadow-luxury"
-                onClick={() => navigate("/raccordement-enedis")}
-              >
+              <Button size="lg" className="btn-luxury bg-white text-primary hover:bg-white/95 font-semibold px-8 py-6 text-lg h-auto touch-target transform hover:scale-105 transition-luxury shadow-luxury" onClick={() => navigate("/raccordement-enedis")}>
                 Déposer ma demande
               </Button>
               
-              <Button 
-                variant="outline" 
-                size="lg"
-                className="btn-luxury border-white/30 text-white hover:bg-white/10 font-semibold px-8 py-6 text-lg h-auto touch-target backdrop-blur-md"
-              >
+              <Button variant="outline" size="lg" className="btn-luxury border-white/30 text-white hover:bg-white/10 font-semibold px-8 py-6 text-lg h-auto touch-target backdrop-blur-md">
                 <Headphones className="mr-2 h-5 w-5" />
                 Assistance technique
               </Button>
@@ -85,19 +78,25 @@ const HeroSection = () => {
 
             {/* Animated Statistics */}
             <div className="grid grid-cols-3 gap-6 pt-8">
-              <div className="text-center animate-slide-in" style={{ animationDelay: '0.5s' }}>
+              <div className="text-center animate-slide-in" style={{
+              animationDelay: '0.5s'
+            }}>
                 <div className="text-3xl sm:text-4xl font-bold text-white mb-1">
                   {stats.clients.toLocaleString()}+
                 </div>
                 <div className="text-white/70 text-sm font-medium">Clients accompagnés</div>
               </div>
-              <div className="text-center animate-slide-in" style={{ animationDelay: '0.7s' }}>
+              <div className="text-center animate-slide-in" style={{
+              animationDelay: '0.7s'
+            }}>
                 <div className="text-3xl sm:text-4xl font-bold text-white mb-1">
                   {stats.satisfaction}%
                 </div>
                 <div className="text-white/70 text-sm font-medium">Satisfaction client</div>
               </div>
-              <div className="text-center animate-slide-in" style={{ animationDelay: '0.9s' }}>
+              <div className="text-center animate-slide-in" style={{
+              animationDelay: '0.9s'
+            }}>
                 <div className="text-3xl sm:text-4xl font-bold text-white mb-1">
                   {stats.projects.toLocaleString()}+
                 </div>
@@ -124,7 +123,9 @@ const HeroSection = () => {
 
           {/* Right Column - Floating Contact Card */}
           <div className="lg:flex justify-center items-center hidden">
-            <div className="floating-card glass-card p-8 rounded-2xl w-full max-w-md animate-fade-up" style={{ animationDelay: '1s' }}>
+            <div className="floating-card glass-card p-8 rounded-2xl w-full max-w-md animate-fade-up" style={{
+            animationDelay: '1s'
+          }}>
               <div className="text-center mb-6">
                 <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Phone className="w-8 h-8 text-white" />
@@ -156,9 +157,7 @@ const HeroSection = () => {
 
                 <div className="flex items-center justify-center pt-4">
                   <div className="flex">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 text-accent fill-current" />
-                    ))}
+                    {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 text-accent fill-current" />)}
                   </div>
                   <span className="text-white/80 text-sm ml-2">4.9/5 (2,847 avis)</span>
                 </div>
@@ -167,8 +166,6 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default HeroSection;
