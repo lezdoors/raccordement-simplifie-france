@@ -9,18 +9,17 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90 btn-mobile",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 btn-mobile",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+          "border border-primary bg-background text-primary hover:bg-primary hover:text-primary-foreground btn-mobile",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 btn-mobile",
+        ghost: "hover:bg-accent hover:text-accent-foreground btn-mobile",
         link: "text-primary underline-offset-4 hover:underline",
-        hero: "bg-gradient-primary text-white hover:shadow-elegant transform hover:scale-105 transition-smooth text-base font-semibold border-0",
-        luxury: "bg-gradient-luxury text-white hover:shadow-floating transform hover:scale-105 transition-luxury font-semibold border-0",
-        premium: "bg-white text-royal hover:bg-white/95 shadow-luxury hover:shadow-floating transform hover:scale-105 transition-luxury font-semibold border border-gold/20",
+        hero: "bg-gradient-primary text-white hover:shadow-elegant transform hover:scale-105 transition-smooth text-base font-semibold border-0 btn-mobile",
+        success: "bg-accent text-accent-foreground hover:bg-accent/90 btn-mobile",
       },
       size: {
         default: "h-10 px-4 py-2",
