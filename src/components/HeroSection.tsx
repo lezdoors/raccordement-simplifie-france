@@ -32,14 +32,14 @@ const HeroSection = () => {
     setTimeout(() => animateNumber(98, 'satisfaction'), 800);
     setTimeout(() => animateNumber(25000, 'projects'), 1100);
   }, []);
-  return <section className="relative min-h-screen bg-gradient-hero overflow-hidden">
+  return <section className="relative bg-gradient-hero overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 opacity-30">
         <div className="absolute inset-0 bg-gradient-to-br from-royal/10 to-transparent"></div>
       </div>
       
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-full">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-screen py-20">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center py-12">
           
           {/* Left Column - Main Content */}
           <div className="space-y-8 animate-fade-up">
