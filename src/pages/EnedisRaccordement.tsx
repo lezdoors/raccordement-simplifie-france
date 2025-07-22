@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { MultiStepForm } from "@/components/form/MultiStepForm";
+import { SupportSection } from "@/components/SupportSection";
 
 const EnedisRaccordement = () => {
   const navigate = useNavigate();
@@ -27,6 +28,8 @@ const EnedisRaccordement = () => {
           </div>
           
           <MultiStepForm />
+          
+          <SupportSection />
         </div>
       </div>
     </div>

@@ -53,11 +53,7 @@ const formSchema = z.object({
   powerDemanded: z.string().min(1, "La puissance demandée est requise"),
   workStreet: z.string().min(1, "L'adresse de la rue est requise"),
   workAddressComplement: z.string().optional(),
-  workPostalCode: z.string()
-    .min(5, "Le code postal doit contenir 5 chiffres")
-    .max(5, "Le code postal doit contenir 5 chiffres")
-    .regex(/^[0-9]{5}$/, "Code postal invalide"),
-  workCity: z.string().min(1, "La ville est requise"),
+  // Work address uses the same postal code and city from step 1
   
   // Step 3: Final Validation - Removed billingType
   projectStatus: z.string().min(1, "L'état du projet est requis"),
@@ -112,8 +108,6 @@ export const MultiStepForm = () => {
       powerDemanded: "",
       workStreet: "",
       workAddressComplement: "",
-      workPostalCode: "",
-      workCity: "",
       projectStatus: "",
       desiredTimeline: "",
       consent: false,
@@ -190,7 +184,7 @@ export const MultiStepForm = () => {
           project_type: data.projectType,
           power_type: data.powerType,
           power_kva: data.powerDemanded,
-          adresse: `${data.workStreet}, ${data.workPostalCode} ${data.workCity}`,
+          adresse: `${data.workStreet}, ${data.postalCode} ${data.city}`,
           complement_adresse: data.workAddressComplement,
           project_status: data.projectStatus,
           desired_timeline: data.desiredTimeline,
@@ -224,7 +218,7 @@ export const MultiStepForm = () => {
           project_type: data.projectType,
           power_type: data.powerType,
           power_kva: data.powerDemanded,
-          adresse: `${data.workStreet}, ${data.workPostalCode} ${data.workCity}`,
+          adresse: `${data.workStreet}, ${data.postalCode} ${data.city}`,
           complement_adresse: data.workAddressComplement,
           project_status: data.projectStatus,
           desired_timeline: data.desiredTimeline,
@@ -262,7 +256,7 @@ export const MultiStepForm = () => {
         }
         return step1Fields;
       case 2:
-        return ["connectionType", "projectType", "powerType", "powerDemanded", "workStreet", "workPostalCode", "workCity"];
+        return ["connectionType", "projectType", "powerType", "powerDemanded", "workStreet"];
       case 3:
         return ["projectStatus", "desiredTimeline", "consent"];
       default:

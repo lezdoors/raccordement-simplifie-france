@@ -17,6 +17,20 @@ interface StepFinalValidationProps {
 
 export const StepFinalValidation = ({ form }: StepFinalValidationProps) => {
   const formData = form.watch();
+  
+  // Ensure formData is populated by explicitly watching all fields
+  const watchedValues = {
+    civilite: form.watch("civilite"),
+    clientType: form.watch("clientType"),
+    firstName: form.watch("firstName"),
+    lastName: form.watch("lastName"),
+    email: form.watch("email"),
+    phone: form.watch("phone"),
+    connectionType: form.watch("connectionType"),
+    projectType: form.watch("projectType"),
+    powerType: form.watch("powerType"),
+    powerDemanded: form.watch("powerDemanded"),
+  };
 
   const getConnectionTypeLabel = (type: string) => {
     const types = {
@@ -87,38 +101,41 @@ export const StepFinalValidation = ({ form }: StepFinalValidationProps) => {
           <div className="flex justify-between">
             <span className="font-medium">Type de client:</span>
             <Badge variant="secondary">
-              {formData.clientType === "particulier" ? "Particulier" : 
-               formData.clientType === "professionnel" ? "Professionnel" : "Collectivité"}
+              {watchedValues.clientType === "particulier" ? "Particulier" : 
+               watchedValues.clientType === "professionnel" ? "Professionnel" : "Collectivité"}
             </Badge>
           </div>
           <div className="flex justify-between">
             <span className="font-medium">Contact:</span>
-            <span>{formData.civilite === "monsieur" ? "M." : "Mme"} {formData.firstName} {formData.lastName}</span>
+            <span>
+              {watchedValues.civilite === "monsieur" ? "M." : 
+               watchedValues.civilite === "madame" ? "Mme" : ""} {watchedValues.firstName} {watchedValues.lastName}
+            </span>
           </div>
           <div className="flex justify-between">
             <span className="font-medium">Email:</span>
-            <span>{formData.email}</span>
+            <span>{watchedValues.email}</span>
           </div>
           <div className="flex justify-between">
             <span className="font-medium">Téléphone:</span>
-            <span>{formData.phone}</span>
+            <span>{watchedValues.phone}</span>
           </div>
           <Separator />
           <div className="flex justify-between">
             <span className="font-medium">Type de raccordement:</span>
-            <span>{getConnectionTypeLabel(formData.connectionType)}</span>
+            <span>{getConnectionTypeLabel(watchedValues.connectionType)}</span>
           </div>
           <div className="flex justify-between">
             <span className="font-medium">Type de projet:</span>
-            <span>{getProjectTypeLabel(formData.projectType)}</span>
+            <span>{getProjectTypeLabel(watchedValues.projectType)}</span>
           </div>
           <div className="flex justify-between">
             <span className="font-medium">Alimentation:</span>
-            <span>{getPowerTypeLabel(formData.powerType)}</span>
+            <span>{getPowerTypeLabel(watchedValues.powerType)}</span>
           </div>
           <div className="flex justify-between">
-            <span className="font-medium">Puissance:</span>
-            <span>{formData.powerDemanded} {formData.powerType !== "je_ne_sais_pas" ? "kVA" : ""}</span>
+            <span className="font-medium">Puissance choisie:</span>
+            <span>{watchedValues.powerDemanded} {watchedValues.powerType !== "je_ne_sais_pas" && watchedValues.powerDemanded ? "kVA" : ""}</span>
           </div>
         </div>
       </Card>

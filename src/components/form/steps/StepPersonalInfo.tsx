@@ -82,17 +82,23 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
                   onValueChange={field.onChange}
                   className="grid grid-cols-3 gap-4"
                 >
-                  <div className="flex items-center justify-center space-x-2 p-4 border-2 rounded-lg cursor-pointer hover:bg-accent/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
-                    <RadioGroupItem value="monsieur" id="monsieur" className="sr-only" />
-                    <Label htmlFor="monsieur" className="cursor-pointer font-medium w-full text-center">Monsieur</Label>
+                  <div className="relative">
+                    <RadioGroupItem value="monsieur" id="monsieur" className="peer sr-only" />
+                    <Label htmlFor="monsieur" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 w-full text-center font-medium block">
+                      Monsieur
+                    </Label>
                   </div>
-                  <div className="flex items-center justify-center space-x-2 p-4 border-2 rounded-lg cursor-pointer hover:bg-accent/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
-                    <RadioGroupItem value="madame" id="madame" className="sr-only" />
-                    <Label htmlFor="madame" className="cursor-pointer font-medium w-full text-center">Madame</Label>
+                  <div className="relative">
+                    <RadioGroupItem value="madame" id="madame" className="peer sr-only" />
+                    <Label htmlFor="madame" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 w-full text-center font-medium block">
+                      Madame
+                    </Label>
                   </div>
-                  <div className="flex items-center justify-center space-x-2 p-4 border-2 rounded-lg cursor-pointer hover:bg-accent/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
-                    <RadioGroupItem value="autre" id="autre" className="sr-only" />
-                    <Label htmlFor="autre" className="cursor-pointer font-medium w-full text-center">Autre</Label>
+                  <div className="relative">
+                    <RadioGroupItem value="autre" id="autre" className="peer sr-only" />
+                    <Label htmlFor="autre" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 w-full text-center font-medium block">
+                      Autre
+                    </Label>
                   </div>
                 </RadioGroup>
               </FormControl>
@@ -115,22 +121,22 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
                   className="grid grid-cols-1 md:grid-cols-3 gap-4"
                 >
                   <div className="relative">
-                    <RadioGroupItem value="particulier" id="particulier-client" className="sr-only" />
-                    <Label htmlFor="particulier-client" className="flex flex-col items-center justify-center space-y-2 p-6 border-2 rounded-lg cursor-pointer hover:bg-accent/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-all">
+                    <RadioGroupItem value="particulier" id="particulier-client" className="peer sr-only" />
+                    <Label htmlFor="particulier-client" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2">
                       <div className="text-lg font-semibold">Particulier</div>
                       <div className="text-sm text-muted-foreground text-center">Raccordement résidentiel</div>
                     </Label>
                   </div>
                   <div className="relative">
-                    <RadioGroupItem value="professionnel" id="professionnel-client" className="sr-only" />
-                    <Label htmlFor="professionnel-client" className="flex flex-col items-center justify-center space-y-2 p-6 border-2 rounded-lg cursor-pointer hover:bg-accent/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-all">
+                    <RadioGroupItem value="professionnel" id="professionnel-client" className="peer sr-only" />
+                    <Label htmlFor="professionnel-client" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2">
                       <div className="text-lg font-semibold">Professionnel</div>
                       <div className="text-sm text-muted-foreground text-center">Raccordement entreprise</div>
                     </Label>
                   </div>
                   <div className="relative">
-                    <RadioGroupItem value="collectivite" id="collectivite-client" className="sr-only" />
-                    <Label htmlFor="collectivite-client" className="flex flex-col items-center justify-center space-y-2 p-6 border-2 rounded-lg cursor-pointer hover:bg-accent/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-all">
+                    <RadioGroupItem value="collectivite" id="collectivite-client" className="peer sr-only" />
+                    <Label htmlFor="collectivite-client" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2">
                       <div className="text-lg font-semibold">Collectivité</div>
                       <div className="text-sm text-muted-foreground text-center">Raccordement collectivités</div>
                     </Label>
