@@ -32,14 +32,14 @@ const HeroSection = () => {
     setTimeout(() => animateNumber(98, 'satisfaction'), 800);
     setTimeout(() => animateNumber(25000, 'projects'), 1100);
   }, []);
-  return <section className="relative bg-gradient-hero overflow-hidden">
+  return <section className="relative min-h-screen bg-gradient-hero overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 opacity-30">
         <div className="absolute inset-0 bg-gradient-to-br from-royal/10 to-transparent"></div>
       </div>
       
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-full">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center py-12">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-screen py-20">
           
           {/* Left Column - Main Content */}
           <div className="space-y-8 animate-fade-up">
@@ -66,15 +66,13 @@ const HeroSection = () => {
 
             {/* Premium CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold px-8 py-6 text-lg h-auto transform hover:scale-105 transition-all duration-300 min-h-[48px] touch-target" onClick={() => navigate("/raccordement-enedis")}>
+              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold px-8 py-6 text-lg h-auto transform hover:scale-105 transition-all duration-300" onClick={() => navigate("/raccordement-enedis")}>
                 Déposer ma demande
               </Button>
               
-              <Button variant="outline" size="lg" className="bg-white text-primary border-primary hover:bg-white/90 font-semibold px-8 py-6 text-lg h-auto min-h-[48px] touch-target" asChild>
-                <a href="tel:0970959570">
-                  <Headphones className="mr-2 h-5 w-5" />
-                  Contacter un expert
-                </a>
+              <Button variant="outline" size="lg" className="bg-white text-primary border-primary hover:bg-white/90 font-semibold px-8 py-6 text-lg h-auto">
+                <Headphones className="mr-2 h-5 w-5" />
+                Contacter un expert
               </Button>
             </div>
 

@@ -291,28 +291,5 @@
   body {
     font-size: 16px;
     line-height: 1.6;
-    padding-bottom: 90px; /* Increased space for mobile contact bar */
-  }
-  
-  /* Mobile form optimizations */
-  .form-input {
-    min-height: 48px;
-    font-size: 16px; /* Prevents zoom on iOS */
-  }
-  
-  .form-button {
-    min-height: 48px;
-    font-size: 16px;
-  }
-  
-  /* Form container with bottom padding */
-  .mobile-form-container {
-    padding-bottom: 90px;
-  }
-  
-  /* Mobile navigation optimizations */
-  .mobile-nav-button {
-    min-height: 48px;
-    touch-action: manipulation;
   }
 }

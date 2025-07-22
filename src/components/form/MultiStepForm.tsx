@@ -107,54 +107,26 @@ const STEPS = [
   { id: 6, title: "Résumé et validation", component: StepSummary },
 ];
 
-interface MultiStepFormProps {
-  initialData?: {
-    prenom?: string;
-    nom?: string;
-    email?: string;
-    telephone?: string;
-    clientType?: string;
-    firstName?: string;
-    lastName?: string;
-    phone?: string;
-    workAddress?: string;
-    adresse?: string;
-    workCity?: string;
-    ville?: string;
-    workPostalCode?: string;
-    code_postal?: string;
-    connectionType?: string;
-    power?: string;
-    urgent?: boolean;
-    companyName?: string;
-    raison_sociale?: string;
-    collectivityName?: string;
-    nom_collectivite?: string;
-  };
-}
-
-export const MultiStepForm = ({ initialData }: MultiStepFormProps) => {
+export const MultiStepForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const navigate = useNavigate();
   
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      clientType: (initialData?.clientType as "particulier" | "professionnel" | "collectivite") || "particulier",
-      firstName: initialData?.firstName || initialData?.prenom || "",
-      lastName: initialData?.lastName || initialData?.nom || "",
-      email: initialData?.email || "",
-      phone: initialData?.phone || initialData?.telephone || "",
-      workAddress: initialData?.workAddress || initialData?.adresse || "",
-      workCity: initialData?.workCity || initialData?.ville || "",
-      workPostalCode: initialData?.workPostalCode || initialData?.code_postal || "",
+      clientType: "particulier" as const,
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      workAddress: "",
+      workCity: "",
+      workPostalCode: "",
       sameAsBilling: true,
-      connectionType: (initialData?.connectionType as "definitif" | "provisoire" | "augmentation" | "collectif") || "definitif",
-      power: initialData?.power || "",
-      urgent: initialData?.urgent || false,
+      connectionType: "definitif" as const,
+      power: "",
+      urgent: false,
       rgpdConsent: false,
-      companyName: initialData?.companyName || initialData?.raison_sociale || "",
-      collectivityName: initialData?.collectivityName || initialData?.nom_collectivite || "",
     },
     mode: "onChange",
   });
@@ -292,7 +264,7 @@ export const MultiStepForm = ({ initialData }: MultiStepFormProps) => {
 
       {/* Step Content */}
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit as any)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
           <div className="min-h-[400px]">
             {getCurrentComponent()}
           </div>
@@ -304,8 +276,7 @@ export const MultiStepForm = ({ initialData }: MultiStepFormProps) => {
             variant="outline"
             onClick={handlePrevious}
             disabled={isFirstStep}
-            size="lg"
-            className="flex items-center gap-2 min-h-[48px] touch-target"
+            className="flex items-center gap-2"
           >
             <ChevronLeft className="w-4 h-4" />
             Précédent
@@ -314,8 +285,8 @@ export const MultiStepForm = ({ initialData }: MultiStepFormProps) => {
           {isLastStep ? (
             <Button
               type="submit"
-              size="lg"
-              className="flex items-center gap-2 min-h-[48px] touch-target"
+              className="flex items-center gap-2"
+              disabled={!form.formState.isValid}
             >
               Envoyer ma demande
             </Button>
@@ -323,8 +294,7 @@ export const MultiStepForm = ({ initialData }: MultiStepFormProps) => {
             <Button
               type="button"
               onClick={handleNext}
-              size="lg"
-              className="flex items-center gap-2 min-h-[48px] touch-target"
+              className="flex items-center gap-2"
             >
               Suivant
               <ChevronRight className="w-4 h-4" />

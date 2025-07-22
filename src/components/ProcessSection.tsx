@@ -79,7 +79,7 @@ const ProcessSection = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg" 
-              className="bg-primary hover:bg-primary/90 px-8 min-h-[48px] touch-target"
+              className="bg-primary hover:bg-primary/90 px-8"
               onClick={() => navigate("/raccordement-enedis")}
             >
               Démarrer ma demande
