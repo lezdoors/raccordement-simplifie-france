@@ -6,8 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "sonner";
-import { BarChart3, Users, MessageSquare, CreditCard, FileText, LogOut } from "lucide-react";
+import { BarChart3, Users, MessageSquare, CreditCard, FileText, LogOut, Bell } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import NotificationCenter from "@/components/NotificationCenter";
 import type { User } from "@supabase/supabase-js";
 
 interface FormSubmission {
@@ -269,10 +270,14 @@ const Admin = () => {
 
         {/* Main Content */}
         <Tabs defaultValue="submissions" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="submissions">Demandes de raccordement</TabsTrigger>
             <TabsTrigger value="messages">Messages de contact</TabsTrigger>
             <TabsTrigger value="payments">Paiements</TabsTrigger>
+            <TabsTrigger value="notifications">
+              <Bell className="h-4 w-4 mr-1" />
+              Notifications
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="submissions" className="space-y-4">
@@ -411,6 +416,10 @@ const Admin = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="notifications" className="space-y-4">
+            <NotificationCenter />
           </TabsContent>
         </Tabs>
       </div>
