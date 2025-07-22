@@ -221,23 +221,42 @@ const Admin = () => {
 
   const sendNotification = async (type: string, data: any) => {
     try {
-      await supabase.functions.invoke('notify-admin', {
+      console.log('Admin: Sending notification:', type, data);
+      const { data: result, error } = await supabase.functions.invoke('notify-admin', {
         body: { type, data }
       });
+      
+      if (error) {
+        console.error('Admin: Notification error:', error);
+      } else {
+        console.log('Admin: Notification sent successfully:', result);
+      }
     } catch (error) {
-      console.error('Error sending notification:', error);
+      console.error('Admin: Error sending notification:', error);
     }
   };
 
   const fetchData = async () => {
     try {
       setLoading(true);
+      console.log('Admin: Fetching data...');
 
       const [submissionsRes, messagesRes, paymentsRes] = await Promise.all([
         supabase.from('form_submissions').select('*').order('created_at', { ascending: false }),
         supabase.from('messages').select('*').order('created_at', { ascending: false }),
         supabase.from('payments').select('*').order('created_at', { ascending: false }),
       ]);
+
+      console.log('Admin: Query results:', {
+        submissions: submissionsRes.data?.length || 0,
+        messages: messagesRes.data?.length || 0,
+        payments: paymentsRes.data?.length || 0,
+        errors: {
+          submissions: submissionsRes.error,
+          messages: messagesRes.error,
+          payments: paymentsRes.error
+        }
+      });
 
       if (submissionsRes.error) throw submissionsRes.error;
       if (messagesRes.error) throw messagesRes.error;

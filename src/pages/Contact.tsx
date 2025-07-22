@@ -53,6 +53,7 @@ const Contact = () => {
     setIsSubmittingContact(true);
     
     try {
+      console.log('Submitting contact form...');
       const { error } = await supabase
         .from('messages')
         .insert({
@@ -63,7 +64,12 @@ const Contact = () => {
           request_type: 'contact'
         });
       
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+      
+      console.log('Contact form submitted successfully');
       
       setContactSubmitted(true);
       setContactForm({
@@ -103,6 +109,7 @@ const Contact = () => {
     setIsSubmittingCallback(true);
     
     try {
+      console.log('Submitting callback form...');
       const { error } = await supabase
         .from('messages')
         .insert({
@@ -113,7 +120,12 @@ const Contact = () => {
           request_type: 'callback'
         });
       
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+      
+      console.log('Callback form submitted successfully');
       
       setCallbackSubmitted(true);
       setCallbackForm({

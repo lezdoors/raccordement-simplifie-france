@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect } from "react";
+import { supabase, testSupabaseConnection } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,7 +12,23 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [connectionStatus, setConnectionStatus] = useState<'checking' | 'connected' | 'error'>('checking');
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    const checkConnection = async () => {
+      console.log('Testing Supabase connection...');
+      const isConnected = await testSupabaseConnection();
+      
+      if (!isConnected) {
+        toast.error("⚠️ Problème de connexion à la base de données");
+      } else {
+        console.log('Supabase connection test passed');
+      }
+    };
+    
+    checkConnection();
+  }, []);
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

@@ -24,6 +24,7 @@ import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import MobileHomePage from "./pages/MobileHomePage";
 import MobileDetector from "./components/MobileDetector";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const queryClient = new QueryClient();
 
@@ -32,7 +33,8 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <ErrorBoundary>
+        <BrowserRouter>
         <Routes>
           <Route path="/" element={
             <MobileDetector>
@@ -60,7 +62,8 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </BrowserRouter>
+        </BrowserRouter>
+      </ErrorBoundary>
     </TooltipProvider>
   </QueryClientProvider>
 );
