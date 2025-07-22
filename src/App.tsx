@@ -22,6 +22,8 @@ import CGU from "./pages/CGU";
 import Admin from "./pages/Admin";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
+import MobileHomePage from "./pages/MobileHomePage";
+import MobileDetector from "./components/MobileDetector";
 
 const queryClient = new QueryClient();
 
@@ -32,7 +34,11 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={
+            <MobileDetector>
+              {({ isMobile }) => isMobile ? <MobileHomePage /> : <HomePage />}
+            </MobileDetector>
+          } />
           <Route path="/raccordement-enedis" element={<EnedisRaccordement />} />
           <Route path="/enedis-raccordement" element={<Navigate to="/raccordement-enedis" replace />} />
           <Route path="/commencer" element={<Navigate to="/raccordement-enedis" replace />} />

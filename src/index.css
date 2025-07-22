@@ -144,6 +144,9 @@
   }
 }
 
+/* Import mobile styles */
+@import './styles/mobile.css';
+
 @layer base {
   * {
     @apply border-border;

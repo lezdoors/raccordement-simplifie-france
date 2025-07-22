@@ -1,0 +1,200 @@
+/* Mobile-first Stripe-inspired animations and utilities */
+
+/* Touch-friendly interactions */
+.mobile-touch-target {
+  @apply min-h-[48px] min-w-[48px];
+}
+
+.mobile-card {
+  @apply bg-white rounded-2xl shadow-lg border border-gray-100;
+}
+
+.mobile-input {
+  @apply h-14 text-lg rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:ring-0 transition-colors;
+}
+
+.mobile-button {
+  @apply h-12 px-6 text-base font-medium rounded-xl transition-all duration-200;
+}
+
+.mobile-button-primary {
+  @apply mobile-button bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95;
+}
+
+.mobile-button-secondary {
+  @apply mobile-button bg-white border-2 border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50;
+}
+
+/* Floating labels */
+.floating-label-group {
+  @apply relative;
+}
+
+.floating-label {
+  @apply absolute left-3 top-4 text-gray-500 text-base transition-all duration-200 pointer-events-none;
+}
+
+.floating-input:focus + .floating-label,
+.floating-input:not(:placeholder-shown) + .floating-label {
+  @apply -translate-y-6 text-sm text-blue-600 bg-white px-1;
+}
+
+/* Bottom sheet animations */
+.bottom-sheet-enter {
+  animation: slideUpIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bottom-sheet-exit {
+  animation: slideDownOut 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideUpIn {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDownOut {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+/* Progress animations */
+.progress-step {
+  @apply w-full h-2 bg-gray-200 rounded-full overflow-hidden;
+}
+
+.progress-fill {
+  @apply h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-500 ease-out;
+}
+
+/* Card hover effects */
+.mobile-card-hover {
+  @apply transform transition-all duration-200 hover:scale-105 hover:shadow-xl active:scale-95;
+}
+
+/* Sticky elements */
+.mobile-sticky-header {
+  @apply sticky top-0 bg-white/95 backdrop-blur-lg border-b border-gray-100 z-50;
+}
+
+.mobile-sticky-footer {
+  @apply sticky bottom-0 bg-white border-t border-gray-100 p-4 z-40;
+}
+
+/* Micro-interactions */
+.mobile-ripple {
+  @apply relative overflow-hidden;
+}
+
+.mobile-ripple::before {
+  content: '';
+  @apply absolute inset-0 bg-white opacity-0 scale-0 rounded-full;
+  transition: opacity 0.3s, transform 0.6s;
+}
+
+.mobile-ripple:active::before {
+  @apply opacity-30 scale-100;
+}
+
+/* Loading states */
+.mobile-skeleton {
+  @apply bg-gray-200 animate-pulse rounded;
+}
+
+.mobile-loading-dots {
+  @apply inline-flex space-x-1;
+}
+
+.mobile-loading-dots div {
+  @apply w-2 h-2 bg-current rounded-full animate-bounce;
+}
+
+.mobile-loading-dots div:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.mobile-loading-dots div:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+/* Success/Error states */
+.mobile-success {
+  @apply bg-green-50 border-green-200 text-green-800;
+}
+
+.mobile-error {
+  @apply bg-red-50 border-red-200 text-red-800;
+}
+
+.mobile-warning {
+  @apply bg-yellow-50 border-yellow-200 text-yellow-800;
+}
+
+/* Typography scale for mobile */
+.mobile-h1 {
+  @apply text-3xl font-bold leading-tight;
+}
+
+.mobile-h2 {
+  @apply text-2xl font-bold leading-tight;
+}
+
+.mobile-h3 {
+  @apply text-xl font-semibold;
+}
+
+.mobile-body {
+  @apply text-base leading-relaxed;
+}
+
+.mobile-caption {
+  @apply text-sm text-gray-600;
+}
+
+/* Safe areas for mobile devices */
+.mobile-safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.mobile-safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.mobile-safe-left {
+  padding-left: env(safe-area-inset-left);
+}
+
+.mobile-safe-right {
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Stripe-inspired gradients */
+.stripe-gradient-blue {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.stripe-gradient-purple {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.stripe-gradient-green {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+/* glassmorphism effects */
+.glass-effect {
+  @apply bg-white/80 backdrop-blur-lg border border-white/20;
+}
+
+/* Focus states for accessibility */
+.mobile-focus {
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+}
