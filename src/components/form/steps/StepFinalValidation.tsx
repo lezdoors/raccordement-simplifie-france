@@ -20,12 +20,11 @@ export const StepFinalValidation = ({ form }: StepFinalValidationProps) => {
 
   const getConnectionTypeLabel = (type: string) => {
     const types = {
-      raccordement_enedis_definitif: "Raccordement Enedis Définitif",
-      raccordement_provisoire: "Raccordement provisoire", 
-      viabilisation_terrain: "Viabilisation terrain",
-      modification_raccordement: "Modification raccordement",
-      raccordement_collectif: "Raccordement collectif",
-      raccordement_photovoltaique: "Raccordement photovoltaïque"
+      nouveau_raccordement: "Nouveau raccordement",
+      augmentation_puissance: "Augmentation de puissance",
+      raccordement_provisoire: "Raccordement provisoire",
+      deplacement_compteur: "Déplacement de compteur",
+      autre_demande: "Autre demande"
     };
     return types[type as keyof typeof types] || type;
   };
@@ -178,34 +177,6 @@ export const StepFinalValidation = ({ form }: StepFinalValidationProps) => {
           )}
         />
 
-        {/* Type de facturation */}
-        <FormField
-          control={form.control}
-          name="billingType"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-base font-medium">Type de facturation *</FormLabel>
-              <FormControl>
-                <RadioGroup
-                  value={field.value}
-                  onValueChange={field.onChange}
-                  className="flex flex-wrap gap-4"
-                >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="personnel" id="personnel" />
-                    <Label htmlFor="personnel">Personnel</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="societe" id="societe" />
-                    <Label htmlFor="societe">Société</Label>
-                  </div>
-                </RadioGroup>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         {/* Consentement */}
         <FormField
           control={form.control}
@@ -236,25 +207,6 @@ export const StepFinalValidation = ({ form }: StepFinalValidationProps) => {
         />
       </div>
 
-      {/* Payment Section */}
-      <Card className="p-6 bg-primary/5 border-primary/20">
-        <div className="text-center space-y-4">
-          <h3 className="text-lg font-semibold">Finaliser votre demande</h3>
-          <div className="text-2xl font-bold text-primary">129€ TTC</div>
-          <p className="text-sm text-muted-foreground">
-            Frais de traitement de dossier
-          </p>
-          <Button 
-            type="button"
-            size="lg"
-            className="w-full"
-            onClick={handleStripePayment}
-            disabled={!form.formState.isValid || !formData.consent}
-          >
-            Procéder au paiement
-          </Button>
-        </div>
-      </Card>
     </div>
   );
 };

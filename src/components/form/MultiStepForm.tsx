@@ -13,10 +13,10 @@ import { StepFinalValidation } from "./steps/StepFinalValidation";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-// Complete form schema according to specifications
+// Complete form schema according to updated specifications
 const formSchema = z.object({
   // Step 1: Personal Information
-  civilite: z.enum(["monsieur", "madame"]),
+  civilite: z.enum(["monsieur", "madame", "autre"]),
   clientType: z.enum(["particulier", "professionnel", "collectivite"]),
   firstName: z.string().min(1, "Le prénom est requis"),
   lastName: z.string().min(1, "Le nom est requis"),
@@ -34,14 +34,13 @@ const formSchema = z.object({
   collectivityName: z.string().optional(),
   collectivitySiren: z.string().optional(),
   
-  // Step 2: Technical Details
+  // Step 2: Technical Details - Updated address structure
   connectionType: z.enum([
-    "raccordement_enedis_definitif",
-    "raccordement_provisoire", 
-    "viabilisation_terrain",
-    "modification_raccordement",
-    "raccordement_collectif",
-    "raccordement_photovoltaique"
+    "nouveau_raccordement",
+    "augmentation_puissance",
+    "raccordement_provisoire",
+    "deplacement_compteur",
+    "autre_demande"
   ]),
   projectType: z.enum([
     "maison_individuelle",
@@ -52,13 +51,17 @@ const formSchema = z.object({
   ]),
   powerType: z.enum(["monophase", "triphase", "je_ne_sais_pas"]),
   powerDemanded: z.string().min(1, "La puissance demandée est requise"),
-  workAddress: z.string().min(1, "L'adresse complète du chantier est requise"),
-  pdlNumber: z.string().optional(),
+  workStreet: z.string().min(1, "L'adresse de la rue est requise"),
+  workAddressComplement: z.string().optional(),
+  workPostalCode: z.string()
+    .min(5, "Le code postal doit contenir 5 chiffres")
+    .max(5, "Le code postal doit contenir 5 chiffres")
+    .regex(/^[0-9]{5}$/, "Code postal invalide"),
+  workCity: z.string().min(1, "La ville est requise"),
   
-  // Step 3: Final Validation
+  // Step 3: Final Validation - Removed billingType
   projectStatus: z.string().min(1, "L'état du projet est requis"),
   desiredTimeline: z.string().min(1, "Le délai souhaité est requis"),
-  billingType: z.enum(["personnel", "societe"]),
   consent: z.boolean().refine(val => val === true, "Vous devez accepter les conditions"),
 }).refine((data) => {
   // Conditional validation for professional fields
@@ -103,14 +106,16 @@ export const MultiStepForm = () => {
       phone: "",
       postalCode: "",
       city: "",
-      connectionType: "raccordement_enedis_definitif" as const,
+      connectionType: "nouveau_raccordement" as const,
       projectType: "maison_individuelle" as const,
       powerType: "monophase" as const,
       powerDemanded: "",
-      workAddress: "",
+      workStreet: "",
+      workAddressComplement: "",
+      workPostalCode: "",
+      workCity: "",
       projectStatus: "",
       desiredTimeline: "",
-      billingType: "personnel" as const,
       consent: false,
     },
     mode: "onChange",
@@ -185,7 +190,8 @@ export const MultiStepForm = () => {
           project_type: data.projectType,
           power_type: data.powerType,
           power_kva: data.powerDemanded,
-          adresse: data.workAddress,
+          adresse: `${data.workStreet}, ${data.workPostalCode} ${data.workCity}`,
+          complement_adresse: data.workAddressComplement,
           project_status: data.projectStatus,
           desired_timeline: data.desiredTimeline,
           form_status: "in_progress",
@@ -218,7 +224,8 @@ export const MultiStepForm = () => {
           project_type: data.projectType,
           power_type: data.powerType,
           power_kva: data.powerDemanded,
-          adresse: data.workAddress,
+          adresse: `${data.workStreet}, ${data.workPostalCode} ${data.workCity}`,
+          complement_adresse: data.workAddressComplement,
           project_status: data.projectStatus,
           desired_timeline: data.desiredTimeline,
           form_status: "completed",
@@ -255,9 +262,9 @@ export const MultiStepForm = () => {
         }
         return step1Fields;
       case 2:
-        return ["connectionType", "projectType", "powerType", "powerDemanded", "workAddress"];
+        return ["connectionType", "projectType", "powerType", "powerDemanded", "workStreet", "workPostalCode", "workCity"];
       case 3:
-        return ["projectStatus", "desiredTimeline", "billingType", "consent"];
+        return ["projectStatus", "desiredTimeline", "consent"];
       default:
         return [];
     }

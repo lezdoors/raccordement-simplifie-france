@@ -4,7 +4,8 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/comp
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { fetchCityFromPostalCode } from "@/lib/geoApi";
 
 interface StepPersonalInfoProps {
   form: UseFormReturn<any>;
@@ -12,7 +13,10 @@ interface StepPersonalInfoProps {
 
 export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
   const clientType = form.watch("clientType");
+  const postalCode = form.watch("postalCode");
   const [phoneValue, setPhoneValue] = useState("");
+  const [cityOptions, setCityOptions] = useState<string[]>([]);
+  const [loadingCities, setLoadingCities] = useState(false);
 
   // Format French phone number
   const formatPhoneNumber = (value: string) => {
@@ -28,6 +32,30 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
     setPhoneValue(formatted);
     onChange(value.replace(/\D/g, ""));
   };
+
+  // Auto-fetch cities when postal code changes
+  useEffect(() => {
+    const fetchCities = async () => {
+      if (postalCode && postalCode.length === 5) {
+        setLoadingCities(true);
+        const cities = await fetchCityFromPostalCode(postalCode);
+        setCityOptions(cities);
+        
+        // Auto-select city if only one option
+        if (cities.length === 1) {
+          form.setValue("city", cities[0]);
+        } else if (cities.length === 0) {
+          form.setValue("city", "");
+        }
+        setLoadingCities(false);
+      } else {
+        setCityOptions([]);
+        form.setValue("city", "");
+      }
+    };
+
+    fetchCities();
+  }, [postalCode, form]);
 
   return (
     <div className="space-y-6 md:space-y-8">
@@ -48,17 +76,26 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
           render={({ field }) => (
             <FormItem className="space-y-3">
               <FormLabel className="text-base md:text-lg font-medium">Civilité *</FormLabel>
-              <Select onValueChange={field.onChange} value={field.value}>
-                <FormControl>
-                  <SelectTrigger className="h-12 md:h-14 text-base">
-                    <SelectValue placeholder="Sélectionnez votre civilité" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="monsieur">Monsieur</SelectItem>
-                  <SelectItem value="madame">Madame</SelectItem>
-                </SelectContent>
-              </Select>
+              <FormControl>
+                <RadioGroup
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  className="grid grid-cols-3 gap-4"
+                >
+                  <div className="flex items-center justify-center space-x-2 p-4 border-2 rounded-lg cursor-pointer hover:bg-accent/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                    <RadioGroupItem value="monsieur" id="monsieur" className="sr-only" />
+                    <Label htmlFor="monsieur" className="cursor-pointer font-medium w-full text-center">Monsieur</Label>
+                  </div>
+                  <div className="flex items-center justify-center space-x-2 p-4 border-2 rounded-lg cursor-pointer hover:bg-accent/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                    <RadioGroupItem value="madame" id="madame" className="sr-only" />
+                    <Label htmlFor="madame" className="cursor-pointer font-medium w-full text-center">Madame</Label>
+                  </div>
+                  <div className="flex items-center justify-center space-x-2 p-4 border-2 rounded-lg cursor-pointer hover:bg-accent/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                    <RadioGroupItem value="autre" id="autre" className="sr-only" />
+                    <Label htmlFor="autre" className="cursor-pointer font-medium w-full text-center">Autre</Label>
+                  </div>
+                </RadioGroup>
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -77,17 +114,26 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
                   onValueChange={field.onChange}
                   className="grid grid-cols-1 md:grid-cols-3 gap-4"
                 >
-                  <div className="flex items-center space-x-2 p-4 border rounded-lg cursor-pointer hover:bg-accent/50">
-                    <RadioGroupItem value="particulier" id="particulier" />
-                    <Label htmlFor="particulier" className="cursor-pointer">Particulier</Label>
+                  <div className="relative">
+                    <RadioGroupItem value="particulier" id="particulier-client" className="sr-only" />
+                    <Label htmlFor="particulier-client" className="flex flex-col items-center justify-center space-y-2 p-6 border-2 rounded-lg cursor-pointer hover:bg-accent/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-all">
+                      <div className="text-lg font-semibold">Particulier</div>
+                      <div className="text-sm text-muted-foreground text-center">Raccordement résidentiel</div>
+                    </Label>
                   </div>
-                  <div className="flex items-center space-x-2 p-4 border rounded-lg cursor-pointer hover:bg-accent/50">
-                    <RadioGroupItem value="professionnel" id="professionnel" />
-                    <Label htmlFor="professionnel" className="cursor-pointer">Professionnel</Label>
+                  <div className="relative">
+                    <RadioGroupItem value="professionnel" id="professionnel-client" className="sr-only" />
+                    <Label htmlFor="professionnel-client" className="flex flex-col items-center justify-center space-y-2 p-6 border-2 rounded-lg cursor-pointer hover:bg-accent/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-all">
+                      <div className="text-lg font-semibold">Professionnel</div>
+                      <div className="text-sm text-muted-foreground text-center">Raccordement entreprise</div>
+                    </Label>
                   </div>
-                  <div className="flex items-center space-x-2 p-4 border rounded-lg cursor-pointer hover:bg-accent/50">
-                    <RadioGroupItem value="collectivite" id="collectivite" />
-                    <Label htmlFor="collectivite" className="cursor-pointer">Collectivité</Label>
+                  <div className="relative">
+                    <RadioGroupItem value="collectivite" id="collectivite-client" className="sr-only" />
+                    <Label htmlFor="collectivite-client" className="flex flex-col items-center justify-center space-y-2 p-6 border-2 rounded-lg cursor-pointer hover:bg-accent/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-all">
+                      <div className="text-lg font-semibold">Collectivité</div>
+                      <div className="text-sm text-muted-foreground text-center">Raccordement collectivités</div>
+                    </Label>
                   </div>
                 </RadioGroup>
               </FormControl>
@@ -284,14 +330,33 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-base font-medium">Ville *</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="Votre ville"
-                    className="h-12 text-base"
-                  />
-                </FormControl>
+                {cityOptions.length > 1 ? (
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="h-12 text-base">
+                        <SelectValue placeholder={loadingCities ? "Recherche..." : "Sélectionnez votre ville"} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {cityOptions.map((city) => (
+                        <SelectItem key={city} value={city}>{city}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder={loadingCities ? "Recherche..." : "Votre ville"}
+                      className="h-12 text-base"
+                      disabled={loadingCities}
+                    />
+                  </FormControl>
+                )}
                 <FormMessage />
+                {cityOptions.length === 0 && postalCode && postalCode.length === 5 && !loadingCities && (
+                  <p className="text-sm text-muted-foreground">Ville non trouvée pour ce code postal</p>
+                )}
               </FormItem>
             )}
           />
