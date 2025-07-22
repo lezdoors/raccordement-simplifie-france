@@ -26,30 +26,22 @@ const services = [
   {
     icon: <Home className="h-6 w-6" />,
     title: "Maison neuve",
-    description: "Raccordement électrique pour construction neuve",
-    price: "À partir de 199€",
-    popular: false
+    description: "Raccordement électrique pour construction neuve"
   },
   {
     icon: <Sun className="h-6 w-6" />,
     title: "Photovoltaïque",
-    description: "Installation et raccordement panneaux solaires",
-    price: "À partir de 299€",
-    popular: true
+    description: "Installation et raccordement panneaux solaires"
   },
   {
     icon: <Building className="h-6 w-6" />,
     title: "Modification",
-    description: "Changement de puissance ou modification",
-    price: "À partir de 149€",
-    popular: false
+    description: "Changement de puissance ou modification"
   },
   {
     icon: <Factory className="h-6 w-6" />,
     title: "Industriel",
-    description: "Raccordement haute puissance pour entreprises",
-    price: "Sur devis",
-    popular: false
+    description: "Raccordement haute puissance pour entreprises"
   }
 ];
 
@@ -80,7 +72,7 @@ const MobileHomePage = () => {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="px-4 py-12 text-center">
+      <section className="px-4 py-12 text-center max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -119,7 +111,7 @@ const MobileHomePage = () => {
       </section>
 
       {/* Services Cards */}
-      <section className="px-4 py-8" id="services">
+      <section className="px-4 py-8 max-w-4xl mx-auto" id="services">
         <div className="space-y-6">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
@@ -138,14 +130,7 @@ const MobileHomePage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
               >
-                <Card className="relative border-2 hover:border-blue-200 transition-colors cursor-pointer">
-                  {service.popular && (
-                    <Badge className="absolute -top-2 left-4 bg-orange-500 hover:bg-orange-500">
-                      <Star className="h-3 w-3 mr-1" />
-                      Populaire
-                    </Badge>
-                  )}
-                  
+                <Card className="border-2 hover:border-blue-200 transition-colors cursor-pointer">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between">
                       <div className="flex items-start gap-4 flex-1">
@@ -156,12 +141,9 @@ const MobileHomePage = () => {
                           <h3 className="font-semibold text-lg text-gray-900 mb-1">
                             {service.title}
                           </h3>
-                          <p className="text-gray-600 text-sm mb-3">
+                          <p className="text-gray-600 text-sm">
                             {service.description}
                           </p>
-                          <div className="text-blue-600 font-bold">
-                            {service.price}
-                          </div>
                         </div>
                       </div>
                       <ChevronRight className="h-5 w-5 text-gray-400 mt-1" />
@@ -176,7 +158,7 @@ const MobileHomePage = () => {
 
       {/* Social Proof */}
       <section className="px-4 py-8 bg-gray-50">
-        <div className="text-center space-y-4">
+        <div className="text-center space-y-4 max-w-4xl mx-auto">
           <div className="flex items-center justify-center gap-1 text-yellow-500">
             {[...Array(5)].map((_, i) => (
               <Star key={i} className="h-5 w-5 fill-current" />
@@ -192,7 +174,7 @@ const MobileHomePage = () => {
       </section>
 
       {/* Process Steps */}
-      <section className="px-4 py-8">
+      <section className="px-4 py-8 max-w-4xl mx-auto">
         <div className="space-y-6">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">

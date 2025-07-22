@@ -283,50 +283,26 @@ const EnhancedMobileForm = ({ onClose }: EnhancedMobileFormProps) => {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
-      // Save to Supabase
-      const { error } = await supabase
-        .from('form_submissions')
-        .insert({
-          client_type: formData.clientType,
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          email: formData.email,
-          phone: formData.phone,
-          work_address: formData.address,
-          postal_code: formData.postalCode,
-          city: formData.city,
-          project_type: formData.projectType,
-          power_requested: formData.power,
-          comments: formData.comments,
-          status: 'pending'
-        });
+      // Create Stripe payment session
+      const { data, error } = await supabase.functions.invoke('create-payment-session', {
+        body: {
+          amount: 99, // €99 for the service
+          formData: formData
+        }
+      });
 
       if (error) throw error;
 
-      toast.success("Demande envoyée avec succès !");
-      
-      // Reset form
-      setCurrentStep(0);
-      setFormData({
-        clientType: "",
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        address: "",
-        postalCode: "",
-        city: "",
-        projectType: "",
-        power: "",
-        comments: ""
-      });
-      
-      if (onClose) onClose();
+      if (data?.url) {
+        // Redirect to Stripe Checkout
+        window.location.href = data.url;
+      } else {
+        throw new Error('No payment URL received');
+      }
       
     } catch (error) {
-      console.error('Error submitting form:', error);
-      toast.error("Erreur lors de l'envoi");
-    } finally {
+      console.error('Error creating payment session:', error);
+      toast.error("Erreur lors de la création du paiement");
       setIsSubmitting(false);
     }
   };

@@ -9,21 +9,21 @@ const ServicesSection = () => {
       title: "Particuliers",
       description: "Raccordement pour votre maison individuelle, appartement ou local commercial.",
       features: ["Démarches simplifiées", "Suivi en temps réel", "Intervention rapide"],
-      cta: "Demander un devis"
+      cta: "Démarrer ma demande"
     },
     {
       icon: Building2,
       title: "Professionnels", 
       description: "Solutions pour bureaux, commerces et petites entreprises.",
       features: ["Accompagnement dédié", "Tarifs préférentiels", "Planning adapté"],
-      cta: "Contactez-nous"
+      cta: "Démarrer ma demande"
     },
     {
       icon: Factory,
       title: "Industriels",
       description: "Raccordements haute tension pour sites industriels et gros consommateurs.",
       features: ["Étude personnalisée", "Installation complexe", "Maintenance incluse"],
-      cta: "Étude gratuite"
+      cta: "Démarrer ma demande"
     }
   ];
 

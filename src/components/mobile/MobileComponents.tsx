@@ -213,39 +213,20 @@ const MobileFloatingCTA = ({
 
 const MobilePricingCard = ({ 
   title, 
-  price, 
   features, 
-  popular = false,
   onSelect 
 }: { 
   title: string; 
-  price: string; 
   features: string[]; 
-  popular?: boolean;
   onSelect: () => void;
 }) => {
   return (
-    <Card className={`relative ${popular ? 'border-blue-500 border-2' : 'border-gray-200'}`}>
-      {popular && (
-        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-          <Badge className="bg-blue-600 hover:bg-blue-600">
-            <Star className="h-3 w-3 mr-1" />
-            Populaire
-          </Badge>
-        </div>
-      )}
-      
+    <Card className="border-gray-200">
       <CardContent className="p-6">
         <div className="text-center mb-6">
           <h3 className="text-xl font-bold text-gray-900 mb-2">
             {title}
           </h3>
-          <div className="text-3xl font-bold text-blue-600 mb-1">
-            {price}
-          </div>
-          {price !== "Sur devis" && (
-            <p className="text-sm text-gray-600">HT</p>
-          )}
         </div>
         
         <ul className="space-y-3 mb-6">
@@ -259,9 +240,9 @@ const MobilePricingCard = ({
         
         <Button 
           onClick={onSelect}
-          className={`w-full ${popular ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-600 hover:bg-gray-700'}`}
+          className="w-full bg-blue-600 hover:bg-blue-700"
         >
-          Choisir ce service
+          Démarrer ma demande
         </Button>
       </CardContent>
     </Card>

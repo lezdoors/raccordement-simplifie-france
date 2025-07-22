@@ -25,6 +25,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import MobileHomePage from "./pages/MobileHomePage";
 import MobileDetector from "./components/MobileDetector";
 import ErrorBoundary from "./components/ErrorBoundary";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentCancel from "./pages/PaymentCancel";
 
 const queryClient = new QueryClient();
 
@@ -57,6 +59,8 @@ const App = () => (
           <Route path="/service-express" element={<ServiceExpress />} />
           <Route path="/estimation" element={<Estimation />} />
           <Route path="/cgu" element={<CGU />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment-cancel" element={<PaymentCancel />} />
           <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
           <Route path="/login" element={<Login />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

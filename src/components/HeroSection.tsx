@@ -67,7 +67,7 @@ const HeroSection = () => {
             {/* Premium CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
               <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold px-8 py-6 text-lg h-auto transform hover:scale-105 transition-all duration-300" onClick={() => navigate("/raccordement-enedis")}>
-                Déposer ma demande
+                Démarrer ma demande
               </Button>
               
               <Button variant="outline" size="lg" className="bg-white text-primary border-primary hover:bg-white/90 font-semibold px-8 py-6 text-lg h-auto">
