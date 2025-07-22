@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_audit_log: {
+        Row: {
+          action: string
+          admin_email: string
+          created_at: string
+          details: Json | null
+          id: string
+          ip_address: unknown | null
+          resource: string
+          resource_id: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          action: string
+          admin_email: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          resource: string
+          resource_id?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          action?: string
+          admin_email?: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          resource?: string
+          resource_id?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       admins: {
         Row: {
           active: boolean | null
@@ -422,8 +458,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_security_headers: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
       is_admin_email: {
         Args: { email_to_check: string }
+        Returns: boolean
+      }
+      is_current_user_admin: {
+        Args: Record<PropertyKey, never>
         Returns: boolean
       }
     }
