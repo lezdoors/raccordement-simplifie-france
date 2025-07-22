@@ -242,7 +242,7 @@ const Login = () => {
               Problème d'accès ? Contactez l'administrateur système
             </p>
             <p className="text-xs text-muted-foreground">
-              📞 09 69 32 18 00 | 📧 admin@raccordement.net
+              📞 09 69 32 18 00 | 📧 admin@raccordement-connect.com
             </p>
           </div>
         </CardContent>
