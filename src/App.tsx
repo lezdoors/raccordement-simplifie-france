@@ -11,6 +11,14 @@ import APropos from "./pages/APropos";
 import Contact from "./pages/Contact";
 import MentionsLegales from "./pages/MentionsLegales";
 import Confidentialite from "./pages/Confidentialite";
+import MaisonNeuve from "./pages/MaisonNeuve";
+import Photovoltaique from "./pages/Photovoltaique";
+import ModificationBranchement from "./pages/ModificationBranchement";
+import RaccordementIndustriel from "./pages/RaccordementIndustriel";
+import RaccordementChantier from "./pages/RaccordementChantier";
+import ServiceExpress from "./pages/ServiceExpress";
+import Estimation from "./pages/Estimation";
+import CGU from "./pages/CGU";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +38,14 @@ const App = () => (
           <Route path="/contact" element={<Contact />} />
           <Route path="/mentions-legales" element={<MentionsLegales />} />
           <Route path="/confidentialite" element={<Confidentialite />} />
+          <Route path="/maison-neuve" element={<MaisonNeuve />} />
+          <Route path="/photovoltaique" element={<Photovoltaique />} />
+          <Route path="/modification-branchement" element={<ModificationBranchement />} />
+          <Route path="/raccordement-industriel" element={<RaccordementIndustriel />} />
+          <Route path="/raccordement-chantier" element={<RaccordementChantier />} />
+          <Route path="/service-express" element={<ServiceExpress />} />
+          <Route path="/estimation" element={<Estimation />} />
+          <Route path="/cgu" element={<CGU />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

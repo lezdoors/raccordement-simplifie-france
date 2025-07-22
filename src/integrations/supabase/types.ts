@@ -256,6 +256,36 @@ export type Database = {
           },
         ]
       }
+      messages: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string | null
+          name: string
+          phone: string | null
+          request_type: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message?: string | null
+          name: string
+          phone?: string | null
+          request_type?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string | null
+          name?: string
+          phone?: string | null
+          request_type?: string
+        }
+        Relationships: []
+      }
       payments: {
         Row: {
           amount: number
