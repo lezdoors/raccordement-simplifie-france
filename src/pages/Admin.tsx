@@ -142,10 +142,10 @@ const Admin = () => {
   const checkAdminAccess = async (userEmail: string) => {
     try {
       const { data, error } = await supabase
-        .from('admins')
-        .select('email, active, name, role')
+        .from('admin_users')
+        .select('email, is_active, role, can_see_payments, can_manage_users, can_see_all_leads')
         .eq('email', userEmail)
-        .eq('active', true)
+        .eq('is_active', true)
         .single();
 
       if (error || !data) {
