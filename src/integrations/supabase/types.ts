@@ -79,6 +79,7 @@ export type Database = {
           architect_email: string | null
           architect_name: string | null
           architect_phone: string | null
+          assigned_to: string | null
           billing_address: string | null
           billing_city: string | null
           billing_postal_code: string | null
@@ -93,13 +94,16 @@ export type Database = {
           different_billing_address: boolean | null
           email: string
           form_status: string | null
+          form_status_detailed: string | null
           has_architect: boolean | null
           id: string
+          internal_notes: string | null
           ip_address: unknown | null
           nom: string
           nom_collectivite: string | null
           payment_completed_at: string | null
           payment_status: string | null
+          payment_status_detailed: string | null
           power_kva: string | null
           power_type: string
           prenom: string
@@ -127,6 +131,7 @@ export type Database = {
           architect_email?: string | null
           architect_name?: string | null
           architect_phone?: string | null
+          assigned_to?: string | null
           billing_address?: string | null
           billing_city?: string | null
           billing_postal_code?: string | null
@@ -141,13 +146,16 @@ export type Database = {
           different_billing_address?: boolean | null
           email: string
           form_status?: string | null
+          form_status_detailed?: string | null
           has_architect?: boolean | null
           id?: string
+          internal_notes?: string | null
           ip_address?: unknown | null
           nom: string
           nom_collectivite?: string | null
           payment_completed_at?: string | null
           payment_status?: string | null
+          payment_status_detailed?: string | null
           power_kva?: string | null
           power_type: string
           prenom: string
@@ -175,6 +183,7 @@ export type Database = {
           architect_email?: string | null
           architect_name?: string | null
           architect_phone?: string | null
+          assigned_to?: string | null
           billing_address?: string | null
           billing_city?: string | null
           billing_postal_code?: string | null
@@ -189,13 +198,16 @@ export type Database = {
           different_billing_address?: boolean | null
           email?: string
           form_status?: string | null
+          form_status_detailed?: string | null
           has_architect?: boolean | null
           id?: string
+          internal_notes?: string | null
           ip_address?: unknown | null
           nom?: string
           nom_collectivite?: string | null
           payment_completed_at?: string | null
           payment_status?: string | null
+          payment_status_detailed?: string | null
           power_kva?: string | null
           power_type?: string
           prenom?: string
@@ -283,6 +295,39 @@ export type Database = {
           name?: string
           phone?: string | null
           request_type?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          data: Json | null
+          email_sent: boolean | null
+          id: string
+          message: string
+          read_at: string | null
+          title: string
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json | null
+          email_sent?: boolean | null
+          id?: string
+          message: string
+          read_at?: string | null
+          title: string
+          type: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json | null
+          email_sent?: boolean | null
+          id?: string
+          message?: string
+          read_at?: string | null
+          title?: string
+          type?: string
         }
         Relationships: []
       }
