@@ -78,7 +78,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <div className="text-foreground">Chargement...</div>
           <p className="mt-4 text-muted-foreground">Vérification des autorisations...</p>
         </div>
       </div>

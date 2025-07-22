@@ -11,7 +11,7 @@ interface LazyComponentProps {
 export const LazyComponent: React.FC<LazyComponentProps> = ({
   children,
   threshold = 0.1,
-  fallback = <div className="animate-pulse bg-muted h-32 w-full rounded" />,
+  fallback = <div className="bg-muted h-32 w-full rounded" />,
   className,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -65,7 +65,7 @@ export const OptimizedImage: React.FC<ImageOptimizerProps> = ({
   return (
     <div className={`relative overflow-hidden ${className}`}>
       {!isLoaded && !hasError && (
-        <div className="absolute inset-0 bg-muted animate-pulse" />
+        <div className="absolute inset-0 bg-muted" />
       )}
       <img
         src={imageSrc}
@@ -113,16 +113,5 @@ export const usePerformanceMonitor = () => {
 
 // Preload critical resources
 export const preloadCriticalResources = () => {
-  const criticalImages = [
-    '/lovable-uploads/55f86fce-e7c0-4a55-95e2-4c1c19dcbc0f.png',
-    '/lovable-uploads/07de93d6-9367-486b-8b5d-f050c8703a3e.png'
-  ];
-
-  criticalImages.forEach(src => {
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.as = 'image';
-    link.href = src;
-    document.head.appendChild(link);
-  });
+  // No images to preload - removed all external assets
 };

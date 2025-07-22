@@ -1,37 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Headphones, Phone, Mail, Star, Users, CheckCircle, Award } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 const HeroSection = () => {
   const navigate = useNavigate();
-  const [stats, setStats] = useState({
-    clients: 0,
-    satisfaction: 0,
-    projects: 0
-  });
-
-  // Animated counter effect
-  useEffect(() => {
-    const animateNumber = (target: number, key: keyof typeof stats, duration: number = 2000) => {
-      const start = performance.now();
-      const animate = (currentTime: number) => {
-        const elapsed = currentTime - start;
-        const progress = Math.min(elapsed / duration, 1);
-        const current = Math.floor(progress * target);
-        setStats(prev => ({
-          ...prev,
-          [key]: current
-        }));
-        if (progress < 1) {
-          requestAnimationFrame(animate);
-        }
-      };
-      requestAnimationFrame(animate);
-    };
-    setTimeout(() => animateNumber(15000, 'clients'), 500);
-    setTimeout(() => animateNumber(98, 'satisfaction'), 800);
-    setTimeout(() => animateNumber(25000, 'projects'), 1100);
-  }, []);
+  const stats = {
+    clients: 15000,
+    satisfaction: 98,
+    projects: 25000
+  };
   return <section className="relative min-h-screen bg-gradient-hero overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 opacity-30">
@@ -42,7 +18,7 @@ const HeroSection = () => {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-screen py-20">
           
           {/* Left Column - Main Content */}
-          <div className="space-y-8 animate-fade-up">
+          <div className="space-y-8">
             <div className="space-y-6">
               <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-sm font-medium">
                 <Award className="w-4 h-4 mr-2" />
@@ -84,27 +60,21 @@ const HeroSection = () => {
               </Button>
             </div>
 
-            {/* Animated Statistics */}
+            {/* Statistics */}
             <div className="grid grid-cols-3 gap-6 pt-8">
-              <div className="text-center animate-slide-in" style={{
-              animationDelay: '0.5s'
-            }}>
+              <div className="text-center">
                 <div className="text-3xl sm:text-4xl font-bold text-white mb-1">
                   {stats.clients.toLocaleString()}+
                 </div>
                 <div className="text-white/70 text-sm font-medium">Clients accompagnés</div>
               </div>
-              <div className="text-center animate-slide-in" style={{
-              animationDelay: '0.7s'
-            }}>
+              <div className="text-center">
                 <div className="text-3xl sm:text-4xl font-bold text-white mb-1">
                   {stats.satisfaction}%
                 </div>
                 <div className="text-white/70 text-sm font-medium">Satisfaction client</div>
               </div>
-              <div className="text-center animate-slide-in" style={{
-              animationDelay: '0.9s'
-            }}>
+              <div className="text-center">
                 <div className="text-3xl sm:text-4xl font-bold text-white mb-1">
                   {stats.projects.toLocaleString()}+
                 </div>
@@ -135,9 +105,7 @@ const HeroSection = () => {
 
           {/* Right Column - Floating Contact Card */}
           <div className="lg:flex justify-center items-center hidden">
-            <div className="floating-card glass-card p-8 rounded-2xl w-full max-w-md animate-fade-up" style={{
-            animationDelay: '1s'
-          }}>
+            <div className="floating-card glass-card p-8 rounded-2xl w-full max-w-md">
               <div className="text-center mb-6">
                 <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Phone className="w-8 h-8 text-white" />
