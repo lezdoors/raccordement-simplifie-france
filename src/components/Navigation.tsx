@@ -10,20 +10,17 @@ const Navigation = () => {
     <nav className="bg-gradient-to-r from-primary to-primary/90 text-white sticky top-0 z-50 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 md:h-28">
-          {/* Logo Section - Mobile optimized */}
-          <div className="flex flex-col md:flex-row items-center cursor-pointer" onClick={() => navigate("/")}>
-            <div className="h-12 md:h-24 w-auto mr-0 md:mr-6">
+          {/* Logo Section - Centered and enlarged */}
+          <div className="flex items-center cursor-pointer justify-center md:justify-start" onClick={() => navigate("/")}>
+            <div className="h-16 md:h-32 w-auto mr-3 md:mr-4">
               <img 
                 src="/lovable-uploads/55f86fce-e7c0-4a55-95e2-4c1c19dcbc0f.png" 
-                alt="Portail en ligne - Raccordement électrique" 
+                alt="raccordement.net" 
                 className="h-full w-auto object-contain brightness-0 invert" 
                 loading="lazy"
               />
             </div>
-            <div className="text-center md:text-left">
-              <h1 className="text-lg md:text-xl font-bold text-white">raccordement.net</h1>
-              <p className="text-white/80 text-xs md:text-sm">Raccordement électrique</p>
-            </div>
+            <h1 className="text-xl md:text-2xl font-bold text-white">raccordement.net</h1>
           </div>
           
           {/* Desktop Navigation */}
@@ -49,8 +46,8 @@ const Navigation = () => {
                 <Phone className="w-4 h-4" />
                 <span>Appelez nous au</span>
               </div>
-              <a href="tel:0970709570" className="text-lg font-bold text-white hover:text-white/90 transition-colors">
-                09 70 70 95 70
+              <a href="tel:0977405060" className="text-lg font-bold text-white hover:text-white/90 transition-colors">
+                09 77 40 50 60
               </a>
               <p className="text-xs text-white/80">Du lundi au vendredi de 9h à 19h</p>
             </div>
@@ -96,8 +93,8 @@ const Navigation = () => {
             <div className="px-3 py-4 border-t border-white/20">
               <div className="text-center mb-3">
                 <p className="text-sm text-white/90">Appelez nous au</p>
-                <a href="tel:0970709570" className="text-lg font-bold text-white hover:text-white/90 transition-colors">
-                  09 70 70 95 70
+                <a href="tel:0977405060" className="text-lg font-bold text-white hover:text-white/90 transition-colors">
+                  09 77 40 50 60
                 </a>
               </div>
               <Button 

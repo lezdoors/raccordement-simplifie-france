@@ -104,8 +104,12 @@ const HeroSection = () => {
               </div>
             </div>
 
-            {/* Trust indicators */}
-            <div className="flex flex-wrap gap-6 pt-4">
+            {/* Trust indicators - Centered */}
+            <div className="flex flex-wrap justify-center lg:justify-start gap-6 pt-4">
+              <div className="flex items-center text-white/80 text-sm">
+                <CheckCircle className="w-4 h-4 mr-2 text-accent" />
+                100% sécurisé
+              </div>
               <div className="flex items-center text-white/80 text-sm">
                 <CheckCircle className="w-4 h-4 mr-2 text-accent" />
                 Traitement sous 48h

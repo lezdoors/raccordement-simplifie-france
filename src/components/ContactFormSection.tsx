@@ -70,7 +70,7 @@ const ContactFormSection = () => {
     {
       icon: Phone,
       label: "Téléphone",
-      value: "09 70 70 95 70",
+      value: "09 77 40 50 60",
       description: "Du lundi au vendredi de 9h à 19h"
     },
     {
