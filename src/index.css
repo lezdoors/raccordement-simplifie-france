@@ -249,12 +249,65 @@
   .touch-target {
     min-height: 48px;
     min-width: 48px;
+    touch-action: manipulation;
+  }
+  
+  /* Mobile Touch Feedback */
+  .touch-feedback {
+    transition: all 0.1s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .touch-feedback:active {
+    transform: scale(0.98);
+    background-color: hsl(var(--primary) / 0.1);
+  }
+  
+  /* Improved Mobile Buttons */
+  .mobile-button {
+    min-height: 56px;
+    padding: 16px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .mobile-button:active {
+    transform: scale(0.98);
+  }
+  
+  /* Mobile-First Navigation */
+  .mobile-nav-item {
+    padding: 16px 20px;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    touch-action: manipulation;
+  }
+  
+  .mobile-nav-item:active {
+    background-color: hsl(var(--primary) / 0.1);
+    transform: scale(0.98);
   }
   
   /* Smooth Scroll */
   .smooth-scroll {
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Mobile Performance Optimizations */
+  .mobile-optimized {
+    transform: translateZ(0);
+    will-change: transform;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
@@ -290,9 +343,59 @@
     padding: calc(var(--space-premium) * 0.7);
   }
   
-  /* Ensure readability on mobile */
+  /* Mobile Typography Optimizations */
   body {
     font-size: 16px;
     line-height: 1.6;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+  }
+  
+  /* Mobile Touch Improvements */
+  * {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* Allow text selection for content */
+  p, span, div[role="text"], h1, h2, h3, h4, h5, h6 {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
+  
+  /* Mobile Form Improvements */
+  input, textarea, select {
+    font-size: 16px; /* Prevents zoom on iOS */
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
+  
+  /* Mobile Button Optimizations */
+  button, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+  }
+  
+  /* Safe Area Handling for Mobile */
+  .mobile-safe-area {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  /* Mobile Viewport Fixes */
+  .mobile-viewport {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
   }
 }

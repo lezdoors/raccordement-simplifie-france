@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundary";
 import MobileDetector from "./components/MobileDetector";
+import MobilePerformanceOptimizer from "./components/MobilePerformanceOptimizer";
 
 // Lazy load all pages for better performance
 const HomePage = lazy(() => import("./pages/HomePage"));
@@ -43,6 +44,7 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
+      <MobilePerformanceOptimizer />
       <Toaster />
       <Sonner />
       <ErrorBoundary>

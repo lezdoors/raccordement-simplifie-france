@@ -66,7 +66,8 @@ const Navigation = () => {
           <div className="md:hidden">
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)} 
-              className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-white/80 hover:bg-white/10"
+              className="inline-flex items-center justify-center p-3 rounded-md text-white hover:text-white/80 hover:bg-white/10 touch-target touch-feedback"
+              aria-label={isMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
@@ -76,30 +77,37 @@ const Navigation = () => {
 
       {/* Mobile Navigation */}
       {isMenuOpen && (
-        <div className="md:hidden border-t border-white/20">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-primary/95">
-            <a href="/" className="text-white hover:text-white/80 block px-3 py-2 rounded-md text-base font-medium">
+        <div className="md:hidden border-t border-white/20 mobile-safe-area">
+          <div className="px-4 pt-2 pb-3 space-y-1 bg-primary/95 backdrop-blur-md">
+            <a href="/" className="mobile-nav-item text-white hover:text-white/80 touch-feedback">
               Accueil
             </a>
-            <a href="/contact" className="text-white hover:text-white/80 block px-3 py-2 rounded-md text-base font-medium">
+            <a href="/contact" className="mobile-nav-item text-white hover:text-white/80 touch-feedback">
               Contact
             </a>
-            <a href="/faq" className="text-white hover:text-white/80 block px-3 py-2 rounded-md text-base font-medium">
+            <a href="/faq" className="mobile-nav-item text-white hover:text-white/80 touch-feedback">
               FAQ
             </a>
-            <a href="/a-propos" className="text-white hover:text-white/80 block px-3 py-2 rounded-md text-base font-medium">
+            <a href="/a-propos" className="mobile-nav-item text-white hover:text-white/80 touch-feedback">
               À propos
             </a>
-            <div className="px-3 py-4 border-t border-white/20">
-              <div className="text-center mb-3">
-                <p className="text-sm text-white/90">Appelez nous au</p>
-                <a href="tel:0977405060" className="text-lg font-bold text-white hover:text-white/90 transition-colors">
+            <div className="px-4 py-6 border-t border-white/20 mt-4">
+              <div className="text-center mb-4">
+                <p className="text-sm text-white/90 mb-1">Appelez nous au</p>
+                <a 
+                  href="tel:0977405060" 
+                  className="text-lg font-bold text-white hover:text-white/90 transition-colors touch-target"
+                >
                   09 77 40 50 60
                 </a>
+                <p className="text-xs text-white/80 mt-1">Lun-Ven 9h-18h</p>
               </div>
               <Button 
-                onClick={() => navigate("/raccordement-enedis")} 
-                className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                onClick={() => {
+                  navigate("/raccordement-enedis");
+                  setIsMenuOpen(false);
+                }} 
+                className="w-full mobile-button bg-white text-primary hover:bg-white/90 font-semibold touch-feedback"
               >
                 Démarrer ma demande
               </Button>
@@ -109,10 +117,10 @@ const Navigation = () => {
       )}
 
       {/* Floating CTA for mobile */}
-      <div className="md:hidden fixed bottom-4 right-4 z-50">
+      <div className="md:hidden fixed bottom-6 right-4 z-50">
         <Button 
           onClick={() => navigate("/raccordement-enedis")} 
-          className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold shadow-lg rounded-full px-6 py-3"
+          className="mobile-button bg-primary text-primary-foreground hover:bg-primary/90 font-semibold shadow-2xl rounded-full px-6 py-4 touch-feedback mobile-optimized"
           size="lg"
         >
           Démarrer ma demande

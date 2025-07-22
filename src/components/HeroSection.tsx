@@ -49,11 +49,11 @@ const HeroSection = () => {
                 Partenaire N°1 en France
               </div>
               
-              <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight text-center lg:text-left">
+              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight text-center lg:text-left">
                 Raccordement <span className="text-slate-100">électrique</span> Enedis
               </h1>
               
-              <p className="text-xl sm:text-2xl text-white/90 font-light leading-relaxed">
+              <p className="text-lg sm:text-xl md:text-2xl text-white/90 font-light leading-relaxed text-center lg:text-left">
                 Service administratif professionnel
               </p>
               
@@ -66,11 +66,19 @@ const HeroSection = () => {
 
             {/* Premium CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold px-8 py-6 text-lg h-auto transform hover:scale-105 transition-all duration-300" onClick={() => navigate("/raccordement-enedis")}>
+              <Button 
+                size="lg" 
+                className="mobile-button bg-primary text-primary-foreground hover:bg-primary/90 font-semibold px-8 py-6 text-lg h-auto transform hover:scale-105 transition-all duration-300 touch-feedback mobile-optimized" 
+                onClick={() => navigate("/raccordement-enedis")}
+              >
                 Démarrer ma demande
               </Button>
               
-              <Button variant="outline" size="lg" className="bg-white text-primary border-primary hover:bg-white/90 font-semibold px-8 py-6 text-lg h-auto">
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="mobile-button bg-white text-primary border-primary hover:bg-white/90 font-semibold px-8 py-6 text-lg h-auto touch-feedback"
+              >
                 <Headphones className="mr-2 h-5 w-5" />
                 Contacter un expert
               </Button>
