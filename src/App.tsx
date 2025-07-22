@@ -19,6 +19,7 @@ import RaccordementChantier from "./pages/RaccordementChantier";
 import ServiceExpress from "./pages/ServiceExpress";
 import Estimation from "./pages/Estimation";
 import CGU from "./pages/CGU";
+import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,7 @@ const App = () => (
           <Route path="/service-express" element={<ServiceExpress />} />
           <Route path="/estimation" element={<Estimation />} />
           <Route path="/cgu" element={<CGU />} />
+          <Route path="/admin" element={<Admin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
