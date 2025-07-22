@@ -1,12 +1,14 @@
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import ErrorBoundary from "./components/ErrorBoundary";
+import ErrorBoundary from "./components/ui/error-boundary";
 import MobileDetector from "./components/MobileDetector";
 import MobilePerformanceOptimizer from "./components/MobilePerformanceOptimizer";
+import { AccessibilityProvider } from "./components/AccessibilityProvider";
+import { usePerformanceMonitor, preloadCriticalResources } from "./components/PerformanceOptimizer";
 
 // Lazy load all pages for better performance
 const HomePage = lazy(() => import("./pages/HomePage"));
@@ -41,91 +43,105 @@ const PageLoader = () => (
 
 const queryClient = new QueryClient();
 
+const AppContent = () => {
+  usePerformanceMonitor();
+  
+  useEffect(() => {
+    preloadCriticalResources();
+  }, []);
+
+  return (
+    <BrowserRouter>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route path="/" element={
+            <MobileDetector>
+              {({ isMobile }) => isMobile ? 
+                <Suspense fallback={<PageLoader />}><MobileHomePage /></Suspense> : 
+                <Suspense fallback={<PageLoader />}><HomePage /></Suspense>
+              }
+            </MobileDetector>
+          } />
+          <Route path="/raccordement-enedis" element={
+            <Suspense fallback={<PageLoader />}><EnedisRaccordement /></Suspense>
+          } />
+          <Route path="/enedis-raccordement" element={<Navigate to="/raccordement-enedis" replace />} />
+          <Route path="/commencer" element={<Navigate to="/raccordement-enedis" replace />} />
+          <Route path="/merci" element={
+            <Suspense fallback={<PageLoader />}><Merci /></Suspense>
+          } />
+          <Route path="/a-propos" element={
+            <Suspense fallback={<PageLoader />}><APropos /></Suspense>
+          } />
+          <Route path="/contact" element={
+            <Suspense fallback={<PageLoader />}><Contact /></Suspense>
+          } />
+          <Route path="/mentions-legales" element={
+            <Suspense fallback={<PageLoader />}><MentionsLegales /></Suspense>
+          } />
+          <Route path="/confidentialite" element={
+            <Suspense fallback={<PageLoader />}><Confidentialite /></Suspense>
+          } />
+          <Route path="/maison-neuve" element={
+            <Suspense fallback={<PageLoader />}><MaisonNeuve /></Suspense>
+          } />
+          <Route path="/photovoltaique" element={
+            <Suspense fallback={<PageLoader />}><Photovoltaique /></Suspense>
+          } />
+          <Route path="/modification-branchement" element={
+            <Suspense fallback={<PageLoader />}><ModificationBranchement /></Suspense>
+          } />
+          <Route path="/raccordement-industriel" element={
+            <Suspense fallback={<PageLoader />}><RaccordementIndustriel /></Suspense>
+          } />
+          <Route path="/raccordement-chantier" element={
+            <Suspense fallback={<PageLoader />}><RaccordementChantier /></Suspense>
+          } />
+          <Route path="/service-express" element={
+            <Suspense fallback={<PageLoader />}><ServiceExpress /></Suspense>
+          } />
+          <Route path="/estimation" element={
+            <Suspense fallback={<PageLoader />}><Estimation /></Suspense>
+          } />
+          <Route path="/cgu" element={
+            <Suspense fallback={<PageLoader />}><CGU /></Suspense>
+          } />
+          <Route path="/payment-success" element={
+            <Suspense fallback={<PageLoader />}><PaymentSuccess /></Suspense>
+          } />
+          <Route path="/payment-cancel" element={
+            <Suspense fallback={<PageLoader />}><PaymentCancel /></Suspense>
+          } />
+          <Route path="/admin" element={
+            <Suspense fallback={<PageLoader />}>
+              <ProtectedRoute><Admin /></ProtectedRoute>
+            </Suspense>
+          } />
+          <Route path="/login" element={
+            <Suspense fallback={<PageLoader />}><Login /></Suspense>
+          } />
+          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="*" element={
+            <Suspense fallback={<PageLoader />}><NotFound /></Suspense>
+          } />
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
+  );
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <MobilePerformanceOptimizer />
-      <Toaster />
-      <Sonner />
-      <ErrorBoundary>
-        <BrowserRouter>
-          <Suspense fallback={<PageLoader />}>
-            <Routes>
-              <Route path="/" element={
-                <MobileDetector>
-                  {({ isMobile }) => isMobile ? 
-                    <Suspense fallback={<PageLoader />}><MobileHomePage /></Suspense> : 
-                    <Suspense fallback={<PageLoader />}><HomePage /></Suspense>
-                  }
-                </MobileDetector>
-              } />
-              <Route path="/raccordement-enedis" element={
-                <Suspense fallback={<PageLoader />}><EnedisRaccordement /></Suspense>
-              } />
-              <Route path="/enedis-raccordement" element={<Navigate to="/raccordement-enedis" replace />} />
-              <Route path="/commencer" element={<Navigate to="/raccordement-enedis" replace />} />
-              <Route path="/merci" element={
-                <Suspense fallback={<PageLoader />}><Merci /></Suspense>
-              } />
-              <Route path="/a-propos" element={
-                <Suspense fallback={<PageLoader />}><APropos /></Suspense>
-              } />
-              <Route path="/contact" element={
-                <Suspense fallback={<PageLoader />}><Contact /></Suspense>
-              } />
-              <Route path="/mentions-legales" element={
-                <Suspense fallback={<PageLoader />}><MentionsLegales /></Suspense>
-              } />
-              <Route path="/confidentialite" element={
-                <Suspense fallback={<PageLoader />}><Confidentialite /></Suspense>
-              } />
-              <Route path="/maison-neuve" element={
-                <Suspense fallback={<PageLoader />}><MaisonNeuve /></Suspense>
-              } />
-              <Route path="/photovoltaique" element={
-                <Suspense fallback={<PageLoader />}><Photovoltaique /></Suspense>
-              } />
-              <Route path="/modification-branchement" element={
-                <Suspense fallback={<PageLoader />}><ModificationBranchement /></Suspense>
-              } />
-              <Route path="/raccordement-industriel" element={
-                <Suspense fallback={<PageLoader />}><RaccordementIndustriel /></Suspense>
-              } />
-              <Route path="/raccordement-chantier" element={
-                <Suspense fallback={<PageLoader />}><RaccordementChantier /></Suspense>
-              } />
-              <Route path="/service-express" element={
-                <Suspense fallback={<PageLoader />}><ServiceExpress /></Suspense>
-              } />
-              <Route path="/estimation" element={
-                <Suspense fallback={<PageLoader />}><Estimation /></Suspense>
-              } />
-              <Route path="/cgu" element={
-                <Suspense fallback={<PageLoader />}><CGU /></Suspense>
-              } />
-              <Route path="/payment-success" element={
-                <Suspense fallback={<PageLoader />}><PaymentSuccess /></Suspense>
-              } />
-              <Route path="/payment-cancel" element={
-                <Suspense fallback={<PageLoader />}><PaymentCancel /></Suspense>
-              } />
-              <Route path="/admin" element={
-                <Suspense fallback={<PageLoader />}>
-                  <ProtectedRoute><Admin /></ProtectedRoute>
-                </Suspense>
-              } />
-              <Route path="/login" element={
-                <Suspense fallback={<PageLoader />}><Login /></Suspense>
-              } />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={
-                <Suspense fallback={<PageLoader />}><NotFound /></Suspense>
-              } />
-            </Routes>
-          </Suspense>
-        </BrowserRouter>
-      </ErrorBoundary>
-    </TooltipProvider>
+    <AccessibilityProvider>
+      <TooltipProvider>
+        <MobilePerformanceOptimizer />
+        <Toaster />
+        <Sonner />
+        <ErrorBoundary>
+          <AppContent />
+        </ErrorBoundary>
+      </TooltipProvider>
+    </AccessibilityProvider>
   </QueryClientProvider>
 );
 
