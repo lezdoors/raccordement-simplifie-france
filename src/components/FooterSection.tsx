@@ -232,6 +232,7 @@ const FooterSection = () => {
             <a href="/mentions-legales" className="hover:text-blue-400 hover:underline transition-colors duration-200">Mentions légales</a>
             <a href="/confidentialite" className="hover:text-blue-400 hover:underline transition-colors duration-200">Confidentialité</a>
             <a href="/cgu" className="hover:text-blue-400 hover:underline transition-colors duration-200">CGU</a>
+            <a href="/admin" className="hover:text-blue-400 hover:underline transition-colors duration-200">Admin</a>
           </div>
         </div>
       </div>

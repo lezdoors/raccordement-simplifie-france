@@ -20,6 +20,7 @@ import ServiceExpress from "./pages/ServiceExpress";
 import Estimation from "./pages/Estimation";
 import CGU from "./pages/CGU";
 import Admin from "./pages/Admin";
+import Login from "./pages/Login";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,7 @@ const App = () => (
           <Route path="/estimation" element={<Estimation />} />
           <Route path="/cgu" element={<CGU />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/login" element={<Login />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

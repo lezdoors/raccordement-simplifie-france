@@ -6,7 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "sonner";
-import { BarChart3, Users, MessageSquare, CreditCard, FileText } from "lucide-react";
+import { BarChart3, Users, MessageSquare, CreditCard, FileText, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import type { User } from "@supabase/supabase-js";
 
 interface FormSubmission {
   id: string;
@@ -47,10 +49,12 @@ interface Payment {
 }
 
 const Admin = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
   const [submissions, setSubmissions] = useState<FormSubmission[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [payments, setPayments] = useState<Payment[]>([]);
-  const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     totalSubmissions: 0,
     totalMessages: 0,
@@ -59,8 +63,30 @@ const Admin = () => {
   });
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    // Check authentication status
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate('/login');
+        return;
+      }
+      setUser(session.user);
+      fetchData();
+    };
+
+    checkAuth();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!session) {
+        navigate('/login');
+      } else {
+        setUser(session.user);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
 
   const fetchData = async () => {
     try {
@@ -117,6 +143,16 @@ const Admin = () => {
     }
   };
 
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast.error('Erreur lors de la déconnexion');
+    } else {
+      toast.success('Déconnexion réussie');
+      navigate('/login');
+    }
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('fr-FR', {
       day: '2-digit',
@@ -141,6 +177,7 @@ const Admin = () => {
       completed: 'bg-green-100 text-green-800',
       succeeded: 'bg-green-100 text-green-800',
       failed: 'bg-red-100 text-red-800',
+      contact: 'bg-purple-100 text-purple-800',
     };
 
     return (
@@ -163,6 +200,10 @@ const Admin = () => {
     );
   }
 
+  if (!user) {
+    return null; // Will redirect to login
+  }
+
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-7xl mx-auto space-y-8">
@@ -170,11 +211,17 @@ const Admin = () => {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold">Dashboard Admin</h1>
-            <p className="text-muted-foreground">Gestion des demandes et suivi des activités</p>
+            <p className="text-muted-foreground">Bienvenue, {user.email}</p>
           </div>
-          <Button onClick={fetchData} variant="outline">
-            Actualiser
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={fetchData} variant="outline">
+              Actualiser
+            </Button>
+            <Button onClick={handleLogout} variant="outline">
+              <LogOut className="h-4 w-4 mr-2" />
+              Déconnexion
+            </Button>
+          </div>
         </div>
 
         {/* Stats Cards */}
