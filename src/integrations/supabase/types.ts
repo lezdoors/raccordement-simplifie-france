@@ -50,6 +50,45 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_users: {
+        Row: {
+          can_export_data: boolean | null
+          can_manage_users: boolean | null
+          can_see_all_leads: boolean | null
+          can_see_payments: boolean | null
+          created_at: string | null
+          department: string | null
+          email: string
+          id: string
+          is_active: boolean | null
+          role: string
+        }
+        Insert: {
+          can_export_data?: boolean | null
+          can_manage_users?: boolean | null
+          can_see_all_leads?: boolean | null
+          can_see_payments?: boolean | null
+          created_at?: string | null
+          department?: string | null
+          email: string
+          id?: string
+          is_active?: boolean | null
+          role: string
+        }
+        Update: {
+          can_export_data?: boolean | null
+          can_manage_users?: boolean | null
+          can_see_all_leads?: boolean | null
+          can_see_payments?: boolean | null
+          created_at?: string | null
+          department?: string | null
+          email?: string
+          id?: string
+          is_active?: boolean | null
+          role?: string
+        }
+        Relationships: []
+      }
       admins: {
         Row: {
           active: boolean | null
@@ -77,6 +116,126 @@ export type Database = {
           id?: string
           name?: string | null
           role?: string | null
+        }
+        Relationships: []
+      }
+      connection_requests: {
+        Row: {
+          additional_comments: string | null
+          architect_email: string | null
+          architect_name: string | null
+          architect_phone: string | null
+          billing_address: Json | null
+          client_type: string | null
+          company_name: string | null
+          connection_type: string | null
+          created_at: string
+          custom_request_description: string | null
+          desired_timeline: string | null
+          email: string | null
+          first_name: string | null
+          form_step_completed: number | null
+          has_architect: boolean | null
+          id: string
+          ip_address: unknown | null
+          last_name: string | null
+          phone: string | null
+          power_kva: string | null
+          power_type: string | null
+          project_address: string | null
+          project_address_complement: string | null
+          project_city: string | null
+          project_postal_code: string | null
+          project_status: string | null
+          project_type: string | null
+          referrer: string | null
+          siren: string | null
+          status: string | null
+          updated_at: string
+          user_agent: string | null
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+        }
+        Insert: {
+          additional_comments?: string | null
+          architect_email?: string | null
+          architect_name?: string | null
+          architect_phone?: string | null
+          billing_address?: Json | null
+          client_type?: string | null
+          company_name?: string | null
+          connection_type?: string | null
+          created_at?: string
+          custom_request_description?: string | null
+          desired_timeline?: string | null
+          email?: string | null
+          first_name?: string | null
+          form_step_completed?: number | null
+          has_architect?: boolean | null
+          id?: string
+          ip_address?: unknown | null
+          last_name?: string | null
+          phone?: string | null
+          power_kva?: string | null
+          power_type?: string | null
+          project_address?: string | null
+          project_address_complement?: string | null
+          project_city?: string | null
+          project_postal_code?: string | null
+          project_status?: string | null
+          project_type?: string | null
+          referrer?: string | null
+          siren?: string | null
+          status?: string | null
+          updated_at?: string
+          user_agent?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+        }
+        Update: {
+          additional_comments?: string | null
+          architect_email?: string | null
+          architect_name?: string | null
+          architect_phone?: string | null
+          billing_address?: Json | null
+          client_type?: string | null
+          company_name?: string | null
+          connection_type?: string | null
+          created_at?: string
+          custom_request_description?: string | null
+          desired_timeline?: string | null
+          email?: string | null
+          first_name?: string | null
+          form_step_completed?: number | null
+          has_architect?: boolean | null
+          id?: string
+          ip_address?: unknown | null
+          last_name?: string | null
+          phone?: string | null
+          power_kva?: string | null
+          power_type?: string | null
+          project_address?: string | null
+          project_address_complement?: string | null
+          project_city?: string | null
+          project_postal_code?: string | null
+          project_status?: string | null
+          project_type?: string | null
+          referrer?: string | null
+          siren?: string | null
+          status?: string | null
+          updated_at?: string
+          user_agent?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
         }
         Relationships: []
       }
@@ -333,6 +492,96 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      leads_raccordement: {
+        Row: {
+          adresse_chantier: string | null
+          civilite: string | null
+          code_postal: string | null
+          commentaires: string | null
+          consent_accepted: boolean | null
+          created_at: string | null
+          delai_souhaite: string | null
+          email: string
+          etat_projet: string | null
+          form_step: number | null
+          id: string
+          nom: string
+          numero_pdl: string | null
+          payment_status: string | null
+          prenom: string
+          puissance: string | null
+          raison_sociale: string | null
+          siren: string | null
+          stripe_session_id: string | null
+          telephone: string
+          type_alimentation: string | null
+          type_client: string
+          type_facturation: string | null
+          type_projet: string | null
+          type_raccordement: string | null
+          updated_at: string | null
+          ville: string | null
+        }
+        Insert: {
+          adresse_chantier?: string | null
+          civilite?: string | null
+          code_postal?: string | null
+          commentaires?: string | null
+          consent_accepted?: boolean | null
+          created_at?: string | null
+          delai_souhaite?: string | null
+          email: string
+          etat_projet?: string | null
+          form_step?: number | null
+          id?: string
+          nom: string
+          numero_pdl?: string | null
+          payment_status?: string | null
+          prenom: string
+          puissance?: string | null
+          raison_sociale?: string | null
+          siren?: string | null
+          stripe_session_id?: string | null
+          telephone: string
+          type_alimentation?: string | null
+          type_client: string
+          type_facturation?: string | null
+          type_projet?: string | null
+          type_raccordement?: string | null
+          updated_at?: string | null
+          ville?: string | null
+        }
+        Update: {
+          adresse_chantier?: string | null
+          civilite?: string | null
+          code_postal?: string | null
+          commentaires?: string | null
+          consent_accepted?: boolean | null
+          created_at?: string | null
+          delai_souhaite?: string | null
+          email?: string
+          etat_projet?: string | null
+          form_step?: number | null
+          id?: string
+          nom?: string
+          numero_pdl?: string | null
+          payment_status?: string | null
+          prenom?: string
+          puissance?: string | null
+          raison_sociale?: string | null
+          siren?: string | null
+          stripe_session_id?: string | null
+          telephone?: string
+          type_alimentation?: string | null
+          type_client?: string
+          type_facturation?: string | null
+          type_projet?: string | null
+          type_raccordement?: string | null
+          updated_at?: string | null
+          ville?: string | null
+        }
+        Relationships: []
       }
       messages: {
         Row: {
