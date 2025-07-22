@@ -59,9 +59,9 @@ Deno.serve(async (req) => {
 
     // Send the email
     const { data, error } = await resend.emails.send({
-      from: 'raccordement.net <noreply@resend.dev>',
+      from: 'raccordement-elec.fr <noreply@resend.dev>',
       to: [user.email],
-      subject: '🔐 Confirmez votre compte admin - raccordement.net',
+      subject: '🔐 Confirmez votre compte admin - raccordement-elec.fr',
       html,
     })
 

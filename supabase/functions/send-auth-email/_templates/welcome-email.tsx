@@ -31,13 +31,13 @@ export const WelcomeEmail = ({
 }: WelcomeEmailProps) => (
   <Html>
     <Head />
-    <Preview>Confirmez votre compte admin - raccordement.net</Preview>
+    <Preview>Confirmez votre compte admin - raccordement-elec.fr</Preview>
     <Body style={main}>
       <Container style={container}>
         <Heading style={h1}>🔐 Confirmation de votre compte</Heading>
         
         <Text style={text}>
-          Bienvenue sur le tableau de bord administrateur de <strong>raccordement.net</strong> !
+          Bienvenue sur le tableau de bord administrateur de <strong>raccordement-elec.fr</strong> !
         </Text>
         
         <Text style={text}>
@@ -74,9 +74,9 @@ export const WelcomeEmail = ({
         <Hr style={hr} />
 
         <Text style={footer}>
-          <strong>raccordement.net</strong><br />
+          <strong>raccordement-elec.fr</strong><br />
           Votre partenaire pour tous vos raccordements électriques<br />
-          📞 09 69 32 18 00 | 📧 contact@raccordement.net
+          📞 09 77 40 50 60 | 📧 contact@raccordement-elec.fr
         </Text>
       </Container>
     </Body>
