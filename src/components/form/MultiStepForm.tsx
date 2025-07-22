@@ -235,24 +235,10 @@ export const MultiStepForm = () => {
       // Clear saved data
       localStorage.removeItem('raccordement-form-data');
       
-      // Create Stripe payment session
-      toast.loading("Redirection vers le paiement...");
+      toast.success("Votre demande a été envoyée avec succès !");
       
-      const { data: paymentData, error: paymentError } = await supabase.functions.invoke('create-payment-session', {
-        body: { formData: data }
-      });
-
-      if (paymentError || !paymentData?.url) {
-        console.error("Payment session error:", paymentError);
-        toast.error("Erreur lors de la création du paiement. Veuillez réessayer.");
-        return;
-      }
-
-      // Open payment in new tab
-      window.open(paymentData.url, '_blank');
-      
-      toast.success("Redirected to payment. Complete the payment in the new tab.");
-      
+      // Redirect to thank you page
+      navigate("/merci");
     } catch (error) {
       console.error("Error submitting form:", error);
       toast.error("Une erreur est survenue. Veuillez réessayer.");
@@ -377,7 +363,7 @@ export const MultiStepForm = () => {
                       disabled={!form.formState.isValid}
                       size="lg"
                     >
-                      Payer 129,80€ et finaliser
+                      Envoyer ma demande
                     </Button>
                   ) : (
                     <Button

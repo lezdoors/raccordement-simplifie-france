@@ -14,8 +14,6 @@ const MobileHomePage = lazy(() => import("./pages/MobileHomePage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const EnedisRaccordement = lazy(() => import("./pages/EnedisRaccordement"));
 const Merci = lazy(() => import("./pages/Merci"));
-const PaymentSuccess = lazy(() => import("./pages/PaymentSuccess"));
-const PaymentCancel = lazy(() => import("./pages/PaymentCancel"));
 const APropos = lazy(() => import("./pages/APropos"));
 const Contact = lazy(() => import("./pages/Contact"));
 const MentionsLegales = lazy(() => import("./pages/MentionsLegales"));
@@ -31,6 +29,8 @@ const CGU = lazy(() => import("./pages/CGU"));
 const Admin = lazy(() => import("./pages/Admin"));
 const Login = lazy(() => import("./pages/Login"));
 const ProtectedRoute = lazy(() => import("./components/ProtectedRoute"));
+const PaymentSuccess = lazy(() => import("./pages/PaymentSuccess"));
+const PaymentCancel = lazy(() => import("./pages/PaymentCancel"));
 
 // Loading component for suspense fallbacks
 const PageLoader = () => (
@@ -67,12 +67,6 @@ const App = () => (
               <Route path="/merci" element={
                 <Suspense fallback={<PageLoader />}><Merci /></Suspense>
               } />
-              <Route path="/payment-success" element={
-                <Suspense fallback={<PageLoader />}><PaymentSuccess /></Suspense>
-              } />
-              <Route path="/payment-cancel" element={
-                <Suspense fallback={<PageLoader />}><PaymentCancel /></Suspense>
-              } />
               <Route path="/a-propos" element={
                 <Suspense fallback={<PageLoader />}><APropos /></Suspense>
               } />
@@ -108,6 +102,12 @@ const App = () => (
               } />
               <Route path="/cgu" element={
                 <Suspense fallback={<PageLoader />}><CGU /></Suspense>
+              } />
+              <Route path="/payment-success" element={
+                <Suspense fallback={<PageLoader />}><PaymentSuccess /></Suspense>
+              } />
+              <Route path="/payment-cancel" element={
+                <Suspense fallback={<PageLoader />}><PaymentCancel /></Suspense>
               } />
               <Route path="/admin" element={
                 <Suspense fallback={<PageLoader />}>

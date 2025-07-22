@@ -14,48 +14,30 @@ serve(async (req) => {
   }
 
   try {
-    const { formData } = await req.json();
-    
-    if (!formData?.email) {
-      throw new Error("Form data with email is required");
-    }
+    const { amount, formData } = await req.json();
 
     // Initialize Stripe
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2023-10-16",
     });
 
-    // Create Supabase client for updating submission
-    const supabaseService = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
-      { auth: { persistSession: false } }
-    );
+    // Create Supabase client
+    const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Check if customer exists in Stripe
-    const customers = await stripe.customers.list({ 
-      email: formData.email, 
-      limit: 1 
-    });
-    
-    let customerId;
-    if (customers.data.length > 0) {
-      customerId = customers.data[0].id;
-    }
-
-    // Create checkout session with fixed amount
+    // Create payment session
     const session = await stripe.checkout.sessions.create({
-      customer: customerId,
-      customer_email: customerId ? undefined : formData.email,
+      payment_method_types: ["card"],
       line_items: [
         {
           price_data: {
             currency: "eur",
-            product_data: { 
-              name: "Demande de raccordement électrique",
-              description: "Service administratif pour raccordement électrique Enedis"
+            product_data: {
+              name: `Service de raccordement électrique - ${formData.projectType}`,
+              description: `Gestion administrative complète pour ${formData.firstName} ${formData.lastName}`,
             },
-            unit_amount: 12980, // €129.80 in cents
+            unit_amount: amount * 100, // Convert to cents
           },
           quantity: 1,
         },
@@ -63,26 +45,39 @@ serve(async (req) => {
       mode: "payment",
       success_url: `${req.headers.get("origin")}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.get("origin")}/payment-cancel`,
+      customer_email: formData.email,
       metadata: {
-        form_submission_email: formData.email,
-        client_type: formData.clientType || '',
-        connection_type: formData.connectionType || ''
-      }
+        customer_name: `${formData.firstName} ${formData.lastName}`,
+        project_type: formData.projectType,
+        phone: formData.phone,
+        address: formData.address,
+        city: formData.city,
+        postal_code: formData.postalCode,
+      },
     });
 
-    // Update form submission with Stripe session ID
-    const { error: updateError } = await supabaseService
+    // Save form data to Supabase
+    const { error: insertError } = await supabase
       .from('form_submissions')
-      .update({
+      .insert({
+        client_type: formData.clientType,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        work_address: formData.address,
+        postal_code: formData.postalCode,
+        city: formData.city,
+        project_type: formData.projectType,
+        power_requested: formData.power,
+        comments: formData.comments,
         stripe_session_id: session.id,
-        amount_paid: 129.80,
-        payment_status: 'pending',
-        form_status: 'payment_pending'
-      })
-      .eq('email', formData.email);
+        amount_paid: amount,
+        status: 'pending_payment'
+      });
 
-    if (updateError) {
-      console.error("Failed to update form submission:", updateError);
+    if (insertError) {
+      console.error('Error saving form data:', insertError);
     }
 
     return new Response(

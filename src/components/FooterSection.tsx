@@ -83,12 +83,12 @@ const FooterSection = () => {
           <div className="h-12 md:h-16 w-auto mr-0 md:mr-4 mb-2 md:mb-0">
             <img 
               src="/lovable-uploads/55f86fce-e7c0-4a55-95e2-4c1c19dcbc0f.png" 
-              alt="raccordement-elec.fr" 
+              alt="raccordement.net" 
               className="h-full w-auto object-contain brightness-0 invert" 
               loading="lazy"
             />
           </div>
-          <h2 className="text-xl md:text-2xl font-bold text-center md:text-left">raccordement-elec.fr</h2>
+          <h2 className="text-xl md:text-2xl font-bold text-center md:text-left">raccordement.net</h2>
         </div>
 
         {/* Mobile-first Grid Layout */}
@@ -213,10 +213,10 @@ const FooterSection = () => {
               <div className="flex items-center justify-center md:justify-start">
                 <Phone className="w-4 h-4 mr-2 text-blue-400" />
                 <a 
-                  href="tel:0970709570" 
+                  href="tel:0969321800" 
                   className="text-blue-400 hover:text-blue-300 transition-colors duration-200 font-semibold text-lg"
                 >
-                  09 70 70 95 70
+                  09 69 32 18 00
                 </a>
               </div>
             </div>
@@ -239,12 +239,12 @@ const FooterSection = () => {
               }}
             >
               ©
-            </a> 2025 Raccordement Électricité. Tous droits réservés.
+            </a> 2024 raccordement.net. Tous droits réservés.
           </p>
-            <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6 text-sm md:text-base text-gray-400 text-center">
+          <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6 text-sm md:text-base text-gray-400 text-center">
             <a href="/mentions-legales" className="hover:text-blue-400 hover:underline transition-colors duration-200">Mentions légales</a>
-            <a href="/cgu" className="hover:text-blue-400 hover:underline transition-colors duration-200">Conditions générales de vente</a>
-            <a href="/confidentialite" className="hover:text-blue-400 hover:underline transition-colors duration-200">Politique de confidentialité</a>
+            <a href="/confidentialite" className="hover:text-blue-400 hover:underline transition-colors duration-200">Confidentialité</a>
+            <a href="/cgu" className="hover:text-blue-400 hover:underline transition-colors duration-200">CGU</a>
           </div>
         </div>
       </div>

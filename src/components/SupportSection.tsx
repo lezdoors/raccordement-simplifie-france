@@ -16,15 +16,16 @@ export const SupportSection = () => {
             <div className="flex items-center justify-center md:justify-start gap-2 mb-3">
               <MessageCircle className="w-6 h-6 text-blue-600" />
               <h3 className="text-xl font-semibold text-foreground">
-                Besoin d'aide avec le formulaire ?
+                💬 Support Portail en ligne
               </h3>
             </div>
             <p className="text-muted-foreground mb-4 max-w-2xl">
-              Notre équipe est disponible. Appelez le 09 70 70 95 70 ou écrivez à contact@raccordement-elec.fr
+              Notre équipe de spécialistes est disponible pour vous accompagner dans votre demande de raccordement électrique. 
+              Assistance gratuite et personnalisée.
             </p>
             <div className="flex items-center justify-center md:justify-start gap-2 text-sm text-muted-foreground">
               <Clock className="w-4 h-4" />
-              <span>Réponse sous 2h en jours ouvrés</span>
+              <span>🕘 Réponse sous 2h en jours ouvrés</span>
             </div>
           </div>
           
