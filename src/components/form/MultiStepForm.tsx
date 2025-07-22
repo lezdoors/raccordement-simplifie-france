@@ -274,85 +274,113 @@ export const MultiStepForm = () => {
   const progress = (currentStep / STEPS.length) * 100;
 
   return (
-    <Card className="p-6 md:p-8">
-      {/* French Flag Progress Bar */}
-      <div className="mb-8">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold text-foreground">
-            Étape {currentStep} sur {STEPS.length}
-          </h2>
-          <span className="text-sm text-muted-foreground">
-            {Math.round(progress)}% complété
-          </span>
+    <div className="min-h-screen bg-background">
+      {/* Sticky Progress Bar for Mobile */}
+      <div className="md:hidden sticky top-0 z-40 bg-white border-b shadow-sm">
+        <div className="px-4 py-3">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-sm font-medium text-foreground">
+              Étape {currentStep} sur {STEPS.length}
+            </span>
+            <span className="text-xs text-muted-foreground">
+              {Math.round(progress)}% complété
+            </span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div 
+              className="bg-primary h-2 rounded-full transition-all duration-300" 
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
         </div>
-        
-        {/* Custom French Flag Progress Bar */}
-        <div className="flex items-center justify-between mb-4">
-          {STEPS.map((step, index) => (
-            <div key={step.id} className="flex items-center">
-              <div className={`
-                w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-semibold
-                ${getStepColor(step.id)}
-                ${step.id === currentStep ? 'ring-2 ring-offset-2 ring-primary' : ''}
-              `}>
-                <span className="text-white">{step.id}</span>
-              </div>
-              {index < STEPS.length - 1 && (
-                <div className={`
-                  h-1 w-16 mx-2
-                  ${step.id < currentStep ? getStepColor(step.id).replace('bg-', 'bg-').replace('-100', '-300') : 'bg-gray-200'}
-                `} />
-              )}
-            </div>
-          ))}
-        </div>
-        
-        <p className="text-sm text-muted-foreground text-center">
-          {STEPS[currentStep - 1].title}
-        </p>
       </div>
 
-      {/* Step Content */}
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-          <div className="min-h-[400px]">
-            {getCurrentComponent()}
-          </div>
+      <div className="container mx-auto px-4 py-4 md:py-8">
+        <div className="max-w-4xl mx-auto">
+          <Card className="p-4 md:p-6 lg:p-8">
+            {/* Desktop Progress Bar with French Flag Colors */}
+            <div className="hidden md:block mb-8">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-lg font-semibold text-foreground">
+                  Étape {currentStep} sur {STEPS.length}
+                </h2>
+                <span className="text-sm text-muted-foreground">
+                  {Math.round(progress)}% complété
+                </span>
+              </div>
+              
+              {/* Custom French Flag Progress Bar */}
+              <div className="flex items-center justify-between mb-4">
+                {STEPS.map((step, index) => (
+                  <div key={step.id} className="flex items-center">
+                    <div className={`
+                      w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-semibold
+                      ${getStepColor(step.id)}
+                      ${step.id === currentStep ? 'ring-2 ring-offset-2 ring-primary' : ''}
+                    `}>
+                      <span className="text-white">{step.id}</span>
+                    </div>
+                    {index < STEPS.length - 1 && (
+                      <div className={`
+                        h-1 w-16 mx-2
+                        ${step.id < currentStep ? getStepColor(step.id).replace('bg-', 'bg-').replace('-100', '-300') : 'bg-gray-200'}
+                      `} />
+                    )}
+                  </div>
+                ))}
+              </div>
+              
+              <p className="text-sm text-muted-foreground text-center">
+                {STEPS[currentStep - 1].title}
+              </p>
+            </div>
 
-        {/* Navigation Buttons */}
-        <div className="flex justify-between pt-6 border-t">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handlePrevious}
-            disabled={isFirstStep}
-            className="flex items-center gap-2"
-          >
-            <ChevronLeft className="w-4 h-4" />
-            Précédent
-          </Button>
+            {/* Step Content */}
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 md:space-y-8">
+                <div className="min-h-[400px] px-2 md:px-0">
+                  {getCurrentComponent()}
+                </div>
 
-          {isLastStep ? (
-            <Button
-              type="submit"
-              className="flex items-center gap-2"
-              disabled={!form.formState.isValid}
-            >
-              Envoyer ma demande
-            </Button>
-          ) : (
-            <Button
-              type="button"
-              onClick={handleNext}
-              className="flex items-center gap-2"
-            >
-              Suivant
-              <ChevronRight className="w-4 h-4" />
-            </Button>
-          )}
+                {/* Navigation Buttons - Mobile optimized */}
+                <div className="flex flex-col md:flex-row justify-between gap-4 pt-6 border-t">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handlePrevious}
+                    disabled={isFirstStep}
+                    className="flex items-center justify-center gap-2 w-full md:w-auto order-2 md:order-1"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    Précédent
+                  </Button>
+
+                  {isLastStep ? (
+                    <Button
+                      type="submit"
+                      className="flex items-center justify-center gap-2 w-full md:w-auto order-1 md:order-2"
+                      disabled={!form.formState.isValid}
+                      size="lg"
+                    >
+                      Envoyer ma demande
+                    </Button>
+                  ) : (
+                    <Button
+                      type="button"
+                      onClick={handleNext}
+                      className="flex items-center justify-center gap-2 w-full md:w-auto order-1 md:order-2"
+                      size="lg"
+                    >
+                      Suivant
+                      <ChevronRight className="w-4 h-4" />
+                    </Button>
+                  )}
+                </div>
+              </form>
+            </Form>
+          </Card>
         </div>
-        </form>
-      </Form>
-    </Card>
+      </div>
+    </div>
   );
 };

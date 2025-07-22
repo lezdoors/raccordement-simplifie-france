@@ -30,27 +30,27 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="text-center space-y-2">
-        <h2 className="text-2xl font-semibold text-foreground">
+    <div className="space-y-6 md:space-y-8">
+      <div className="text-center space-y-3">
+        <h2 className="text-xl md:text-2xl font-semibold text-foreground leading-relaxed">
           Informations personnelles
         </h2>
-        <p className="text-muted-foreground">
+        <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
           Ces informations nous permettront de vous contacter
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:gap-8">
         {/* Civilité */}
         <FormField
           control={form.control}
           name="civilite"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-base font-medium">Civilité *</FormLabel>
+            <FormItem className="space-y-3">
+              <FormLabel className="text-base md:text-lg font-medium">Civilité *</FormLabel>
               <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
-                  <SelectTrigger className="h-12">
+                  <SelectTrigger className="h-12 md:h-14 text-base">
                     <SelectValue placeholder="Sélectionnez votre civilité" />
                   </SelectTrigger>
                 </FormControl>
@@ -69,8 +69,8 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
           control={form.control}
           name="clientType"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-base font-medium">Type de client *</FormLabel>
+            <FormItem className="space-y-3">
+              <FormLabel className="text-base md:text-lg font-medium">Type de client *</FormLabel>
               <FormControl>
                 <RadioGroup
                   value={field.value}
