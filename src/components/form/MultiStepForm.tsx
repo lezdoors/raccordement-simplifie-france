@@ -5,106 +5,87 @@ import { z } from "zod";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { Form } from "@/components/ui/form";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { StepClientType } from "./steps/StepClientType";
 import { StepPersonalInfo } from "./steps/StepPersonalInfo";
-import { StepWorkAddress } from "./steps/StepWorkAddress";
-import { StepBillingAddress } from "./steps/StepBillingAddress";
-import { StepAdditionalInfo } from "./steps/StepAdditionalInfo";
-import { StepSummary } from "./steps/StepSummary";
+import { StepTechnicalDetails } from "./steps/StepTechnicalDetails";
+import { StepFinalValidation } from "./steps/StepFinalValidation";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-// Form schema with enhanced validation
+// Complete form schema according to specifications
 const formSchema = z.object({
-  // Step 1: Client Type
+  // Step 1: Personal Information
+  civilite: z.enum(["monsieur", "madame"]),
   clientType: z.enum(["particulier", "professionnel", "collectivite"]),
-  
-  // Step 2: Personal/Company Info
   firstName: z.string().min(1, "Le prénom est requis"),
   lastName: z.string().min(1, "Le nom est requis"),
   email: z.string().email("Email invalide"),
   phone: z.string()
     .min(10, "Le numéro de téléphone doit contenir 10 chiffres")
     .regex(/^[0-9]{10}$/, "Format de téléphone invalide"),
-  companyName: z.string().optional(),
-  siret: z.string().optional(),
-  collectivityName: z.string().optional(),
-  
-  // Step 3: Work Address
-  workAddress: z.string().min(1, "L'adresse du chantier est requise"),
-  workCity: z.string().min(1, "La ville est requise"),
-  workPostalCode: z.string()
+  postalCode: z.string()
     .min(5, "Le code postal doit contenir 5 chiffres")
     .max(5, "Le code postal doit contenir 5 chiffres")
     .regex(/^[0-9]{5}$/, "Code postal invalide"),
-  workAddressComplement: z.string().optional(),
+  city: z.string().min(1, "La ville est requise"),
+  companyName: z.string().optional(),
+  siret: z.string().optional(),
+  collectivityName: z.string().optional(),
+  collectivitySiren: z.string().optional(),
   
-  // Step 4: Billing Address
-  sameAsBilling: z.boolean(),
-  billingAddress: z.string().optional(),
-  billingCity: z.string().optional(),
-  billingPostalCode: z.string().optional(),
-  billingAddressComplement: z.string().optional(),
+  // Step 2: Technical Details
+  connectionType: z.enum([
+    "raccordement_enedis_definitif",
+    "raccordement_provisoire", 
+    "viabilisation_terrain",
+    "modification_raccordement",
+    "raccordement_collectif",
+    "raccordement_photovoltaique"
+  ]),
+  projectType: z.enum([
+    "maison_individuelle",
+    "immeuble_collectif", 
+    "local_commercial",
+    "batiment_industriel",
+    "terrain_nu"
+  ]),
+  powerType: z.enum(["monophase", "triphase", "je_ne_sais_pas"]),
+  powerDemanded: z.string().min(1, "La puissance demandée est requise"),
+  workAddress: z.string().min(1, "L'adresse complète du chantier est requise"),
+  pdlNumber: z.string().optional(),
   
-  // Step 5: Additional Info
-  connectionType: z.enum(["definitif", "provisoire", "augmentation", "collectif"]),
-  power: z.string().min(1, "La puissance est requise"),
-  dwellings: z.string().optional(),
-  urgent: z.boolean(),
-  comments: z.string().optional(),
-  
-  // RGPD
-  rgpdConsent: z.boolean().refine(val => val === true, "Vous devez accepter le traitement de vos données"),
-}).refine((data) => {
-  // Conditional validation for billing address
-  if (!data.sameAsBilling) {
-    return !!(data.billingAddress && data.billingCity && data.billingPostalCode);
-  }
-  return true;
-}, {
-  message: "L'adresse de facturation est requise",
-  path: ["billingAddress"],
+  // Step 3: Final Validation
+  projectStatus: z.string().min(1, "L'état du projet est requis"),
+  desiredTimeline: z.string().min(1, "Le délai souhaité est requis"),
+  billingType: z.enum(["personnel", "societe"]),
+  consent: z.boolean().refine(val => val === true, "Vous devez accepter les conditions"),
 }).refine((data) => {
   // Conditional validation for professional fields
   if (data.clientType === "professionnel") {
-    return !!data.companyName;
+    return !!data.companyName && !!data.siret;
   }
   return true;
 }, {
-  message: "La raison sociale est requise pour les professionnels",
+  message: "La raison sociale et le SIREN sont requis pour les professionnels",
   path: ["companyName"],
 }).refine((data) => {
   // Conditional validation for collectivity fields
   if (data.clientType === "collectivite") {
-    return !!data.collectivityName;
+    return !!data.collectivityName && !!data.collectivitySiren;
   }
   return true;
 }, {
-  message: "Le nom de la collectivité est requis",
+  message: "Le nom de la collectivité et le SIREN sont requis",
   path: ["collectivityName"],
-}).refine((data) => {
-  // Conditional validation for collective housing
-  if (data.connectionType === "collectif") {
-    return !!data.dwellings;
-  }
-  return true;
-}, {
-  message: "Le nombre de logements est requis pour un raccordement collectif",
-  path: ["dwellings"],
 });
 
 type FormData = z.infer<typeof formSchema>;
 
 const STEPS = [
-  { id: 1, title: "Type de demandeur", component: StepClientType },
-  { id: 2, title: "Informations personnelles", component: StepPersonalInfo },
-  { id: 3, title: "Adresse du chantier", component: StepWorkAddress },
-  { id: 4, title: "Adresse de facturation", component: StepBillingAddress },
-  { id: 5, title: "Informations complémentaires", component: StepAdditionalInfo },
-  { id: 6, title: "Résumé et validation", component: StepSummary },
+  { id: 1, title: "Informations personnelles", component: StepPersonalInfo },
+  { id: 2, title: "Détails techniques", component: StepTechnicalDetails },
+  { id: 3, title: "Validation finale", component: StepFinalValidation },
 ];
 
 export const MultiStepForm = () => {
@@ -114,19 +95,23 @@ export const MultiStepForm = () => {
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      civilite: "monsieur" as const,
       clientType: "particulier" as const,
       firstName: "",
       lastName: "",
       email: "",
       phone: "",
+      postalCode: "",
+      city: "",
+      connectionType: "raccordement_enedis_definitif" as const,
+      projectType: "maison_individuelle" as const,
+      powerType: "monophase" as const,
+      powerDemanded: "",
       workAddress: "",
-      workCity: "",
-      workPostalCode: "",
-      sameAsBilling: true,
-      connectionType: "definitif" as const,
-      power: "",
-      urgent: false,
-      rgpdConsent: false,
+      projectStatus: "",
+      desiredTimeline: "",
+      billingType: "personnel" as const,
+      consent: false,
     },
     mode: "onChange",
   });
@@ -134,7 +119,29 @@ export const MultiStepForm = () => {
   const { watch, trigger, getValues } = form;
   const watchedValues = watch();
 
-  const progress = (currentStep / STEPS.length) * 100;
+  // French flag colors for progress bar
+  const getStepColor = (stepIndex: number) => {
+    if (stepIndex < currentStep) {
+      // Completed steps: French flag colors
+      switch ((stepIndex - 1) % 3) {
+        case 0: return "bg-blue-100"; // Light blue for French blue
+        case 1: return "bg-gray-50"; // Light cream for French white  
+        case 2: return "bg-red-50"; // Light rose for French red
+        default: return "bg-blue-100";
+      }
+    } else if (stepIndex === currentStep) {
+      // Current step: slightly darker version
+      switch ((stepIndex - 1) % 3) {
+        case 0: return "bg-blue-200 border-blue-300";
+        case 1: return "bg-gray-100 border-gray-300";
+        case 2: return "bg-red-100 border-red-300";
+        default: return "bg-blue-200 border-blue-300";
+      }
+    } else {
+      // Incomplete steps
+      return "bg-gray-100";
+    }
+  };
 
   const handleNext = async () => {
     const stepFields = getStepFields(currentStep);
@@ -142,8 +149,9 @@ export const MultiStepForm = () => {
     
     if (isValid) {
       if (currentStep < STEPS.length) {
+        // Auto-save to Supabase on step completion
+        await autoSaveToSupabase();
         setCurrentStep(prev => prev + 1);
-        // Auto-save to localStorage
         localStorage.setItem('raccordement-form-data', JSON.stringify(getValues()));
       }
     }
@@ -155,33 +163,64 @@ export const MultiStepForm = () => {
     }
   };
 
-  const handleSubmit = async (data: FormData) => {
+  const autoSaveToSupabase = async () => {
     try {
-      // Save to Supabase
-      const { error } = await supabase
+      const data = getValues();
+      await supabase
         .from('form_submissions')
-        .insert({
+        .upsert({
+          id: data.email, // Use email as unique identifier for upserts
           client_type: data.clientType,
           nom: data.lastName,
           prenom: data.firstName,
           email: data.email,
           telephone: data.phone,
           raison_sociale: data.companyName,
+          siren: data.siret,
           nom_collectivite: data.collectivityName,
-          adresse: data.workAddress,
-          complement_adresse: data.workAddressComplement,
-          ville: data.workCity,
-          code_postal: data.workPostalCode,
-          different_billing_address: !data.sameAsBilling,
-          billing_address: data.sameAsBilling ? null : data.billingAddress,
-          billing_city: data.sameAsBilling ? null : data.billingCity,
-          billing_postal_code: data.sameAsBilling ? null : data.billingPostalCode,
+          siren_collectivite: data.collectivitySiren,
+          ville: data.city,
+          code_postal: data.postalCode,
           connection_type: data.connectionType,
-          power_kva: data.power,
-          desired_timeline: data.urgent ? "urgent" : "normal",
-          additional_comments: data.comments,
-          project_type: data.connectionType,
-          project_status: "submitted",
+          project_type: data.projectType,
+          power_type: data.powerType,
+          power_kva: data.powerDemanded,
+          adresse: data.workAddress,
+          project_status: data.projectStatus,
+          desired_timeline: data.desiredTimeline,
+          form_status: "in_progress",
+          payment_status: "pending"
+        });
+    } catch (error) {
+      console.error("Auto-save error:", error);
+    }
+  };
+
+  const handleSubmit = async (data: FormData) => {
+    try {
+      // Final save to Supabase
+      const { error } = await supabase
+        .from('form_submissions')
+        .upsert({
+          id: data.email,
+          client_type: data.clientType,
+          nom: data.lastName,
+          prenom: data.firstName,
+          email: data.email,
+          telephone: data.phone,
+          raison_sociale: data.companyName,
+          siren: data.siret,
+          nom_collectivite: data.collectivityName,
+          siren_collectivite: data.collectivitySiren,
+          ville: data.city,
+          code_postal: data.postalCode,
+          connection_type: data.connectionType,
+          project_type: data.projectType,
+          power_type: data.powerType,
+          power_kva: data.powerDemanded,
+          adresse: data.workAddress,
+          project_status: data.projectStatus,
+          desired_timeline: data.desiredTimeline,
           form_status: "completed",
           payment_status: "pending"
         });
@@ -208,29 +247,17 @@ export const MultiStepForm = () => {
   const getStepFields = (step: number): (keyof FormData)[] => {
     switch (step) {
       case 1:
-        return ["clientType"];
-      case 2:
-        const fields: (keyof FormData)[] = ["firstName", "lastName", "email", "phone"];
+        const step1Fields: (keyof FormData)[] = ["civilite", "clientType", "firstName", "lastName", "email", "phone", "postalCode", "city"];
         if (watchedValues.clientType === "professionnel") {
-          fields.push("companyName");
+          step1Fields.push("companyName", "siret");
         } else if (watchedValues.clientType === "collectivite") {
-          fields.push("collectivityName");
+          step1Fields.push("collectivityName", "collectivitySiren");
         }
-        return fields;
+        return step1Fields;
+      case 2:
+        return ["connectionType", "projectType", "powerType", "powerDemanded", "workAddress"];
       case 3:
-        return ["workAddress", "workCity", "workPostalCode"];
-      case 4:
-        return watchedValues.sameAsBilling 
-          ? ["sameAsBilling"] 
-          : ["sameAsBilling", "billingAddress", "billingCity", "billingPostalCode"];
-      case 5:
-        const step5Fields: (keyof FormData)[] = ["connectionType", "power"];
-        if (watchedValues.connectionType === "collectif") {
-          step5Fields.push("dwellings");
-        }
-        return step5Fields;
-      case 6:
-        return ["rgpdConsent"];
+        return ["projectStatus", "desiredTimeline", "billingType", "consent"];
       default:
         return [];
     }
@@ -244,11 +271,13 @@ export const MultiStepForm = () => {
   const isLastStep = currentStep === STEPS.length;
   const isFirstStep = currentStep === 1;
 
+  const progress = (currentStep / STEPS.length) * 100;
+
   return (
     <Card className="p-6 md:p-8">
-      {/* Progress Bar */}
+      {/* French Flag Progress Bar */}
       <div className="mb-8">
-        <div className="flex justify-between items-center mb-2">
+        <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold text-foreground">
             Étape {currentStep} sur {STEPS.length}
           </h2>
@@ -256,8 +285,29 @@ export const MultiStepForm = () => {
             {Math.round(progress)}% complété
           </span>
         </div>
-        <Progress value={progress} className="w-full" />
-        <p className="text-sm text-muted-foreground mt-2">
+        
+        {/* Custom French Flag Progress Bar */}
+        <div className="flex items-center justify-between mb-4">
+          {STEPS.map((step, index) => (
+            <div key={step.id} className="flex items-center">
+              <div className={`
+                w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-semibold
+                ${getStepColor(step.id)}
+                ${step.id === currentStep ? 'ring-2 ring-offset-2 ring-primary' : ''}
+              `}>
+                <span className="text-white">{step.id}</span>
+              </div>
+              {index < STEPS.length - 1 && (
+                <div className={`
+                  h-1 w-16 mx-2
+                  ${step.id < currentStep ? getStepColor(step.id).replace('bg-', 'bg-').replace('-100', '-300') : 'bg-gray-200'}
+                `} />
+              )}
+            </div>
+          ))}
+        </div>
+        
+        <p className="text-sm text-muted-foreground text-center">
           {STEPS[currentStep - 1].title}
         </p>
       </div>
