@@ -5,6 +5,9 @@ import ProcessSection from "@/components/ProcessSection";
 import HowItWorksSection from "@/components/HowItWorksSection";
 import AdvantagesSection from "@/components/AdvantagesSection";
 import SpecializedServicesSection from "@/components/SpecializedServicesSection";
+import TrustSection from "@/components/TrustSection";
+import TestimonialsSection from "@/components/TestimonialsSection";
+import UrgencySection from "@/components/UrgencySection";
 import SatisfactionSection from "@/components/SatisfactionSection";
 import ConnectionTypesSection from "@/components/ConnectionTypesSection";
 import FAQSection from "@/components/FAQSection";
@@ -16,10 +19,13 @@ const HomePage = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       <HeroSection />
+      <UrgencySection />
       <ServiceTypesSection />
       <ProcessSection />
       <HowItWorksSection />
+      <TrustSection />
       <AdvantagesSection />
+      <TestimonialsSection />
       <SpecializedServicesSection />
       <SatisfactionSection />
       <ConnectionTypesSection />
