@@ -69,7 +69,7 @@ const MobileNavigation = () => {
                 </a>
               </Button>
               <Button asChild variant="outline" className="w-full" size="sm">
-                <a href="mailto:contact@raccordement.net">
+                <a href="mailto:contact@raccordement-elec.fr">
                   <Mail className="h-4 w-4 mr-2" />
                   Email
                 </a>

@@ -15,12 +15,12 @@ const Navigation = () => {
             <div className="h-16 md:h-32 w-auto mr-3 md:mr-4">
               <img 
                 src="/lovable-uploads/55f86fce-e7c0-4a55-95e2-4c1c19dcbc0f.png" 
-                alt="raccordement.net" 
+                alt="raccordement-elec.fr" 
                 className="h-full w-auto object-contain brightness-0 invert" 
                 loading="lazy"
               />
             </div>
-            <h1 className="text-xl md:text-2xl font-bold text-white">raccordement.net</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-white">raccordement-elec.fr</h1>
           </div>
           
           {/* Desktop Navigation */}

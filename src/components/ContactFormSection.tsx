@@ -76,7 +76,7 @@ const ContactFormSection = () => {
     {
       icon: Mail,
       label: "Email",
-      value: "contact@raccordement-electrique.fr",
+      value: "contact@raccordement-elec.fr",
       description: "Réponse sous 24h"
     },
     {

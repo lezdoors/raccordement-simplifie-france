@@ -83,12 +83,12 @@ const FooterSection = () => {
           <div className="h-12 md:h-16 w-auto mr-0 md:mr-4 mb-2 md:mb-0">
             <img 
               src="/lovable-uploads/55f86fce-e7c0-4a55-95e2-4c1c19dcbc0f.png" 
-              alt="raccordement.net" 
+              alt="raccordement-elec.fr" 
               className="h-full w-auto object-contain brightness-0 invert" 
               loading="lazy"
             />
           </div>
-          <h2 className="text-xl md:text-2xl font-bold text-center md:text-left">raccordement.net</h2>
+          <h2 className="text-xl md:text-2xl font-bold text-center md:text-left">raccordement-elec.fr</h2>
         </div>
 
         {/* Mobile-first Grid Layout */}
@@ -239,7 +239,7 @@ const FooterSection = () => {
               }}
             >
               ©
-            </a> 2024 raccordement.net. Tous droits réservés.
+            </a> 2024 raccordement-elec.fr. Tous droits réservés.
           </p>
           <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6 text-sm md:text-base text-gray-400 text-center">
             <a href="/mentions-legales" className="hover:text-blue-400 hover:underline transition-colors duration-200">Mentions légales</a>

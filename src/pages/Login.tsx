@@ -186,7 +186,7 @@ const Login = () => {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="admin@raccordement.net"
+                  placeholder="admin@raccordement-elec.fr"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10 h-12"
