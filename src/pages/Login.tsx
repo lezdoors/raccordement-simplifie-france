@@ -38,17 +38,17 @@ const Login = () => {
   const checkAdminAccess = async (userEmail: string) => {
     try {
       const { data, error } = await supabase
-        .from('admins')
-        .select('email, active, name, role')
+        .from('admin_users')
+        .select('email, is_active, role, can_see_payments, can_manage_users, can_see_all_leads')
         .eq('email', userEmail)
-        .eq('active', true)
+        .eq('is_active', true)
         .single();
 
       if (error || !data) {
         return false;
       }
 
-      return true;
+      return data;
     } catch (error) {
       console.error('Error checking admin access:', error);
       return false;
@@ -70,9 +70,9 @@ const Login = () => {
     setLoading(true);
     try {
       // First check if email is authorized
-      const isAuthorized = await checkAdminAccess(email);
-      if (!isAuthorized) {
-        toast.error("⛔ Accès refusé. Cette adresse email n'est pas autorisée.");
+      const adminData = await checkAdminAccess(email);
+      if (!adminData) {
+        toast.error("⛔ Email non autorisé. Cette adresse email n'est pas dans la liste des utilisateurs autorisés.");
         setLoading(false);
         return;
       }
@@ -129,9 +129,9 @@ const Login = () => {
     }
 
     // Check if email is authorized before sending reset
-    const isAuthorized = await checkAdminAccess(email);
-    if (!isAuthorized) {
-      toast.error("⛔ Accès refusé. Cette adresse email n'est pas autorisée.");
+    const adminData = await checkAdminAccess(email);
+    if (!adminData) {
+      toast.error("⛔ Email non autorisé. Cette adresse email n'est pas dans la liste des utilisateurs autorisés.");
       return;
     }
 

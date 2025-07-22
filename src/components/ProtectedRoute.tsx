@@ -21,12 +21,12 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
           return;
         }
 
-        // Check if user email is in admins table
+        // Check if user email is in admin_users table
         const { data, error } = await supabase
-          .from('admins')
-          .select('email, active')
+          .from('admin_users')
+          .select('email, is_active, role, can_see_payments, can_manage_users, can_see_all_leads')
           .eq('email', session.user.email)
-          .eq('active', true)
+          .eq('is_active', true)
           .single();
 
         if (error || !data) {
@@ -55,10 +55,10 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
       // Re-check authorization on auth change
       const { data, error } = await supabase
-        .from('admins')
-        .select('email, active')
+        .from('admin_users')
+        .select('email, is_active, role, can_see_payments, can_manage_users, can_see_all_leads')
         .eq('email', session.user.email)
-        .eq('active', true)
+        .eq('is_active', true)
         .single();
 
       if (error || !data) {
