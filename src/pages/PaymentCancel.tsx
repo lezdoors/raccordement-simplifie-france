@@ -59,8 +59,8 @@ const PaymentCancel = () => {
             <div className="bg-gray-50 rounded-lg p-6 mb-8">
               <p className="text-sm text-gray-600 mb-2">Besoin d'aide ? Contactez-nous :</p>
               <p className="font-semibold text-gray-900">
-                <a href="tel:0977405060" className="text-blue-600 hover:text-blue-700">
-                  09 77 40 50 60
+                <a href="tel:0970709570" className="text-blue-600 hover:text-blue-700">
+                  09 70 70 95 70
                 </a>
               </p>
               <p className="text-xs text-gray-500">Du lundi au vendredi de 9h à 19h</p>

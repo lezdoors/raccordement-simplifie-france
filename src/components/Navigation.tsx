@@ -15,12 +15,12 @@ const Navigation = () => {
             <div className="h-16 md:h-32 w-auto mr-3 md:mr-4">
               <img 
                 src="/lovable-uploads/55f86fce-e7c0-4a55-95e2-4c1c19dcbc0f.png" 
-                alt="raccordement.net" 
+                alt="raccordement-elec.fr" 
                 className="h-full w-auto object-contain brightness-0 invert" 
                 loading="lazy"
               />
             </div>
-            <h1 className="text-xl md:text-2xl font-bold text-white">raccordement.net</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-white">raccordement-elec.fr</h1>
           </div>
           
           {/* Desktop Navigation */}
@@ -46,8 +46,8 @@ const Navigation = () => {
                 <Phone className="w-4 h-4" />
                 <span>Appelez nous au</span>
               </div>
-              <a href="tel:0977405060" className="text-lg font-bold text-white hover:text-white/90 transition-colors">
-                09 77 40 50 60
+              <a href="tel:0970709570" className="text-lg font-bold text-white hover:text-white/90 transition-colors">
+                09 70 70 95 70
               </a>
               <p className="text-xs text-white/80">Du lundi au vendredi de 9h à 19h</p>
             </div>
@@ -56,9 +56,9 @@ const Navigation = () => {
               variant="default" 
               size="lg" 
               onClick={() => navigate("/raccordement-enedis")} 
-              className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold"
+              className="bg-white text-primary hover:bg-white/90 font-semibold"
             >
-              Démarrer ma demande
+              Commencer ma demande
             </Button>
           </div>
 
@@ -95,10 +95,10 @@ const Navigation = () => {
               <div className="text-center mb-4">
                 <p className="text-sm text-white/90 mb-1">Appelez nous au</p>
                 <a 
-                  href="tel:0977405060" 
+                  href="tel:0970709570" 
                   className="text-lg font-bold text-white hover:text-white/90 transition-colors touch-target"
                 >
-                  09 77 40 50 60
+                  09 70 70 95 70
                 </a>
                 <p className="text-xs text-white/80 mt-1">Lun-Ven 9h-18h</p>
               </div>
@@ -109,7 +109,7 @@ const Navigation = () => {
                 }} 
                 className="w-full mobile-button bg-white text-primary hover:bg-white/90 font-semibold touch-feedback"
               >
-                Démarrer ma demande
+                Commencer ma demande
               </Button>
             </div>
           </div>
@@ -123,7 +123,7 @@ const Navigation = () => {
           className="mobile-button bg-primary text-primary-foreground hover:bg-primary/90 font-semibold shadow-2xl rounded-full px-6 py-4 touch-feedback mobile-optimized"
           size="lg"
         >
-          Démarrer ma demande
+          Commencer ma demande
         </Button>
       </div>
     </nav>

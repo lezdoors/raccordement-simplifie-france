@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Headphones, Phone, Mail, Star, Users, CheckCircle, Award } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import heroImage from "@/assets/hero-electrical-connection.jpg";
 const HeroSection = () => {
   const navigate = useNavigate();
   const [stats, setStats] = useState({
@@ -50,11 +51,11 @@ const HeroSection = () => {
               </div>
               
               <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight text-center lg:text-left">
-                Raccordement <span className="text-slate-100">électrique</span> Enedis
+                Votre raccordement électrique simplifié, <span className="text-accent">en 3 minutes</span>
               </h1>
               
               <p className="text-lg sm:text-xl md:text-2xl text-white/90 font-light leading-relaxed text-center lg:text-left">
-                Service administratif professionnel
+                Service expert en démarches administratives
               </p>
               
               <p className="text-lg text-white/80 leading-relaxed max-w-xl font-body">
@@ -71,7 +72,7 @@ const HeroSection = () => {
                 className="mobile-button bg-primary text-primary-foreground hover:bg-primary/90 font-semibold px-8 py-6 text-lg h-auto transform hover:scale-105 transition-all duration-300 touch-feedback mobile-optimized" 
                 onClick={() => navigate("/raccordement-enedis")}
               >
-                Démarrer ma demande
+                Commencer ma demande
               </Button>
               
               <Button 
@@ -131,12 +132,35 @@ const HeroSection = () => {
                 Accompagnement dédié
               </div>
             </div>
+            
+            {/* Client testimonial trust signal */}
+            <div className="text-center lg:text-left pt-6">
+              <div className="flex items-center justify-center lg:justify-start gap-1 mb-1">
+                {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 text-accent fill-current" />)}
+              </div>
+              <p className="text-white/80 text-sm">
+                "Service parfait, rapide et professionnel !" - Marie D., Toulouse
+              </p>
+            </div>
           </div>
 
-          {/* Right Column - Floating Contact Card */}
+          {/* Right Column - Professional Hero Image */}
           <div className="lg:flex justify-center items-center hidden">
-            <div className="floating-card glass-card p-8 rounded-2xl w-full max-w-md animate-fade-up" style={{
-            animationDelay: '1s'
+            <div className="relative w-full max-w-md">
+              <img 
+                src={heroImage}
+                alt="Raccordement électrique professionnel en France"
+                className="w-full h-auto rounded-2xl shadow-2xl"
+                loading="eager"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
+            </div>
+          </div>
+          
+          {/* Floating Contact Card - Moved below image */}
+          <div className="lg:flex justify-center items-end hidden">
+            <div className="floating-card glass-card p-6 rounded-xl w-full max-w-sm animate-fade-up mt-8" style={{
+            animationDelay: '1.2s'
           }}>
               <div className="text-center mb-6">
                 <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -154,7 +178,7 @@ const HeroSection = () => {
                 <div className="flex items-center p-4 rounded-xl bg-white/5 border border-white/10">
                   <Phone className="w-5 h-5 text-accent mr-3" />
                   <div>
-                    <div className="text-white font-medium">09 77 40 50 60</div>
+                    <div className="text-white font-medium">09 70 70 95 70</div>
                     <div className="text-white/60 text-xs">Lun-Ven 9h-18h</div>
                   </div>
                 </div>
