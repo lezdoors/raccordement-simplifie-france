@@ -103,6 +103,16 @@ const Admin = () => {
         navigate('/login');
         return;
       }
+
+      // Verify admin access for current user
+      const isAdminAuthorized = await checkAdminAccess(session.user.email || '');
+      if (!isAdminAuthorized) {
+        await supabase.auth.signOut();
+        toast.error("⛔ Accès refusé. Cette adresse email n'est pas autorisée.");
+        navigate('/login');
+        return;
+      }
+
       setUser(session.user);
       fetchData();
       setupRealtimeSubscriptions();
@@ -110,16 +120,44 @@ const Admin = () => {
 
     checkAuth();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (!session) {
         navigate('/login');
       } else {
+        // Check admin access on auth state change
+        const isAdminAuthorized = await checkAdminAccess(session.user.email || '');
+        if (!isAdminAuthorized) {
+          await supabase.auth.signOut();
+          toast.error("⛔ Accès refusé. Cette adresse email n'est pas autorisée.");
+          navigate('/login');
+          return;
+        }
         setUser(session.user);
       }
     });
 
     return () => subscription.unsubscribe();
   }, [navigate]);
+
+  const checkAdminAccess = async (userEmail: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('admins')
+        .select('email, active, name, role')
+        .eq('email', userEmail)
+        .eq('active', true)
+        .single();
+
+      if (error || !data) {
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Error checking admin access:', error);
+      return false;
+    }
+  };
 
   const setupRealtimeSubscriptions = () => {
     // Real-time subscriptions for notifications

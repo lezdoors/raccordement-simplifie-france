@@ -226,13 +226,25 @@ const FooterSection = () => {
         {/* Bottom Section - Mobile optimized */}
         <div className="border-t border-slate-700 mt-8 md:mt-12 pt-6 md:pt-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <p className="text-sm md:text-base text-gray-400 text-center md:text-left leading-relaxed">
-            © 2024 raccordement.net. Tous droits réservés.
+            <a 
+              href="/admin" 
+              className="text-gray-400 hover:text-blue-400 transition-colors duration-300 no-underline cursor-pointer select-none" 
+              title="Espace CRM"
+              style={{ textDecoration: 'none' }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.textShadow = '0 0 8px rgba(59, 130, 246, 0.5)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.textShadow = 'none';
+              }}
+            >
+              ©
+            </a> 2024 raccordement.net. Tous droits réservés.
           </p>
           <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6 text-sm md:text-base text-gray-400 text-center">
             <a href="/mentions-legales" className="hover:text-blue-400 hover:underline transition-colors duration-200">Mentions légales</a>
             <a href="/confidentialite" className="hover:text-blue-400 hover:underline transition-colors duration-200">Confidentialité</a>
             <a href="/cgu" className="hover:text-blue-400 hover:underline transition-colors duration-200">CGU</a>
-            <a href="/admin" className="hover:text-blue-400 hover:underline transition-colors duration-200">Admin</a>
           </div>
         </div>
       </div>

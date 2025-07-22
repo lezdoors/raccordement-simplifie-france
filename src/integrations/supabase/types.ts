@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      admins: {
+        Row: {
+          active: boolean | null
+          created_at: string
+          created_by: string | null
+          email: string
+          id: string
+          name: string | null
+          role: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          created_at?: string
+          created_by?: string | null
+          email: string
+          id?: string
+          name?: string | null
+          role?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          created_at?: string
+          created_by?: string | null
+          email?: string
+          id?: string
+          name?: string | null
+          role?: string | null
+        }
+        Relationships: []
+      }
       demandes: {
         Row: {
           adresse: string
@@ -392,7 +422,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin_email: {
+        Args: { email_to_check: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
