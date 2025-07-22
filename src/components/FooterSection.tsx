@@ -184,7 +184,7 @@ const FooterSection = () => {
                 <p className="text-red-400 text-sm">{error}</p>
               )}
               {submitted && (
-                <p className="text-green-400 text-sm">✅ Message envoyé. Un conseiller vous contactera rapidement.</p>
+                <p className="text-green-400 text-sm">Message envoyé. Un conseiller vous contactera rapidement.</p>
               )}
               <Button 
                 type="submit" 

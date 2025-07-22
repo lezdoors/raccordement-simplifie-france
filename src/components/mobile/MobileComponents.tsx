@@ -179,7 +179,7 @@ const MobileFloatingCTA = ({
             <div className="flex items-center gap-2 mb-1">
               <Zap className="h-4 w-4 text-orange-500" />
               <span className="text-sm font-medium text-gray-900">
-                Devis gratuit
+                Démarrer ma demande
               </span>
             </div>
             <p className="text-xs text-gray-600">

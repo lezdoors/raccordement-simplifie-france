@@ -21,7 +21,7 @@ const Login = () => {
       const isConnected = await testSupabaseConnection();
       
       if (!isConnected) {
-        toast.error("⚠️ Problème de connexion à la base de données");
+        toast.error("Problème de connexion à la base de données");
       } else {
         console.log('Supabase connection test passed');
       }
@@ -242,7 +242,7 @@ const Login = () => {
               Problème d'accès ? Contactez l'administrateur système
             </p>
             <p className="text-xs text-muted-foreground">
-              📞 09 69 32 18 00 | 📧 admin@raccordement-connect.com
+              09 69 32 18 00 | admin@raccordement-connect.com
             </p>
           </div>
         </CardContent>

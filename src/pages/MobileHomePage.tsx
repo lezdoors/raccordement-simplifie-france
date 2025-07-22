@@ -3,14 +3,11 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { 
-  Zap, 
   Shield, 
   Clock, 
   CheckCircle, 
-  Menu, 
   Phone, 
   Star,
   ArrowRight,
@@ -21,6 +18,9 @@ import {
   ChevronRight
 } from "lucide-react";
 import MobileMultiStepForm from "@/components/MobileMultiStepForm";
+import Navigation from "@/components/Navigation";
+import FooterSection from "@/components/FooterSection";
+import EnhancedMobileForm from "@/components/EnhancedMobileForm";
 
 const services = [
   {
@@ -74,69 +74,10 @@ const features = [
 const MobileHomePage = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
 
-  const navigationItems = [
-    { label: "Accueil", href: "/" },
-    { label: "Services", href: "#services" },
-    { label: "À propos", href: "/a-propos" },
-    { label: "Contact", href: "/contact" }
-  ];
-
   return (
     <div className="min-h-screen bg-white">
-      {/* Mobile Header */}
-      <header className="sticky top-0 bg-white/95 backdrop-blur-lg border-b border-gray-100 z-50">
-        <div className="flex items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-3">
-            <img 
-              src="/lovable-uploads/55f86fce-e7c0-4a55-95e2-4c1c19dcbc0f.png" 
-              alt="raccordement.net" 
-              className="h-8 w-auto" 
-            />
-            <span className="font-bold text-lg text-gray-900">raccordement.net</span>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <a 
-              href="tel:0969321800" 
-              className="p-2 text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
-            >
-              <Phone className="h-5 w-5" />
-            </a>
-            
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="sm" className="p-2">
-                  <Menu className="h-5 w-5" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-80">
-                <SheetHeader>
-                  <SheetTitle>Menu</SheetTitle>
-                </SheetHeader>
-                <nav className="mt-8 space-y-4">
-                  {navigationItems.map((item) => (
-                    <a
-                      key={item.label}
-                      href={item.href}
-                      className="block py-3 px-4 text-lg font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
-                    >
-                      {item.label}
-                    </a>
-                  ))}
-                  <div className="pt-4 border-t">
-                    <Button asChild className="w-full">
-                      <a href="tel:0969321800">
-                        <Phone className="h-4 w-4 mr-2" />
-                        09 69 32 18 00
-                      </a>
-                    </Button>
-                  </div>
-                </nav>
-              </SheetContent>
-            </Sheet>
-          </div>
-        </div>
-      </header>
+      {/* Use existing Navigation component */}
+      <Navigation />
 
       {/* Hero Section */}
       <section className="px-4 py-12 text-center">
@@ -147,7 +88,7 @@ const MobileHomePage = () => {
           className="space-y-6"
         >
           <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100">
-            ⚡ Service express 24h
+            Service express 24h
           </Badge>
           
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
@@ -156,10 +97,10 @@ const MobileHomePage = () => {
             <span className="text-blue-600">simplifié</span>
           </h1>
           
-          <p className="text-lg text-gray-600 max-w-md mx-auto">
-            Démarches Enedis facilitées pour particuliers et professionnels. 
-            Devis gratuit en 2 minutes.
-          </p>
+            <p className="text-gray-600 max-w-md mx-auto">
+              Démarches Enedis facilitées pour particuliers et professionnels. 
+              Demande en 2 minutes.
+            </p>
 
           {/* Features Row */}
           <div className="flex justify-center gap-6 py-4">
@@ -271,8 +212,8 @@ const MobileHomePage = () => {
               },
               {
                 step: "02", 
-                title: "Devis personnalisé",
-                description: "Recevez votre devis gratuit sous 24h"
+                title: "Demande personnalisée",
+                description: "Recevez votre devis sous 24h"
               },
               {
                 step: "03",
@@ -319,8 +260,8 @@ const MobileHomePage = () => {
           
           <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
             <DialogTrigger asChild>
-              <Button className="flex-[2] h-12 text-base bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800">
-                Devis gratuit
+            <Button className="flex-[2] h-12 text-base bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800">
+                Démarrer ma demande
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
             </DialogTrigger>
@@ -328,7 +269,7 @@ const MobileHomePage = () => {
               <DialogHeader className="sr-only">
                 <DialogTitle>Formulaire de demande</DialogTitle>
               </DialogHeader>
-              <MobileMultiStepForm />
+              <EnhancedMobileForm onClose={() => setIsFormOpen(false)} />
             </DialogContent>
           </Dialog>
         </div>
@@ -336,6 +277,9 @@ const MobileHomePage = () => {
 
       {/* Bottom Spacer to prevent content being hidden behind fixed CTA */}
       <div className="h-20" />
+      
+      {/* Use existing Footer component */}
+      <FooterSection />
     </div>
   );
 };

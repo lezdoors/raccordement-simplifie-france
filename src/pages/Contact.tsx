@@ -202,7 +202,7 @@ const Contact = () => {
                   <p className="text-red-500 text-sm">{contactError}</p>
                 )}
                 {contactSubmitted && (
-                  <p className="text-green-600 text-sm">✅ Message envoyé. Un conseiller vous contactera rapidement.</p>
+                    <p className="text-green-600 text-sm">Message envoyé. Un conseiller vous contactera rapidement.</p>
                 )}
                 <Button 
                   type="submit" 
@@ -253,7 +253,7 @@ const Contact = () => {
                     <p className="text-red-500 text-sm">{callbackError}</p>
                   )}
                   {callbackSubmitted && (
-                    <p className="text-green-600 text-sm">✅ Message envoyé. Un conseiller vous contactera rapidement.</p>
+                    <p className="text-green-600 text-sm">Message envoyé. Un conseiller vous contactera rapidement.</p>
                   )}
                   <Button 
                     type="submit" 
