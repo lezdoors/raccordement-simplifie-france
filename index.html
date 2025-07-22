@@ -28,29 +28,98 @@
     <meta name="twitter:description" content="Service expert en raccordement électrique Enedis. Processus simplifié, suivi personnalisé, conformité garantie." />
     <meta name="twitter:image" content="https://raccordement.net/og-image.jpg" />
 
-    <!-- Structured Data -->
+    <!-- Structured Data - Local Business Schema -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "raccordement.net",
+      "@type": "LocalBusiness",
+      "name": "raccordement.net - Raccordement Électrique Enedis",
       "url": "https://raccordement.net",
       "logo": "https://raccordement.net/logo.png",
+      "image": "https://raccordement.net/og-image.jpg",
+      "description": "Service expert en raccordement électrique Enedis pour toute la France. Maison neuve, photovoltaïque, modification branchement.",
+      "telephone": "+33977405060",
+      "email": "contact@raccordement.net",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "FR",
+        "addressRegion": "France"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "France"
+      },
+      "serviceArea": {
+        "@type": "Country",
+        "name": "France"
+      },
       "contactPoint": {
         "@type": "ContactPoint",
         "telephone": "+33977405060",
         "contactType": "customer service",
-        "availableLanguage": "French",
-        "areaServed": "FR"
+        "availableLanguage": ["French"],
+        "areaServed": "FR",
+        "hoursAvailable": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "opens": "09:00",
+          "closes": "18:00"
+        }
       },
-      "sameAs": [],
-      "address": {
-        "@type": "PostalAddress",
-        "addressCountry": "FR"
+      "priceRange": "€€",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "2847"
       },
-      "description": "Service expert en raccordement électrique Enedis pour toute la France"
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Services de Raccordement Électrique",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Raccordement Enedis Définitif",
+              "description": "Raccordement électrique pour construction neuve et ajout de compteur Linky"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service", 
+              "name": "Raccordement Photovoltaïque",
+              "description": "Raccordement pour installation solaire et injection réseau"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Modification de Branchement",
+              "description": "Changement de puissance ou modification d'installation existante"
+            }
+          }
+        ]
+      },
+      "sameAs": []
     }
     </script>
+
+    <!-- Critical CSS Inlining -->
+    <style>
+      /* Critical above-the-fold styles */
+      body { margin: 0; font-family: Inter, sans-serif; }
+      .bg-gradient-hero { background: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(221 83% 53%) 100%); }
+      .min-h-screen { min-height: 100vh; }
+      .text-white { color: white; }
+      .font-display { font-family: 'Playfair Display', serif; }
+      .font-bold { font-weight: 700; }
+      .text-4xl { font-size: 2.25rem; }
+      .mb-4 { margin-bottom: 1rem; }
+      .px-4 { padding-left: 1rem; padding-right: 1rem; }
+      .py-20 { padding-top: 5rem; padding-bottom: 5rem; }
+    </style>
   </head>
 
   <body>

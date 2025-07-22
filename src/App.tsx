@@ -9,9 +9,10 @@ import MobileDetector from "./components/MobileDetector";
 import MobilePerformanceOptimizer from "./components/MobilePerformanceOptimizer";
 import { AccessibilityProvider } from "./components/AccessibilityProvider";
 import { usePerformanceMonitor, preloadCriticalResources } from "./components/PerformanceOptimizer";
+import ServiceWorker from "./components/ServiceWorker";
 
 // Lazy load all pages for better performance
-const HomePage = lazy(() => import("./pages/HomePage"));
+const OptimizedHomePage = lazy(() => import("./pages/OptimizedHomePage"));
 const MobileHomePage = lazy(() => import("./pages/MobileHomePage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const EnedisRaccordement = lazy(() => import("./pages/EnedisRaccordement"));
@@ -58,7 +59,7 @@ const AppContent = () => {
             <MobileDetector>
               {({ isMobile }) => isMobile ? 
                 <Suspense fallback={<PageLoader />}><MobileHomePage /></Suspense> : 
-                <Suspense fallback={<PageLoader />}><HomePage /></Suspense>
+                <Suspense fallback={<PageLoader />}><OptimizedHomePage /></Suspense>
               }
             </MobileDetector>
           } />
@@ -134,6 +135,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <AccessibilityProvider>
       <TooltipProvider>
+        <ServiceWorker />
         <MobilePerformanceOptimizer />
         <Toaster />
         <Sonner />
