@@ -53,6 +53,11 @@ const formSchema = z.object({
   powerDemanded: z.string().min(1, "La puissance demandée est requise"),
   workStreet: z.string().min(1, "L'adresse de la rue est requise"),
   workAddressComplement: z.string().optional(),
+  // Billing address fields
+  differentBillingAddress: z.boolean().optional(),
+  billingStreet: z.string().optional(),
+  billingPostalCode: z.string().optional(),
+  billingCity: z.string().optional(),
   // Work address uses the same postal code and city from step 1
   
   // Step 3: Final Validation - Removed billingType
@@ -109,6 +114,10 @@ export const MultiStepForm = () => {
       powerDemanded: "",
       workStreet: "",
       workAddressComplement: "",
+      differentBillingAddress: false,
+      billingStreet: "",
+      billingPostalCode: "",
+      billingCity: "",
       projectStatus: "",
       desiredTimeline: "",
       consent: false,
@@ -192,6 +201,20 @@ export const MultiStepForm = () => {
           form_status: "in_progress",
           payment_status: "pending"
         });
+
+      // Send partial notification email for step 1
+      if (currentStep === 1) {
+        try {
+          await supabase.functions.invoke('notify-admin', {
+            body: { 
+              formData: data,
+              isPartial: true
+            }
+          });
+        } catch (emailError) {
+          console.error("Partial email notification error:", emailError);
+        }
+      }
     } catch (error) {
       console.error("Auto-save error:", error);
     }
@@ -201,87 +224,29 @@ export const MultiStepForm = () => {
     try {
       setIsSubmitting(true);
       
-      // Save to both tables for now - keeping form_submissions as backup
-      const [formSubmissionResult, leadResult] = await Promise.all([
-        // Save to form_submissions (backup)
-        supabase.from('form_submissions').upsert({
-          id: data.email,
-          client_type: data.clientType,
-          nom: data.lastName,
-          prenom: data.firstName,
-          email: data.email,
-          telephone: data.phone,
-          raison_sociale: data.companyName,
-          siren: data.siret,
-          nom_collectivite: data.collectivityName,
-          siren_collectivite: data.collectivitySiren,
-          ville: data.city,
-          code_postal: data.postalCode,
-          connection_type: data.connectionType,
-          project_type: data.projectType,
-          power_type: data.powerType,
-          power_kva: data.powerDemanded,
-          adresse: `${data.workStreet}, ${data.postalCode} ${data.city}`,
-          complement_adresse: data.workAddressComplement,
-          project_status: data.projectStatus,
-          desired_timeline: data.desiredTimeline,
-          form_status: "completed",
-          payment_status: "pending"
-        }),
-
-        // Save to leads_raccordement (CRM display)
-        supabase.from('leads_raccordement').insert({
-          type_client: data.clientType,
-          nom: data.lastName,
-          prenom: data.firstName,
-          email: data.email,
-          telephone: data.phone,
-          raison_sociale: data.companyName,
-          siren: data.siret,
-          ville: data.city,
-          code_postal: data.postalCode,
-          type_raccordement: data.connectionType,
-          type_projet: data.projectType,
-          type_alimentation: data.powerType,
-          puissance: data.powerDemanded,
-          adresse_chantier: `${data.workStreet}, ${data.postalCode} ${data.city}`,
-          etat_projet: data.projectStatus,
-          delai_souhaite: data.desiredTimeline,
-          assigned_to_email: null, // Default to NULL as requested
-          form_step: 6, // Final step
-          consent_accepted: true,
-          payment_status: 'pending'
-        })
-      ]);
-
-      if (formSubmissionResult.error) {
-        console.error("Form submission backup error:", formSubmissionResult.error);
-        // Continue even if backup fails
-      }
-
-      if (leadResult.error) {
-        console.error("Lead raccordement error:", leadResult.error);
-        
-        // Check for specific error types
-        if (leadResult.error.message?.includes('duplicate key value')) {
-          toast.error("Un dossier avec cet email existe déjà. Veuillez utiliser une autre adresse email.");
-        } else if (leadResult.error.message?.includes('connection')) {
-          toast.error("Problème de connexion. Vérifiez votre connexion internet et réessayez.");
-        } else {
-          toast.error("Erreur lors de l'envoi de votre demande. Veuillez réessayer.");
+      // Instead of saving to database immediately, redirect to Stripe payment
+      // Database save will happen after successful payment
+      const { data: paymentData, error: paymentError } = await supabase.functions.invoke('create-payment', {
+        body: { 
+          amount: 12900, // €129 TTC in cents
+          description: "Demande de raccordement Enedis",
+          formData: data
         }
+      });
+
+      if (paymentError) {
+        console.error("Payment error:", paymentError);
+        toast.error("Erreur lors de l'initialisation du paiement. Veuillez réessayer.");
         return;
       }
 
-      // Clear saved data
-      localStorage.removeItem('raccordement-form-data');
+      // Save form data temporarily in localStorage for after payment
+      localStorage.setItem('raccordement-form-data-payment', JSON.stringify(data));
       
-      toast.success("Votre demande a été envoyée avec succès ! Vous allez être redirigé...");
+      toast.success("Redirection vers le paiement en cours...");
       
-      // Small delay before redirect for better UX
-      setTimeout(() => {
-        navigate("/merci");
-      }, 1500);
+      // Redirect to Stripe Checkout
+      window.location.href = paymentData.url;
       
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -314,7 +279,11 @@ export const MultiStepForm = () => {
         }
         return step1Fields;
       case 2:
-        return ["connectionType", "projectType", "powerType", "powerDemanded", "workStreet"];
+        const step2Fields: (keyof FormData)[] = ["connectionType", "projectType", "powerType", "powerDemanded", "workStreet"];
+        if (watchedValues.differentBillingAddress) {
+          step2Fields.push("billingStreet", "billingPostalCode", "billingCity");
+        }
+        return step2Fields;
       case 3:
         return ["projectStatus", "desiredTimeline", "consent"];
       default:
@@ -415,14 +384,14 @@ export const MultiStepForm = () => {
                   </Button>
 
                   {isLastStep ? (
-                    <Button
-                      type="submit"
-                      className="flex items-center justify-center gap-2 w-full md:w-auto order-1 md:order-2"
-                      disabled={!form.formState.isValid || isSubmitting}
-                      size="lg"
-                    >
-                      {isSubmitting ? "Envoi en cours..." : "Envoyer ma demande"}
-                    </Button>
+                     <Button
+                       type="submit"
+                       className="flex items-center justify-center gap-2 w-full md:w-auto order-1 md:order-2"
+                       disabled={!form.formState.isValid || isSubmitting}
+                       size="lg"
+                     >
+                       {isSubmitting ? "Redirection vers le paiement..." : "Payer maintenant (129€ TTC)"}
+                     </Button>
                   ) : (
                     <Button
                       type="button"

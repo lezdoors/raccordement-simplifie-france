@@ -92,6 +92,96 @@ export const StepTechnicalDetails = ({ form }: StepTechnicalDetailsProps) => {
           <p className="text-sm text-muted-foreground">
             Le code postal et la ville utilisés seront ceux renseignés à l'étape précédente.
           </p>
+          
+          {/* Billing address option */}
+          <FormField
+            control={form.control}
+            name="differentBillingAddress"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                <FormControl>
+                  <input
+                    type="checkbox"
+                    checked={field.value || false}
+                    onChange={(e) => field.onChange(e.target.checked)}
+                    className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary focus:ring-2"
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="text-sm font-medium">
+                    Adresse de facturation différente
+                  </FormLabel>
+                  <p className="text-xs text-muted-foreground">
+                    Cochez si votre adresse de facturation est différente de l'adresse du projet
+                  </p>
+                </div>
+              </FormItem>
+            )}
+          />
+
+          {/* Billing address fields */}
+          {form.watch("differentBillingAddress") && (
+            <div className="mt-4 space-y-4 p-4 border rounded-lg bg-accent/10">
+              <h4 className="font-semibold text-foreground">Adresse de facturation</h4>
+              
+              <FormField
+                control={form.control}
+                name="billingStreet"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-base font-medium">Rue / Numéro *</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="Ex: 123 rue de la République"
+                        className="h-12 text-base"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="billingPostalCode"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-base font-medium">Code postal *</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="Code postal (5 chiffres)"
+                          className="h-12 text-base"
+                          maxLength={5}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="billingCity"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-base font-medium">Ville *</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="Votre ville"
+                          className="h-12 text-base"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Détails techniques */}

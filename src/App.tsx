@@ -32,6 +32,7 @@ import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AdminProvider } from "./contexts/AdminContext";
 import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentSuccessOptimized from "./pages/PaymentSuccessOptimized";
 import PaymentCancel from "./pages/PaymentCancel";
 
 // Simple loading component without animation
@@ -59,7 +60,7 @@ const AppContent = () => {
         <Route path="/raccordement-enedis" element={<EnedisRaccordement />} />
         <Route path="/enedis-raccordement" element={<Navigate to="/raccordement-enedis" replace />} />
         <Route path="/commencer" element={<Navigate to="/raccordement-enedis" replace />} />
-        <Route path="/merci" element={<Merci />} />
+        <Route path="/merci" element={<PaymentSuccessOptimized />} />
         <Route path="/a-propos" element={<APropos />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/mentions-legales" element={<MentionsLegales />} />
