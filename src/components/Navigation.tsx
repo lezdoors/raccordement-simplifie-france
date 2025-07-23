@@ -5,16 +5,16 @@ import { useNavigate } from "react-router-dom";
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
-  return <nav className="bg-gradient-to-r from-primary to-primary/90 text-white sticky top-0 z-50 shadow-lg">
+  return <nav className="bg-gradient-to-r from-primary to-primary/90 text-white sticky top-0 z-[60] shadow-lg backdrop-blur-md bg-opacity-95">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16 md:h-28">
-          {/* Logo Section - Centered and enlarged */}
+        <div className="flex justify-between items-center h-20 md:h-32">
+          {/* Logo Section - Significantly enlarged */}
           <div className="flex items-center cursor-pointer justify-center md:justify-start" onClick={() => navigate("/")}>
-            <div className="h-16 md:h-24 w-auto mr-3 md:mr-4 flex items-center justify-center">
+            <div className="h-20 md:h-28 w-auto mr-3 md:mr-4 flex items-center justify-center">
               <img 
                 src="/src/assets/logo.svg" 
-                alt="Raccordement Électrique" 
-                className="h-12 md:h-20 w-auto"
+                alt="Racco Service - Raccordement Électrique" 
+                className="h-16 md:h-24 w-auto transition-transform hover:scale-105"
               />
             </div>
           </div>
@@ -96,7 +96,7 @@ const Navigation = () => {
         </div>}
 
       {/* Floating CTA for mobile */}
-      <div className="md:hidden fixed bottom-6 right-4 z-50">
+      <div className="md:hidden fixed bottom-6 right-4 z-[55]">
         <Button onClick={() => navigate("/raccordement-enedis")} className="mobile-button bg-primary text-primary-foreground hover:bg-primary/90 font-semibold shadow-2xl rounded-full px-6 py-4 touch-feedback mobile-optimized" size="lg">
           Démarrer ma demande
         </Button>
