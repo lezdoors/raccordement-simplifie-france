@@ -35,25 +35,7 @@ const Login = () => {
     return emailRegex.test(email);
   };
 
-  const checkAdminAccess = async (userEmail: string) => {
-    try {
-      const { data, error } = await supabase
-        .from('admin_users')
-        .select('email, is_active, role, can_see_payments, can_manage_users, can_see_all_leads')
-        .eq('email', userEmail)
-        .eq('is_active', true)
-        .single();
-
-      if (error || !data) {
-        return false;
-      }
-
-      return data;
-    } catch (error) {
-      console.error('Error checking admin access:', error);
-      return false;
-    }
-  };
+  // Temporarily removed admin whitelist check during setup phase
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,14 +51,7 @@ const Login = () => {
 
     setLoading(true);
     try {
-      // First check if email is authorized
-      const adminData = await checkAdminAccess(email);
-      if (!adminData) {
-        toast.error("⛔ Email non autorisé. Cette adresse email n'est pas dans la liste des utilisateurs autorisés.");
-        setLoading(false);
-        return;
-      }
-
+      // Temporarily removed email whitelist check during setup phase
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -92,19 +67,6 @@ const Login = () => {
         }
         setLoading(false);
         return;
-      }
-
-      // Double check admin access after successful login
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const finalCheck = await checkAdminAccess(user.email || '');
-        if (!finalCheck) {
-          // Sign out immediately if not authorized
-          await supabase.auth.signOut();
-          toast.error("⛔ Accès refusé. Cette adresse email n'est pas autorisée.");
-          setLoading(false);
-          return;
-        }
       }
 
       toast.success("Connexion réussie !");
@@ -128,13 +90,7 @@ const Login = () => {
       return;
     }
 
-    // Check if email is authorized before sending reset
-    const adminData = await checkAdminAccess(email);
-    if (!adminData) {
-      toast.error("⛔ Email non autorisé. Cette adresse email n'est pas dans la liste des utilisateurs autorisés.");
-      return;
-    }
-
+    // Temporarily removed email whitelist check during setup phase
     setLoading(true);
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -166,7 +122,7 @@ const Login = () => {
             Espace CRM
           </CardTitle>
           <p className="text-muted-foreground">
-            Accès réservé aux administrateurs autorisés
+            Seuls les utilisateurs invités par email peuvent accéder
           </p>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -174,7 +130,7 @@ const Login = () => {
           <Alert className="border-amber-200 bg-amber-50">
             <AlertTriangle className="h-4 w-4 text-amber-600" />
             <AlertDescription className="text-amber-800 text-sm">
-              <strong>Accès sécurisé :</strong> Seules les adresses email autorisées peuvent accéder au CRM.
+              <strong>Accès par invitation uniquement :</strong> Si vous n'avez pas reçu d'invitation, contactez l'administrateur.
             </AlertDescription>
           </Alert>
 

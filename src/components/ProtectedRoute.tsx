@@ -21,20 +21,8 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
           return;
         }
 
-        // Check if user email is in admin_users table
-        const { data, error } = await supabase
-          .from('admin_users')
-          .select('email, is_active, role, can_see_payments, can_manage_users, can_see_all_leads')
-          .eq('email', session.user.email)
-          .eq('is_active', true)
-          .single();
-
-        if (error || !data) {
-          await supabase.auth.signOut();
-          toast.error("⛔ Accès refusé. Cette adresse email n'est pas autorisée.");
-          navigate('/login');
-          return;
-        }
+        // Temporarily allow any authenticated user during setup phase
+        // Email whitelist check will be re-enabled later for role-based access
 
         setIsAuthorized(true);
       } catch (error) {
@@ -53,20 +41,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
         return;
       }
 
-      // Re-check authorization on auth change
-      const { data, error } = await supabase
-        .from('admin_users')
-        .select('email, is_active, role, can_see_payments, can_manage_users, can_see_all_leads')
-        .eq('email', session.user.email)
-        .eq('is_active', true)
-        .single();
-
-      if (error || !data) {
-        await supabase.auth.signOut();
-        toast.error("⛔ Accès refusé. Cette adresse email n'est pas autorisée.");
-        navigate('/login');
-        return;
-      }
+      // Temporarily allow any authenticated user during setup phase
 
       setIsAuthorized(true);
     });
