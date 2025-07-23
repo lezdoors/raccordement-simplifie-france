@@ -2,10 +2,21 @@ import { CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import Navigation from "@/components/Navigation";
 
 const Merci = () => {
   const navigate = useNavigate();
+
+  // Track purchase conversion on page load
+  useEffect(() => {
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'conversion', {
+        'send_to': 'AW-16698052873/IFUxCJLHtMUaEImioJo-',
+        'transaction_id': Math.random().toString(36).substr(2, 9).toUpperCase()
+      });
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
