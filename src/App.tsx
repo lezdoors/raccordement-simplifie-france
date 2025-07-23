@@ -30,6 +30,7 @@ import CGU from "./pages/CGU";
 import Admin from "./pages/Admin";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { AdminProvider } from "./contexts/AdminContext";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCancel from "./pages/PaymentCancel";
 
@@ -85,12 +86,14 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <AccessibilityProvider>
       <TooltipProvider>
-        <ServiceWorker />
-        <Toaster />
-        <Sonner />
-        <ErrorBoundary>
-          <AppContent />
-        </ErrorBoundary>
+        <AdminProvider>
+          <ServiceWorker />
+          <Toaster />
+          <Sonner />
+          <ErrorBoundary>
+            <AppContent />
+          </ErrorBoundary>
+        </AdminProvider>
       </TooltipProvider>
     </AccessibilityProvider>
   </QueryClientProvider>
