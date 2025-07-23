@@ -10,12 +10,13 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-16 md:h-28">
           {/* Logo Section - Centered and enlarged */}
           <div className="flex items-center cursor-pointer justify-center md:justify-start" onClick={() => navigate("/")}>
-            <div className="h-16 md:h-32 w-auto mr-3 md:mr-4 flex items-center justify-center">
-              <div className="w-12 h-12 md:w-16 md:h-16 bg-white rounded-lg flex items-center justify-center">
-                <span className="text-primary font-bold text-lg md:text-xl">R</span>
-              </div>
+            <div className="h-16 md:h-24 w-auto mr-3 md:mr-4 flex items-center justify-center">
+              <img 
+                src="/src/assets/logo.svg" 
+                alt="Raccordement Électrique" 
+                className="h-12 md:h-20 w-auto"
+              />
             </div>
-            
           </div>
           
           {/* Desktop Navigation */}

@@ -21,9 +21,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
           return;
         }
 
-        // Temporarily allow any authenticated user during setup phase
-        // Email whitelist check will be re-enabled later for role-based access
-
+        // Allow any authenticated user to login
         setIsAuthorized(true);
       } catch (error) {
         console.error('Error checking access:', error);
@@ -40,8 +38,6 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
         navigate('/login');
         return;
       }
-
-      // Temporarily allow any authenticated user during setup phase
 
       setIsAuthorized(true);
     });

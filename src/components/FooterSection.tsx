@@ -80,12 +80,13 @@ const FooterSection = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         {/* Logo Section */}
         <div className="flex flex-col md:flex-row items-center justify-center mb-8 md:mb-12">
-          <div className="h-12 md:h-16 w-auto mr-0 md:mr-4 mb-2 md:mb-0 flex items-center justify-center">
-            <div className="w-12 h-12 md:w-16 md:h-16 bg-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg md:text-xl">R</span>
-            </div>
+          <div className="h-16 md:h-20 w-auto mr-0 md:mr-4 mb-2 md:mb-0 flex items-center justify-center">
+            <img 
+              src="/src/assets/logo.svg" 
+              alt="Raccordement Électrique" 
+              className="h-14 md:h-18 w-auto"
+            />
           </div>
-          <h2 className="text-xl md:text-2xl font-bold text-center md:text-left">raccordement-elec.fr</h2>
         </div>
 
         {/* Mobile-first Grid Layout */}

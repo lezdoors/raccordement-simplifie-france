@@ -198,10 +198,10 @@ export const MultiStepForm = () => {
 
   const handleSubmit = async (data: FormData) => {
     try {
-      // Final save to Supabase
-      const { error } = await supabase
-        .from('form_submissions')
-        .upsert({
+      // Save to both tables for now - keeping form_submissions as backup
+      const [formSubmissionResult, leadResult] = await Promise.all([
+        // Save to form_submissions (backup)
+        supabase.from('form_submissions').upsert({
           id: data.email,
           client_type: data.clientType,
           nom: data.lastName,
@@ -224,10 +224,40 @@ export const MultiStepForm = () => {
           desired_timeline: data.desiredTimeline,
           form_status: "completed",
           payment_status: "pending"
-        });
+        }),
 
-      if (error) {
-        console.error("Supabase error:", error);
+        // Save to leads_raccordement (CRM display)
+        supabase.from('leads_raccordement').insert({
+          type_client: data.clientType,
+          nom: data.lastName,
+          prenom: data.firstName,
+          email: data.email,
+          telephone: data.phone,
+          raison_sociale: data.companyName,
+          siren: data.siret,
+          ville: data.city,
+          code_postal: data.postalCode,
+          type_raccordement: data.connectionType,
+          type_projet: data.projectType,
+          type_alimentation: data.powerType,
+          puissance: data.powerDemanded,
+          adresse_chantier: `${data.workStreet}, ${data.postalCode} ${data.city}`,
+          etat_projet: data.projectStatus,
+          delai_souhaite: data.desiredTimeline,
+          assigned_to_email: null, // Default to NULL as requested
+          form_step: 6, // Final step
+          consent_accepted: true,
+          payment_status: 'pending'
+        })
+      ]);
+
+      if (formSubmissionResult.error) {
+        console.error("Form submission backup error:", formSubmissionResult.error);
+        // Continue even if backup fails
+      }
+
+      if (leadResult.error) {
+        console.error("Lead raccordement error:", leadResult.error);
         toast.error("Erreur lors de l'envoi de votre demande. Veuillez réessayer.");
         return;
       }
