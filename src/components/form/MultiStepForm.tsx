@@ -89,6 +89,7 @@ const STEPS = [
 
 export const MultiStepForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   
   const form = useForm<FormData>({
@@ -198,6 +199,8 @@ export const MultiStepForm = () => {
 
   const handleSubmit = async (data: FormData) => {
     try {
+      setIsSubmitting(true);
+      
       // Save to both tables for now - keeping form_submissions as backup
       const [formSubmissionResult, leadResult] = await Promise.all([
         // Save to form_submissions (backup)
@@ -258,20 +261,45 @@ export const MultiStepForm = () => {
 
       if (leadResult.error) {
         console.error("Lead raccordement error:", leadResult.error);
-        toast.error("Erreur lors de l'envoi de votre demande. Veuillez réessayer.");
+        
+        // Check for specific error types
+        if (leadResult.error.message?.includes('duplicate key value')) {
+          toast.error("Un dossier avec cet email existe déjà. Veuillez utiliser une autre adresse email.");
+        } else if (leadResult.error.message?.includes('connection')) {
+          toast.error("Problème de connexion. Vérifiez votre connexion internet et réessayez.");
+        } else {
+          toast.error("Erreur lors de l'envoi de votre demande. Veuillez réessayer.");
+        }
         return;
       }
 
       // Clear saved data
       localStorage.removeItem('raccordement-form-data');
       
-      toast.success("Votre demande a été envoyée avec succès !");
+      toast.success("Votre demande a été envoyée avec succès ! Vous allez être redirigé...");
       
-      // Redirect to thank you page
-      navigate("/merci");
+      // Small delay before redirect for better UX
+      setTimeout(() => {
+        navigate("/merci");
+      }, 1500);
+      
     } catch (error) {
       console.error("Error submitting form:", error);
-      toast.error("Une erreur est survenue. Veuillez réessayer.");
+      
+      // Enhanced error handling
+      if (error instanceof Error) {
+        if (error.message.includes('Failed to fetch')) {
+          toast.error("Problème de connexion réseau. Vérifiez votre connexion internet.");
+        } else if (error.message.includes('timeout')) {
+          toast.error("La demande a pris trop de temps. Veuillez réessayer.");
+        } else {
+          toast.error("Une erreur technique est survenue. Veuillez réessayer.");
+        }
+      } else {
+        toast.error("Une erreur inattendue est survenue. Veuillez réessayer.");
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -390,10 +418,10 @@ export const MultiStepForm = () => {
                     <Button
                       type="submit"
                       className="flex items-center justify-center gap-2 w-full md:w-auto order-1 md:order-2"
-                      disabled={!form.formState.isValid}
+                      disabled={!form.formState.isValid || isSubmitting}
                       size="lg"
                     >
-                      Envoyer ma demande
+                      {isSubmitting ? "Envoi en cours..." : "Envoyer ma demande"}
                     </Button>
                   ) : (
                     <Button

@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 const FooterSection = () => {
   const [formData, setFormData] = useState({
@@ -14,7 +14,6 @@ const FooterSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
-  const { toast } = useToast();
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -58,11 +57,7 @@ const FooterSection = () => {
       });
     } catch (error) {
       console.error('Error submitting footer form:', error);
-      toast({
-        title: "Erreur",
-        description: "Une erreur est survenue lors de l'envoi de la demande.",
-        variant: "destructive",
-      });
+      toast.error("Une erreur est survenue lors de l'envoi de la demande.");
     } finally {
       setIsSubmitting(false);
     }

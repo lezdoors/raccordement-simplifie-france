@@ -69,8 +69,12 @@ const Login = () => {
         return;
       }
 
-      toast.success("Connexion réussie !");
-      window.location.href = "/admin";
+      toast.success("Connexion réussie ! Redirection en cours...");
+      
+      // Small delay for better UX
+      setTimeout(() => {
+        window.location.href = "/admin";
+      }, 1000);
     } catch (error: any) {
       console.error("Login error:", error);
       toast.error("Erreur lors de la connexion");
