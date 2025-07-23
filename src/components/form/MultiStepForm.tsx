@@ -229,6 +229,11 @@ export const MultiStepForm = () => {
     try {
       setIsSubmitting(true);
       
+      // Trigger Google Ads form_submit conversion tracking
+      if (typeof window !== 'undefined' && (window as any).gtag_report_form_submit_conversion) {
+        (window as any).gtag_report_form_submit_conversion();
+      }
+      
       // Instead of saving to database immediately, redirect to Stripe payment
       // Database save will happen after successful payment
       const { data: paymentData, error: paymentError } = await supabase.functions.invoke('create-payment', {

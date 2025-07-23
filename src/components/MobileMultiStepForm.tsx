@@ -228,6 +228,11 @@ const MobileMultiStepForm = () => {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
+      // Trigger Google Ads form_submit conversion tracking
+      if (typeof window !== 'undefined' && (window as any).gtag_report_form_submit_conversion) {
+        (window as any).gtag_report_form_submit_conversion();
+      }
+      
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000));
       toast.success("Demande envoyée avec succès !");

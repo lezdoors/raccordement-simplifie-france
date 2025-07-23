@@ -288,6 +288,11 @@ const EnhancedMobileForm = ({ onClose }: EnhancedMobileFormProps) => {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
+      // Trigger Google Ads form_submit conversion tracking
+      if (typeof window !== 'undefined' && (window as any).gtag_report_form_submit_conversion) {
+        (window as any).gtag_report_form_submit_conversion();
+      }
+      
       // Create Stripe payment session
       const { data, error } = await supabase.functions.invoke('create-payment-session', {
         body: {
