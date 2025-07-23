@@ -199,6 +199,11 @@ const MobileMultiStepForm = () => {
       return;
     }
 
+    // Trigger Google Ads conversion tracking only on first step
+    if (currentStep === 0 && typeof window !== 'undefined' && (window as any).gtag_report_conversion) {
+      (window as any).gtag_report_conversion();
+    }
+
     if (currentStep < MOBILE_FORM_STEPS.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {

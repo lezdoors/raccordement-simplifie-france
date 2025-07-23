@@ -157,6 +157,11 @@ export const MultiStepForm = () => {
     const isValid = await trigger(stepFields);
     
     if (isValid) {
+      // Trigger Google Ads conversion tracking only on first step
+      if (currentStep === 1 && typeof window !== 'undefined' && (window as any).gtag_report_conversion) {
+        (window as any).gtag_report_conversion();
+      }
+      
       if (currentStep < STEPS.length) {
         // Auto-save to Supabase on step completion
         await autoSaveToSupabase();
