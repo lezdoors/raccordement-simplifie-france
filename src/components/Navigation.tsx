@@ -12,9 +12,9 @@ const Navigation = () => {
           <div className="flex items-center cursor-pointer justify-center md:justify-start" onClick={() => navigate("/")}>
             <div className="h-20 md:h-28 w-auto mr-3 md:mr-4 flex items-center justify-center">
               <img 
-                src="/src/assets/logo.svg" 
-                alt="Racco Service - Raccordement Électrique" 
-                className="h-16 md:h-24 w-auto transition-transform hover:scale-105"
+                src="https://kstugxtmghinprrpkrud.supabase.co/storage/v1/object/public/logo//Votre%20Partenaire%20(Website).svg" 
+                alt="Racco Service - Votre Partenaire Raccordement Électrique" 
+                className="w-[150px] md:w-[200px] h-auto transition-transform hover:scale-105"
               />
             </div>
           </div>
