@@ -180,32 +180,73 @@ export const MultiStepForm = () => {
   const autoSaveToSupabase = async () => {
     try {
       const data = getValues();
-      await supabase
+      
+      // Create a unique ID based on email for this session
+      const sessionId = `temp_${btoa(data.email).replace(/[^a-zA-Z0-9]/g, '')}`;
+      
+      const { data: existingRecord, error: selectError } = await supabase
         .from('form_submissions')
-        .upsert({
-          id: data.email, // Use email as unique identifier for upserts
-          client_type: data.clientType,
-          nom: data.lastName,
-          prenom: data.firstName,
-          email: data.email,
-          telephone: data.phone,
-          raison_sociale: data.companyName,
-          siren: data.siret,
-          nom_collectivite: data.collectivityName,
-          siren_collectivite: data.collectivitySiren,
-          ville: data.city,
-          code_postal: data.postalCode,
-          connection_type: data.connectionType,
-          project_type: data.projectType,
-          power_type: data.powerType,
-          power_kva: data.powerDemanded,
-          adresse: `${data.workStreet}, ${data.postalCode} ${data.city}`,
-          complement_adresse: data.workAddressComplement,
-          project_status: data.projectStatus,
-          desired_timeline: data.desiredTimeline,
-          form_status: "in_progress",
-          payment_status: "pending"
-        });
+        .select('id')
+        .eq('email', data.email)
+        .eq('form_status', 'in_progress')
+        .maybeSingle();
+
+      const submissionData = {
+        client_type: data.clientType,
+        nom: data.lastName,
+        prenom: data.firstName,
+        email: data.email,
+        telephone: data.phone,
+        raison_sociale: data.companyName || null,
+        siren: data.siret || null,
+        nom_collectivite: data.collectivityName || null,
+        siren_collectivite: data.collectivitySiren || null,
+        ville: data.city,
+        code_postal: data.postalCode,
+        connection_type: data.connectionType,
+        project_type: data.projectType,
+        power_type: data.powerType,
+        power_kva: data.powerDemanded || null,
+        adresse: data.workStreet ? `${data.workStreet}, ${data.postalCode} ${data.city}` : `${data.postalCode} ${data.city}`,
+        complement_adresse: data.workAddressComplement || null,
+        project_status: data.projectStatus || null,
+        desired_timeline: data.desiredTimeline || null,
+        form_status: "in_progress",
+        payment_status: "pending",
+        created_ip: null, // Will be handled by trigger
+        user_agent: navigator?.userAgent || null,
+        different_billing_address: data.differentBillingAddress || false,
+        billing_address: data.differentBillingAddress ? data.billingStreet : null,
+        billing_postal_code: data.differentBillingAddress ? data.billingPostalCode : null,
+        billing_city: data.differentBillingAddress ? data.billingCity : null
+      };
+
+      if (existingRecord) {
+        // Update existing record
+        const { error: updateError } = await supabase
+          .from('form_submissions')
+          .update(submissionData)
+          .eq('id', existingRecord.id);
+          
+        if (updateError) {
+          console.error("Update error:", updateError);
+        } else {
+          console.log("Successfully updated existing form submission");
+        }
+      } else {
+        // Insert new record
+        const { data: insertResult, error: insertError } = await supabase
+          .from('form_submissions')
+          .insert(submissionData)
+          .select('id')
+          .single();
+          
+        if (insertError) {
+          console.error("Insert error:", insertError);
+        } else {
+          console.log("Successfully created new form submission:", insertResult.id);
+        }
+      }
 
       // Send partial notification email for step 1
       if (currentStep === 1) {

@@ -48,7 +48,7 @@ const Navigation = () => {
               <p className="text-xs text-white/80">Du lundi au vendredi de 9h à 19h</p>
             </div>
             
-            <Button variant="default" size="lg" onClick={() => navigate("/raccordement-enedis")} className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold">
+            <Button size="lg" onClick={() => navigate("/raccordement-enedis")} className="btn-cta font-semibold">
               Démarrer ma demande
             </Button>
           </div>
@@ -88,7 +88,7 @@ const Navigation = () => {
               <Button onClick={() => {
             navigate("/raccordement-enedis");
             setIsMenuOpen(false);
-          }} className="w-full mobile-button bg-white text-primary hover:bg-white/90 font-semibold touch-feedback">
+          }} className="w-full btn-cta mobile-button font-semibold touch-feedback">
                 Démarrer ma demande
               </Button>
             </div>
@@ -97,7 +97,7 @@ const Navigation = () => {
 
       {/* Floating CTA for mobile */}
       <div className="md:hidden fixed bottom-6 right-4 z-[55]">
-        <Button onClick={() => navigate("/raccordement-enedis")} className="mobile-button bg-primary text-primary-foreground hover:bg-primary/90 font-semibold shadow-2xl rounded-full px-6 py-4 touch-feedback mobile-optimized" size="lg">
+        <Button onClick={() => navigate("/raccordement-enedis")} className="btn-cta mobile-button font-semibold shadow-2xl rounded-full px-6 py-4 touch-feedback mobile-optimized" size="lg">
           Démarrer ma demande
         </Button>
       </div>
