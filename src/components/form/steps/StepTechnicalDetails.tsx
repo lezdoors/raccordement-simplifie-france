@@ -89,9 +89,45 @@ export const StepTechnicalDetails = ({ form }: StepTechnicalDetailsProps) => {
             )}
           />
 
-          <p className="text-sm text-muted-foreground">
-            Le code postal et la ville utilisés seront ceux renseignés à l'étape précédente.
-          </p>
+          {/* Code postal et ville déplacés de l'étape 1 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="postalCode"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base font-medium">Code postal *</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="Code postal (5 chiffres)"
+                      className="h-12 text-base"
+                      maxLength={5}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="city"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base font-medium">Ville *</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="Votre ville"
+                      className="h-12 text-base"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           
           {/* Billing address option */}
           <FormField
@@ -203,7 +239,7 @@ export const StepTechnicalDetails = ({ form }: StepTechnicalDetailsProps) => {
                   >
                     <div className="relative">
                       <RadioGroupItem value="nouveau_raccordement" id="nouveau_raccordement" className="peer sr-only" />
-                      <Label htmlFor="nouveau_raccordement" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex items-start space-x-3">
+                      <Label htmlFor="nouveau_raccordement" className={`border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex items-start space-x-3 ${field.value === "nouveau_raccordement" ? "selected" : ""}`}>
                         <Home className="w-5 h-5 mt-0.5 text-primary" />
                         <div>
                           <div className="font-semibold">Nouveau raccordement</div>
@@ -214,7 +250,7 @@ export const StepTechnicalDetails = ({ form }: StepTechnicalDetailsProps) => {
 
                     <div className="relative">
                       <RadioGroupItem value="augmentation_puissance" id="augmentation_puissance" className="peer sr-only" />
-                      <Label htmlFor="augmentation_puissance" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex items-start space-x-3">
+                      <Label htmlFor="augmentation_puissance" className={`border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex items-start space-x-3 ${field.value === "augmentation_puissance" ? "selected" : ""}`}>
                         <TrendingUp className="w-5 h-5 mt-0.5 text-primary" />
                         <div>
                           <div className="font-semibold">Augmentation de puissance</div>
@@ -225,7 +261,7 @@ export const StepTechnicalDetails = ({ form }: StepTechnicalDetailsProps) => {
 
                     <div className="relative">
                       <RadioGroupItem value="raccordement_provisoire" id="raccordement_provisoire" className="peer sr-only" />
-                      <Label htmlFor="raccordement_provisoire" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex items-start space-x-3">
+                      <Label htmlFor="raccordement_provisoire" className={`border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex items-start space-x-3 ${field.value === "raccordement_provisoire" ? "selected" : ""}`}>
                         <Zap className="w-5 h-5 mt-0.5 text-primary" />
                         <div>
                           <div className="font-semibold">Raccordement provisoire</div>
@@ -236,7 +272,7 @@ export const StepTechnicalDetails = ({ form }: StepTechnicalDetailsProps) => {
 
                     <div className="relative">
                       <RadioGroupItem value="deplacement_compteur" id="deplacement_compteur" className="peer sr-only" />
-                      <Label htmlFor="deplacement_compteur" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex items-start space-x-3">
+                      <Label htmlFor="deplacement_compteur" className={`border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex items-start space-x-3 ${field.value === "deplacement_compteur" ? "selected" : ""}`}>
                         <ArrowUpRight className="w-5 h-5 mt-0.5 text-primary" />
                         <div>
                           <div className="font-semibold">Déplacement de compteur</div>
@@ -247,7 +283,7 @@ export const StepTechnicalDetails = ({ form }: StepTechnicalDetailsProps) => {
 
                     <div className="relative md:col-span-2">
                       <RadioGroupItem value="autre_demande" id="autre_demande" className="peer sr-only" />
-                      <Label htmlFor="autre_demande" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex items-start space-x-3">
+                      <Label htmlFor="autre_demande" className={`border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex items-start space-x-3 ${field.value === "autre_demande" ? "selected" : ""}`}>
                         <Info className="w-5 h-5 mt-0.5 text-primary" />
                         <div>
                           <div className="font-semibold">Autre demande</div>
@@ -277,7 +313,7 @@ export const StepTechnicalDetails = ({ form }: StepTechnicalDetailsProps) => {
                   >
                     <div className="relative">
                       <RadioGroupItem value="maison_individuelle" id="maison_individuelle" className="peer sr-only" />
-                      <Label htmlFor="maison_individuelle" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2">
+                      <Label htmlFor="maison_individuelle" className={`border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "maison_individuelle" ? "selected" : ""}`}>
                         <Home className="w-8 h-8 text-primary" />
                         <div className="text-lg font-semibold">Maison individuelle</div>
                         <div className="text-sm text-muted-foreground text-center">Maison unifamiliale avec jardin ou terrain privé</div>
@@ -286,7 +322,7 @@ export const StepTechnicalDetails = ({ form }: StepTechnicalDetailsProps) => {
 
                     <div className="relative">
                       <RadioGroupItem value="immeuble_collectif" id="immeuble_collectif" className="peer sr-only" />
-                      <Label htmlFor="immeuble_collectif" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2">
+                      <Label htmlFor="immeuble_collectif" className={`border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "immeuble_collectif" ? "selected" : ""}`}>
                         <div className="text-lg font-semibold">Immeuble collectif</div>
                         <div className="text-sm text-muted-foreground text-center">Appartement ou copropriété dans un bâtiment résidentiel</div>
                       </Label>
@@ -294,7 +330,7 @@ export const StepTechnicalDetails = ({ form }: StepTechnicalDetailsProps) => {
 
                     <div className="relative">
                       <RadioGroupItem value="local_commercial" id="local_commercial" className="peer sr-only" />
-                      <Label htmlFor="local_commercial" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2">
+                      <Label htmlFor="local_commercial" className={`border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "local_commercial" ? "selected" : ""}`}>
                         <div className="text-lg font-semibold">Local commercial</div>
                         <div className="text-sm text-muted-foreground text-center">Boutique, bureau, restaurant ou autre activité commerciale</div>
                       </Label>
@@ -302,7 +338,7 @@ export const StepTechnicalDetails = ({ form }: StepTechnicalDetailsProps) => {
 
                     <div className="relative">
                       <RadioGroupItem value="batiment_industriel" id="batiment_industriel" className="peer sr-only" />
-                      <Label htmlFor="batiment_industriel" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2">
+                      <Label htmlFor="batiment_industriel" className={`border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "batiment_industriel" ? "selected" : ""}`}>
                         <div className="text-lg font-semibold">Bâtiment industriel</div>
                         <div className="text-sm text-muted-foreground text-center">Usine, entrepôt, atelier ou installation industrielle</div>
                       </Label>
@@ -310,7 +346,7 @@ export const StepTechnicalDetails = ({ form }: StepTechnicalDetailsProps) => {
 
                     <div className="relative md:col-span-2">
                       <RadioGroupItem value="terrain_nu" id="terrain_nu" className="peer sr-only" />
-                      <Label htmlFor="terrain_nu" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2">
+                      <Label htmlFor="terrain_nu" className={`border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "terrain_nu" ? "selected" : ""}`}>
                         <div className="text-lg font-semibold">Terrain nu</div>
                         <div className="text-sm text-muted-foreground text-center">Terrain vierge sans construction existante nécessitant un nouveau raccordement</div>
                       </Label>
@@ -337,7 +373,7 @@ export const StepTechnicalDetails = ({ form }: StepTechnicalDetailsProps) => {
                   >
                     <div className="relative">
                       <RadioGroupItem value="monophase" id="monophase" className="peer sr-only" />
-                      <Label htmlFor="monophase" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2">
+                      <Label htmlFor="monophase" className={`border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "monophase" ? "selected" : ""}`}>
                         <div className="text-lg font-semibold">Monophasé</div>
                         <div className="text-sm text-muted-foreground text-center">Habitations standard (3-12 kVA)</div>
                       </Label>
@@ -345,7 +381,7 @@ export const StepTechnicalDetails = ({ form }: StepTechnicalDetailsProps) => {
 
                     <div className="relative">
                       <RadioGroupItem value="triphase" id="triphase" className="peer sr-only" />
-                      <Label htmlFor="triphase" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2">
+                      <Label htmlFor="triphase" className={`border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "triphase" ? "selected" : ""}`}>
                         <div className="text-lg font-semibold">Triphasé</div>
                         <div className="text-sm text-muted-foreground text-center">Puissances élevées (12-36+ kVA)</div>
                       </Label>
@@ -353,7 +389,7 @@ export const StepTechnicalDetails = ({ form }: StepTechnicalDetailsProps) => {
 
                     <div className="relative">
                       <RadioGroupItem value="je_ne_sais_pas" id="je_ne_sais_pas" className="peer sr-only" />
-                      <Label htmlFor="je_ne_sais_pas" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2">
+                      <Label htmlFor="je_ne_sais_pas" className={`border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "je_ne_sais_pas" ? "selected" : ""}`}>
                         <div className="text-lg font-semibold">Je ne sais pas</div>
                         <div className="text-sm text-muted-foreground text-center">Un expert vous conseillera</div>
                       </Label>
@@ -390,7 +426,7 @@ export const StepTechnicalDetails = ({ form }: StepTechnicalDetailsProps) => {
                       {getCurrentPowerOptions().map((option) => (
                         <div key={option.value} className="relative">
                           <RadioGroupItem value={option.value} id={`power-${option.value}`} className="peer sr-only" />
-                          <Label htmlFor={`power-${option.value}`} className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex items-center justify-between">
+                          <Label htmlFor={`power-${option.value}`} className={`border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex items-center justify-between ${field.value === option.value ? "selected" : ""}`}>
                             <div>
                               <div className="font-semibold">{option.label}</div>
                               <div className="text-sm text-muted-foreground">{option.description}</div>

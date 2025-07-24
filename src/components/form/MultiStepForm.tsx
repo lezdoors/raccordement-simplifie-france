@@ -281,7 +281,7 @@ export const MultiStepForm = () => {
   const getStepFields = (step: number): (keyof FormData)[] => {
     switch (step) {
       case 1:
-        const step1Fields: (keyof FormData)[] = ["civilite", "clientType", "firstName", "lastName", "email", "phone", "postalCode", "city"];
+        const step1Fields: (keyof FormData)[] = ["civilite", "clientType", "firstName", "lastName", "email", "phone"];
         if (watchedValues.clientType === "professionnel") {
           step1Fields.push("companyName", "siret");
         } else if (watchedValues.clientType === "collectivite") {
@@ -289,7 +289,7 @@ export const MultiStepForm = () => {
         }
         return step1Fields;
       case 2:
-        const step2Fields: (keyof FormData)[] = ["connectionType", "projectType", "powerType", "powerDemanded", "workStreet"];
+        const step2Fields: (keyof FormData)[] = ["connectionType", "projectType", "powerType", "powerDemanded", "workStreet", "postalCode", "city"];
         if (watchedValues.differentBillingAddress) {
           step2Fields.push("billingStreet", "billingPostalCode", "billingCity");
         }
@@ -396,7 +396,7 @@ export const MultiStepForm = () => {
                   {isLastStep ? (
                      <Button
                        type="submit"
-                       className="flex items-center justify-center gap-2 w-full md:w-auto order-1 md:order-2"
+                       className="btn-cta flex items-center justify-center gap-2 w-full md:w-auto order-1 md:order-2"
                        disabled={!form.formState.isValid || isSubmitting}
                        size="lg"
                      >
@@ -406,7 +406,7 @@ export const MultiStepForm = () => {
                     <Button
                       type="button"
                       onClick={handleNext}
-                      className="flex items-center justify-center gap-2 w-full md:w-auto order-1 md:order-2"
+                      className="btn-cta flex items-center justify-center gap-2 w-full md:w-auto order-1 md:order-2"
                       size="lg"
                     >
                       Suivant

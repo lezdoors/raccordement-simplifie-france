@@ -84,19 +84,19 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
                 >
                   <div className="relative">
                     <RadioGroupItem value="monsieur" id="monsieur" className="peer sr-only" />
-                    <Label htmlFor="monsieur" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 w-full text-center font-medium block">
+                    <Label htmlFor="monsieur" className={`peer-checked:selected border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 w-full text-center font-medium block ${field.value === "monsieur" ? "selected" : ""}`}>
                       Monsieur
                     </Label>
                   </div>
                   <div className="relative">
                     <RadioGroupItem value="madame" id="madame" className="peer sr-only" />
-                    <Label htmlFor="madame" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 w-full text-center font-medium block">
+                    <Label htmlFor="madame" className={`peer-checked:selected border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 w-full text-center font-medium block ${field.value === "madame" ? "selected" : ""}`}>
                       Madame
                     </Label>
                   </div>
                   <div className="relative">
                     <RadioGroupItem value="autre" id="autre" className="peer sr-only" />
-                    <Label htmlFor="autre" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 w-full text-center font-medium block">
+                    <Label htmlFor="autre" className={`peer-checked:selected border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 w-full text-center font-medium block ${field.value === "autre" ? "selected" : ""}`}>
                       Autre
                     </Label>
                   </div>
@@ -122,21 +122,21 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
                 >
                   <div className="relative">
                     <RadioGroupItem value="particulier" id="particulier-client" className="peer sr-only" />
-                    <Label htmlFor="particulier-client" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2">
+                    <Label htmlFor="particulier-client" className={`border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "particulier" ? "selected" : ""}`}>
                       <div className="text-lg font-semibold">Particulier</div>
                       <div className="text-sm text-muted-foreground text-center">Raccordement résidentiel</div>
                     </Label>
                   </div>
                   <div className="relative">
                     <RadioGroupItem value="professionnel" id="professionnel-client" className="peer sr-only" />
-                    <Label htmlFor="professionnel-client" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2">
+                    <Label htmlFor="professionnel-client" className={`border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "professionnel" ? "selected" : ""}`}>
                       <div className="text-lg font-semibold">Professionnel</div>
                       <div className="text-sm text-muted-foreground text-center">Raccordement entreprise</div>
                     </Label>
                   </div>
                   <div className="relative">
                     <RadioGroupItem value="collectivite" id="collectivite-client" className="peer sr-only" />
-                    <Label htmlFor="collectivite-client" className="peer-checked:ring-2 peer-checked:ring-primary peer-checked:bg-primary/5 peer-checked:border-primary border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2">
+                    <Label htmlFor="collectivite-client" className={`border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "collectivite" ? "selected" : ""}`}>
                       <div className="text-lg font-semibold">Collectivité</div>
                       <div className="text-sm text-muted-foreground text-center">Raccordement collectivités</div>
                     </Label>
@@ -310,63 +310,6 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FormField
-            control={form.control}
-            name="postalCode"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base font-medium">Code postal *</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="Code postal (5 chiffres)"
-                    className="h-12 text-base"
-                    maxLength={5}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="city"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base font-medium">Ville *</FormLabel>
-                {cityOptions.length > 1 ? (
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="h-12 text-base">
-                        <SelectValue placeholder={loadingCities ? "Recherche..." : "Sélectionnez votre ville"} />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {cityOptions.map((city) => (
-                        <SelectItem key={city} value={city}>{city}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                ) : (
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder={loadingCities ? "Recherche..." : "Votre ville"}
-                      className="h-12 text-base"
-                      disabled={loadingCities}
-                    />
-                  </FormControl>
-                )}
-                <FormMessage />
-                {cityOptions.length === 0 && postalCode && postalCode.length === 5 && !loadingCities && (
-                  <p className="text-sm text-muted-foreground">Ville non trouvée pour ce code postal</p>
-                )}
-              </FormItem>
-            )}
-          />
-        </div>
       </div>
     </div>
   );
