@@ -105,6 +105,7 @@ export type Database = {
           created_by: string | null
           email: string
           id: string
+          is_active: boolean | null
           last_login: string | null
           name: string | null
           password_hash: string | null
@@ -117,6 +118,7 @@ export type Database = {
           created_by?: string | null
           email: string
           id?: string
+          is_active?: boolean | null
           last_login?: string | null
           name?: string | null
           password_hash?: string | null
@@ -129,6 +131,7 @@ export type Database = {
           created_by?: string | null
           email?: string
           id?: string
+          is_active?: boolean | null
           last_login?: string | null
           name?: string | null
           password_hash?: string | null
@@ -676,6 +679,7 @@ export type Database = {
       leads_raccordement: {
         Row: {
           adresse_chantier: string | null
+          assigned_to: string | null
           assigned_to_email: string | null
           civilite: string | null
           code_postal: string | null
@@ -691,9 +695,11 @@ export type Database = {
           numero_pdl: string | null
           payment_status: string | null
           prenom: string
+          priority: number | null
           puissance: string | null
           raison_sociale: string | null
           siren: string | null
+          status: string | null
           stripe_session_id: string | null
           telephone: string
           type_alimentation: string | null
@@ -706,6 +712,7 @@ export type Database = {
         }
         Insert: {
           adresse_chantier?: string | null
+          assigned_to?: string | null
           assigned_to_email?: string | null
           civilite?: string | null
           code_postal?: string | null
@@ -721,9 +728,11 @@ export type Database = {
           numero_pdl?: string | null
           payment_status?: string | null
           prenom: string
+          priority?: number | null
           puissance?: string | null
           raison_sociale?: string | null
           siren?: string | null
+          status?: string | null
           stripe_session_id?: string | null
           telephone: string
           type_alimentation?: string | null
@@ -736,6 +745,7 @@ export type Database = {
         }
         Update: {
           adresse_chantier?: string | null
+          assigned_to?: string | null
           assigned_to_email?: string | null
           civilite?: string | null
           code_postal?: string | null
@@ -751,9 +761,11 @@ export type Database = {
           numero_pdl?: string | null
           payment_status?: string | null
           prenom?: string
+          priority?: number | null
           puissance?: string | null
           raison_sociale?: string | null
           siren?: string | null
+          status?: string | null
           stripe_session_id?: string | null
           telephone?: string
           type_alimentation?: string | null
@@ -764,7 +776,15 @@ export type Database = {
           updated_at?: string | null
           ville?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "leads_raccordement_assigned_to_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "admins"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       messages: {
         Row: {
