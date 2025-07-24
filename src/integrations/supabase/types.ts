@@ -296,6 +296,30 @@ export type Database = {
         }
         Relationships: []
       }
+      form_logs: {
+        Row: {
+          id: string
+          partial_data: Json | null
+          submitted_at: string | null
+          user_agent: string | null
+          user_ip: unknown | null
+        }
+        Insert: {
+          id?: string
+          partial_data?: Json | null
+          submitted_at?: string | null
+          user_agent?: string | null
+          user_ip?: unknown | null
+        }
+        Update: {
+          id?: string
+          partial_data?: Json | null
+          submitted_at?: string | null
+          user_agent?: string | null
+          user_ip?: unknown | null
+        }
+        Relationships: []
+      }
       form_submissions: {
         Row: {
           additional_comments: string | null
@@ -492,6 +516,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      leads: {
+        Row: {
+          adresse_facturation: string | null
+          besoin_facturation: boolean | null
+          code_postal: string | null
+          created_at: string | null
+          email: string | null
+          etape: string | null
+          id: string
+          nom: string | null
+          option_tarifaire: string | null
+          prenom: string | null
+          puissance: string | null
+          status: string | null
+          telephone: string | null
+          type_raccordement: string | null
+          ville: string | null
+        }
+        Insert: {
+          adresse_facturation?: string | null
+          besoin_facturation?: boolean | null
+          code_postal?: string | null
+          created_at?: string | null
+          email?: string | null
+          etape?: string | null
+          id?: string
+          nom?: string | null
+          option_tarifaire?: string | null
+          prenom?: string | null
+          puissance?: string | null
+          status?: string | null
+          telephone?: string | null
+          type_raccordement?: string | null
+          ville?: string | null
+        }
+        Update: {
+          adresse_facturation?: string | null
+          besoin_facturation?: boolean | null
+          code_postal?: string | null
+          created_at?: string | null
+          email?: string | null
+          etape?: string | null
+          id?: string
+          nom?: string | null
+          option_tarifaire?: string | null
+          prenom?: string | null
+          puissance?: string | null
+          status?: string | null
+          telephone?: string | null
+          type_raccordement?: string | null
+          ville?: string | null
+        }
+        Relationships: []
       }
       leads_raccordement: {
         Row: {
@@ -704,6 +782,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          email: string | null
+          id: string
+          nom: string | null
+          role: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email?: string | null
+          id: string
+          nom?: string | null
+          role?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          nom?: string | null
+          role?: string | null
+        }
+        Relationships: []
+      }
+      rate_limits: {
+        Row: {
+          created_at: string | null
+          endpoint: string
+          id: string
+          identifier: string
+          requests_count: number | null
+          window_start: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          endpoint: string
+          id?: string
+          identifier: string
+          requests_count?: number | null
+          window_start?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          endpoint?: string
+          id?: string
+          identifier?: string
+          requests_count?: number | null
+          window_start?: string | null
+        }
+        Relationships: []
       }
     }
     Views: {
