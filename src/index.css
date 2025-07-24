@@ -315,10 +315,10 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* CTA Button Styles (Blue/Gold Gradient) */
+  /* CTA Button Styles (Professional Gold Only) */
   .btn-cta {
-    background: var(--gradient-cta);
-    color: white;
+    background: hsl(var(--luxury-gold));
+    color: hsl(var(--royal-blue));
     border: none;
     border-radius: 0.75rem;
     font-weight: 600;
@@ -330,13 +330,14 @@
   }
 
   .btn-cta:hover {
-    filter: brightness(1.1);
+    background: hsl(var(--luxury-gold-light));
     transform: translateY(-1px);
-    box-shadow: 0 10px 25px rgba(27, 43, 101, 0.3);
+    box-shadow: 0 10px 25px hsl(var(--luxury-gold) / 0.4);
   }
 
   .btn-cta:active {
     transform: translateY(0);
+    background: hsl(var(--luxury-gold-dark));
   }
 
   /* Selection Visual State */
@@ -353,20 +354,20 @@
     left: 1rem;
     right: 1rem;
     z-index: 50;
-    background: var(--gradient-cta);
-    color: white;
+    background: hsl(var(--luxury-gold));
+    color: hsl(var(--royal-blue));
     border: none;
     border-radius: 0.75rem;
     padding: 1rem;
     font-weight: 600;
     font-size: 1.1rem;
     text-align: center;
-    box-shadow: 0 10px 25px rgba(27, 43, 101, 0.4);
+    box-shadow: 0 10px 25px hsl(var(--luxury-gold) / 0.4);
     transition: all 0.3s ease;
   }
 
   .floating-cta:hover {
-    filter: brightness(1.1);
+    background: hsl(var(--luxury-gold-light));
   }
 }
 
