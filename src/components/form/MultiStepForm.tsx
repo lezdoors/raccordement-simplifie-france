@@ -181,18 +181,16 @@ export const MultiStepForm = () => {
     try {
       const data = getValues();
       
-      // Create a unique ID based on email for this session
-      const sessionId = `temp_${btoa(data.email).replace(/[^a-zA-Z0-9]/g, '')}`;
-      
+      // Check for existing record in leads_raccordement table (what CRM uses)
       const { data: existingRecord, error: selectError } = await supabase
-        .from('form_submissions')
+        .from('leads_raccordement')
         .select('id')
         .eq('email', data.email)
-        .eq('form_status', 'in_progress')
         .maybeSingle();
 
       const submissionData = {
-        client_type: data.clientType,
+        civilite: data.civilite,
+        type_client: data.clientType,
         nom: data.lastName,
         prenom: data.firstName,
         email: data.email,
@@ -200,43 +198,37 @@ export const MultiStepForm = () => {
         raison_sociale: data.companyName || null,
         siren: data.siret || null,
         nom_collectivite: data.collectivityName || null,
-        siren_collectivite: data.collectivitySiren || null,
-        ville: data.city,
         code_postal: data.postalCode,
-        connection_type: data.connectionType,
-        project_type: data.projectType,
-        power_type: data.powerType,
-        power_kva: data.powerDemanded || null,
-        adresse: data.workStreet ? `${data.workStreet}, ${data.postalCode} ${data.city}` : `${data.postalCode} ${data.city}`,
-        complement_adresse: data.workAddressComplement || null,
-        project_status: data.projectStatus || null,
-        desired_timeline: data.desiredTimeline || null,
-        form_status: "in_progress",
-        payment_status: "pending",
-        created_ip: null, // Will be handled by trigger
-        user_agent: navigator?.userAgent || null,
-        different_billing_address: data.differentBillingAddress || false,
-        billing_address: data.differentBillingAddress ? data.billingStreet : null,
-        billing_postal_code: data.differentBillingAddress ? data.billingPostalCode : null,
-        billing_city: data.differentBillingAddress ? data.billingCity : null
+        ville: data.city,
+        type_raccordement: data.connectionType,
+        type_projet: data.projectType,
+        type_alimentation: data.powerType,
+        puissance: data.powerDemanded || null,
+        adresse_chantier: data.workStreet ? `${data.workStreet}, ${data.postalCode} ${data.city}` : `${data.postalCode} ${data.city}`,
+        etat_projet: data.projectStatus || 'nouveau',
+        delai_souhaite: data.desiredTimeline || null,
+        commentaires: null,
+        consent_accepted: data.consent || false,
+        form_step: currentStep,
+        payment_status: "pending"
       };
 
       if (existingRecord) {
         // Update existing record
         const { error: updateError } = await supabase
-          .from('form_submissions')
+          .from('leads_raccordement')
           .update(submissionData)
           .eq('id', existingRecord.id);
           
         if (updateError) {
           console.error("Update error:", updateError);
         } else {
-          console.log("Successfully updated existing form submission");
+          console.log("Successfully updated existing lead");
         }
       } else {
         // Insert new record
         const { data: insertResult, error: insertError } = await supabase
-          .from('form_submissions')
+          .from('leads_raccordement')
           .insert(submissionData)
           .select('id')
           .single();
@@ -244,7 +236,7 @@ export const MultiStepForm = () => {
         if (insertError) {
           console.error("Insert error:", insertError);
         } else {
-          console.log("Successfully created new form submission:", insertResult.id);
+          console.log("Successfully created new lead:", insertResult.id);
         }
       }
 
