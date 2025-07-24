@@ -1,17 +1,23 @@
-import { useState } from "react";
+import { useEffect, useCallback, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useNavigate } from "react-router-dom";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Card } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { StepPersonalInfo } from "./steps/StepPersonalInfo";
-import { StepTechnicalDetails } from "./steps/StepTechnicalDetails";
-import { StepFinalValidation } from "./steps/StepFinalValidation";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+
+import { StepClientType } from "./steps/StepClientType";
+import { StepPersonalInfo } from "./steps/StepPersonalInfo";
+import { StepWorkAddress } from "./steps/StepWorkAddress";
+import { StepBillingAddress } from "./steps/StepBillingAddress";
+import { StepTechnicalDetails } from "./steps/StepTechnicalDetails";
+import { StepAdditionalInfo } from "./steps/StepAdditionalInfo";
+import { StepFinalValidation } from "./steps/StepFinalValidation";
+import { ProfessionalPaymentForm } from "@/components/ProfessionalPaymentForm";
+import { supabase } from "@/integrations/supabase/client";
 
 // Complete form schema according to updated specifications
 const formSchema = z.object({
@@ -95,7 +101,8 @@ const STEPS = [
 export const MultiStepForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const navigate = useNavigate();
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [savedData, setSavedData] = useState<Partial<FormData> | null>(null);
   
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -128,54 +135,31 @@ export const MultiStepForm = () => {
   const { watch, trigger, getValues } = form;
   const watchedValues = watch();
 
-  // French flag colors for progress bar
-  const getStepColor = (stepIndex: number) => {
-    if (stepIndex < currentStep) {
-      // Completed steps: French flag colors
-      switch ((stepIndex - 1) % 3) {
-        case 0: return "bg-blue-100"; // Light blue for French blue
-        case 1: return "bg-gray-50"; // Light cream for French white  
-        case 2: return "bg-red-50"; // Light rose for French red
-        default: return "bg-blue-100";
+  // Load saved data on component mount
+  useEffect(() => {
+    const saved = localStorage.getItem('raccordement-form-data');
+    if (saved) {
+      try {
+        const parsedData = JSON.parse(saved);
+        setSavedData(parsedData);
+        form.reset(parsedData);
+      } catch (error) {
+        console.error('Error loading saved data:', error);
       }
-    } else if (stepIndex === currentStep) {
-      // Current step: slightly darker version
-      switch ((stepIndex - 1) % 3) {
-        case 0: return "bg-blue-200 border-blue-300";
-        case 1: return "bg-gray-100 border-gray-300";
-        case 2: return "bg-red-100 border-red-300";
-        default: return "bg-blue-200 border-blue-300";
-      }
-    } else {
-      // Incomplete steps
-      return "bg-gray-100";
     }
-  };
+  }, [form]);
 
-  const handleNext = async () => {
-    const stepFields = getStepFields(currentStep);
-    const isValid = await trigger(stepFields);
-    
-    if (isValid) {
-      // Trigger Google Ads conversion tracking only on first step
-      if (currentStep === 1 && typeof window !== 'undefined' && (window as any).gtag_report_conversion) {
-        (window as any).gtag_report_conversion();
-      }
-      
-      if (currentStep < STEPS.length) {
-        // Auto-save to Supabase on step completion
-        await autoSaveToSupabase();
-        setCurrentStep(prev => prev + 1);
-        localStorage.setItem('raccordement-form-data', JSON.stringify(getValues()));
-      }
-    }
-  };
+  // Auto-save form data
+  const autoSave = useCallback(() => {
+    const data = getValues();
+    localStorage.setItem('raccordement-form-data', JSON.stringify(data));
+  }, [getValues]);
 
-  const handlePrevious = () => {
-    if (currentStep > 1) {
-      setCurrentStep(prev => prev - 1);
-    }
-  };
+  // Auto-save on form changes
+  useEffect(() => {
+    const subscription = watch(() => autoSave());
+    return () => subscription.unsubscribe();
+  }, [watch, autoSave]);
 
   const autoSaveToSupabase = async () => {
     try {
@@ -258,6 +242,31 @@ export const MultiStepForm = () => {
     }
   };
 
+  const handleNext = async () => {
+    const stepFields = getStepFields(currentStep);
+    const isValid = await trigger(stepFields);
+    
+    if (isValid) {
+      // Trigger Google Ads conversion tracking only on first step
+      if (currentStep === 1 && typeof window !== 'undefined' && (window as any).gtag_report_conversion) {
+        (window as any).gtag_report_conversion();
+      }
+      
+      if (currentStep < STEPS.length) {
+        // Auto-save to Supabase on step completion
+        await autoSaveToSupabase();
+        setCurrentStep(prev => prev + 1);
+        localStorage.setItem('raccordement-form-data', JSON.stringify(getValues()));
+      }
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentStep > 1) {
+      setCurrentStep(prev => prev - 1);
+    }
+  };
+
   const handleSubmit = async (data: FormData) => {
     try {
       setIsSubmitting(true);
@@ -267,48 +276,25 @@ export const MultiStepForm = () => {
         (window as any).gtag_report_form_submit_conversion();
       }
       
-      // Instead of saving to database immediately, redirect to Stripe payment
-      // Database save will happen after successful payment
-      const { data: paymentData, error: paymentError } = await supabase.functions.invoke('create-payment', {
-        body: { 
-          amount: 12900, // €129 TTC in cents
-          description: "Demande de raccordement Enedis",
-          formData: data
-        }
-      });
-
-      if (paymentError) {
-        console.error("Payment error:", paymentError);
-        toast.error("Erreur lors de l'initialisation du paiement. Veuillez réessayer.");
-        return;
-      }
-
-      // Save form data temporarily in localStorage for after payment
-      localStorage.setItem('raccordement-form-data-payment', JSON.stringify(data));
-      
-      toast.success("Redirection vers le paiement en cours...");
-      
-      // Redirect to Stripe Checkout
-      window.location.href = paymentData.url;
+      // Show the professional payment form instead of redirecting to Stripe Checkout
+      setShowPaymentForm(true);
       
     } catch (error) {
       console.error("Error submitting form:", error);
-      
-      // Enhanced error handling
-      if (error instanceof Error) {
-        if (error.message.includes('Failed to fetch')) {
-          toast.error("Problème de connexion réseau. Vérifiez votre connexion internet.");
-        } else if (error.message.includes('timeout')) {
-          toast.error("La demande a pris trop de temps. Veuillez réessayer.");
-        } else {
-          toast.error("Une erreur technique est survenue. Veuillez réessayer.");
-        }
-      } else {
-        toast.error("Une erreur inattendue est survenue. Veuillez réessayer.");
-      }
+      toast.error("Une erreur s'est produite. Veuillez réessayer.");
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handlePaymentSuccess = () => {
+    toast.success("Paiement confirmé !");
+    window.location.href = '/merci';
+  };
+
+  const handlePaymentCancel = () => {
+    setShowPaymentForm(false);
+    setIsSubmitting(false);
   };
 
   const getStepFields = (step: number): (keyof FormData)[] => {
@@ -344,6 +330,21 @@ export const MultiStepForm = () => {
 
   const progress = (currentStep / STEPS.length) * 100;
 
+  // If payment form is shown, render it instead of the form
+  if (showPaymentForm) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <ProfessionalPaymentForm
+          amount={12900} // €129 TTC in cents
+          description="Demande de raccordement Enedis"
+          formData={getValues()}
+          onSuccess={handlePaymentSuccess}
+          onCancel={handlePaymentCancel}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Sticky Progress Bar for Mobile */}
@@ -369,7 +370,7 @@ export const MultiStepForm = () => {
       <div className="container mx-auto px-4 py-4 md:py-8">
         <div className="max-w-4xl mx-auto">
           <Card className="p-4 md:p-6 lg:p-8">
-            {/* Desktop Progress Bar with French Flag Colors */}
+            {/* Desktop Progress Indicator */}
             <div className="hidden md:block mb-8">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold text-foreground">
@@ -380,21 +381,23 @@ export const MultiStepForm = () => {
                 </span>
               </div>
               
-              {/* Custom French Flag Progress Bar */}
               <div className="flex items-center justify-between mb-4">
                 {STEPS.map((step, index) => (
                   <div key={step.id} className="flex items-center">
                     <div className={`
                       w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-semibold
-                      ${getStepColor(step.id)}
+                      ${step.id <= currentStep 
+                        ? 'bg-primary text-primary-foreground border-primary' 
+                        : 'bg-muted text-muted-foreground border-muted'
+                      }
                       ${step.id === currentStep ? 'ring-2 ring-offset-2 ring-primary' : ''}
                     `}>
-                      <span className="text-white">{step.id}</span>
+                      {step.id}
                     </div>
                     {index < STEPS.length - 1 && (
                       <div className={`
                         h-1 w-16 mx-2
-                        ${step.id < currentStep ? getStepColor(step.id).replace('bg-', 'bg-').replace('-100', '-300') : 'bg-gray-200'}
+                        ${step.id < currentStep ? 'bg-primary' : 'bg-muted'}
                       `} />
                     )}
                   </div>
@@ -433,7 +436,7 @@ export const MultiStepForm = () => {
                        disabled={!form.formState.isValid || isSubmitting}
                        size="lg"
                      >
-                       {isSubmitting ? "Redirection vers le paiement..." : "Payer maintenant (129€ TTC)"}
+                       {isSubmitting ? "Préparation du paiement..." : "Payer maintenant (129€ TTC)"}
                      </Button>
                   ) : (
                     <Button

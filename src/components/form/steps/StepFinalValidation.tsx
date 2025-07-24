@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -10,12 +11,14 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { ProfessionalPaymentForm } from "@/components/ProfessionalPaymentForm";
 
 interface StepFinalValidationProps {
   form: UseFormReturn<any>;
 }
 
 export const StepFinalValidation = ({ form }: StepFinalValidationProps) => {
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
   const formData = form.watch();
   
   // Ensure formData is populated by explicitly watching all fields
@@ -63,25 +66,32 @@ export const StepFinalValidation = ({ form }: StepFinalValidationProps) => {
     return types[type as keyof typeof types] || type;
   };
 
-  const handleStripePayment = async () => {
-    try {
-      const { data, error } = await supabase.functions.invoke('create-payment', {
-        body: { 
-          amount: 12900, // €129 TTC in cents
-          description: "Demande de raccordement Enedis",
-          formData 
-        }
-      });
-
-      if (error) throw error;
-
-      // Open Stripe checkout in a new tab
-      window.open(data.url, '_blank');
-    } catch (error) {
-      console.error('Payment error:', error);
-      toast.error("Erreur lors de l'ouverture du paiement. Veuillez réessayer.");
-    }
+  const handlePaymentClick = () => {
+    setShowPaymentForm(true);
   };
+
+  const handlePaymentSuccess = () => {
+    toast.success("Paiement confirmé !");
+    window.location.href = '/merci';
+  };
+
+  const handlePaymentCancel = () => {
+    setShowPaymentForm(false);
+  };
+
+  if (showPaymentForm) {
+    return (
+      <div className="space-y-6">
+        <ProfessionalPaymentForm
+          amount={12900} // €129 TTC in cents
+          description="Demande de raccordement Enedis"
+          formData={formData}
+          onSuccess={handlePaymentSuccess}
+          onCancel={handlePaymentCancel}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
