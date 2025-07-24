@@ -106,14 +106,18 @@ const Admin = () => {
 
   const fetchData = async () => {
     try {
+      console.log('🔄 Starting data fetch...', { user: user?.email, role: adminUser?.role });
       setLoading(true);
 
       // Fetch leads based on role
       let leadsQuery = supabase.from('leads_raccordement').select('*');
       
       if (isTraiteur && user?.email) {
+        console.log('👤 Fetching leads for traiteur:', user.email);
         // Traiteur can only see leads assigned to them
         leadsQuery = leadsQuery.eq('assigned_to_email', user.email);
+      } else {
+        console.log('👑 Fetching all leads for admin/manager');
       }
       
       const [leadsRes, messagesRes] = await Promise.all([
@@ -121,8 +125,21 @@ const Admin = () => {
         supabase.from('messages').select('*').order('created_at', { ascending: false }),
       ]);
 
-      if (leadsRes.error) throw leadsRes.error;
-      if (messagesRes.error) throw messagesRes.error;
+      console.log('📊 Data fetch results:', {
+        leadsCount: leadsRes.data?.length || 0,
+        messagesCount: messagesRes.data?.length || 0,
+        leadsError: leadsRes.error,
+        messagesError: messagesRes.error
+      });
+
+      if (leadsRes.error) {
+        console.error('❌ Leads fetch error:', leadsRes.error);
+        throw leadsRes.error;
+      }
+      if (messagesRes.error) {
+        console.error('❌ Messages fetch error:', messagesRes.error);
+        throw messagesRes.error;
+      }
 
       setLeads(leadsRes.data || []);
       setMessages(messagesRes.data || []);
@@ -140,27 +157,34 @@ const Admin = () => {
         l => new Date(l.created_at) >= monthAgo
       ).length;
 
-      setStats({
+      const newStats = {
         totalLeads: leadsRes.data?.length || 0,
         totalMessages: messagesRes.data?.length || 0,
         weeklyLeads,
         monthlyLeads,
-      });
+      };
+
+      console.log('📈 Updated stats:', newStats);
+      setStats(newStats);
 
     } catch (error: any) {
-      console.error('Error fetching data:', error);
-      toast.error('Erreur lors du chargement des données');
+      console.error('💥 Critical error fetching data:', error);
+      toast.error(`Erreur lors du chargement des données: ${error.message}`);
     } finally {
       setLoading(false);
+      console.log('✅ Data fetch completed');
     }
   };
 
   const handleAssignLead = async (leadId: string, email: string) => {
     try {
+      // Convert "unassigned" to null
+      const assignedEmail = email === "unassigned" ? null : email;
+      
       const { error } = await supabase
         .from('leads_raccordement')
         .update({ 
-          assigned_to_email: email,
+          assigned_to_email: assignedEmail,
           updated_at: new Date().toISOString()
         })
         .eq('id', leadId);
@@ -168,12 +192,12 @@ const Admin = () => {
       if (error) throw error;
 
       setLeads(prev => prev.map(l => 
-        l.id === leadId ? { ...l, assigned_to_email: email } : l
+        l.id === leadId ? { ...l, assigned_to_email: assignedEmail } : l
       ));
 
       // Update selected lead if it's the same one
       if (selectedLead?.id === leadId) {
-        setSelectedLead(prev => prev ? { ...prev, assigned_to_email: email } : null);
+        setSelectedLead(prev => prev ? { ...prev, assigned_to_email: assignedEmail } : null);
       }
 
       toast.success('Lead assigné avec succès');
@@ -340,6 +364,7 @@ L'équipe Racco-Service`;
     return matchesSearch && matchesStatus && matchesAssigned;
   });
 
+  // Show loading state
   if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-background p-8">
@@ -347,14 +372,31 @@ L'équipe Racco-Service`;
           <div className="text-center py-20">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
             <p className="mt-4 text-muted-foreground">Chargement des données...</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Utilisateur: {user?.email || 'Non connecté'} | Rôle: {adminUser?.role || 'En attente'}
+            </p>
           </div>
         </div>
       </div>
     );
   }
 
+  // Show error state if user is not authenticated
   if (!user) {
-    return null;
+    return (
+      <div className="min-h-screen bg-background p-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center py-20">
+            <AlertCircle className="mx-auto h-12 w-12 text-red-500 mb-4" />
+            <p className="text-lg font-semibold text-foreground">Erreur d'authentification</p>
+            <p className="mt-2 text-muted-foreground">Veuillez vous reconnecter</p>
+            <Button onClick={() => navigate('/login')} className="mt-4">
+              Se reconnecter
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -649,15 +691,15 @@ L'équipe Racco-Service`;
                                             {/* Assignment */}
                                             <div>
                                               <strong>Assigner à:</strong>
-                                              <Select
-                                                value={selectedLead.assigned_to_email || ""}
-                                                onValueChange={(value) => handleAssignLead(selectedLead.id, value)}
+                                               <Select
+                                                 value={selectedLead.assigned_to_email || "unassigned"}
+                                                 onValueChange={(value) => handleAssignLead(selectedLead.id, value)}
                                               >
                                                 <SelectTrigger className="mt-2">
                                                   <SelectValue placeholder="Sélectionner un traiteur" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                  <SelectItem value="">Non assigné</SelectItem>
+                                                  <SelectItem value="unassigned">Non assigné</SelectItem>
                                                   <SelectItem value="hossam@raccordement.net">Hossam</SelectItem>
                                                   <SelectItem value="oussama@raccordement.net">Oussama</SelectItem>
                                                   <SelectItem value="farah@raccordement.net">Farah</SelectItem>
