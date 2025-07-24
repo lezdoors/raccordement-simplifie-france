@@ -342,9 +342,22 @@
 
   /* Selection Visual State */
   .selected {
-    background-color: #edc674 !important;
-    border: 1px solid #1b2b65 !important;
-    color: #1b2b65 !important;
+    background: linear-gradient(135deg, hsl(var(--luxury-gold)) 0%, hsl(var(--luxury-gold-light)) 100%) !important;
+    border: 2px solid hsl(var(--royal-blue)) !important;
+    color: hsl(var(--royal-blue)) !important;
+    box-shadow: 0 4px 12px hsl(var(--royal-blue) / 0.15) !important;
+    transform: translateY(-2px) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+
+  /* Radio and checkbox selected states */
+  input[type="radio"]:checked + label,
+  input[type="checkbox"]:checked + label {
+    background: linear-gradient(135deg, hsl(var(--luxury-gold)) 0%, hsl(var(--luxury-gold-light)) 100%) !important;
+    border: 2px solid hsl(var(--royal-blue)) !important;
+    color: hsl(var(--royal-blue)) !important;
+    box-shadow: 0 4px 12px hsl(var(--royal-blue) / 0.15) !important;
+    transform: translateY(-2px) !important;
   }
 
   /* Mobile Floating CTA Button */
