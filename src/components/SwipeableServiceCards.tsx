@@ -78,7 +78,7 @@ const SwipeableServiceCards = () => {
     <section className="py-luxury bg-gradient-to-br from-background via-muted/20 to-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16 space-y-6">
-          <div className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-luxury text-white text-sm font-medium shadow-luxury">
+          <div className="inline-flex items-center px-6 py-3 rounded-full bg-gold text-royal text-sm font-medium shadow-luxury">
             <FileText className="w-4 h-4 mr-2" />
             Services Premium
           </div>
@@ -204,7 +204,7 @@ const SwipeableServiceCards = () => {
                   <Button 
                     size="lg" 
                     onClick={() => navigate("/raccordement-enedis")}
-                    className="btn-luxury bg-gradient-luxury text-white hover:shadow-floating px-10 py-6 text-lg min-h-[44px] h-auto touch-target font-semibold rounded-xl border-0"
+                    className="btn-cta px-10 py-6 text-lg min-h-[44px] h-auto touch-target font-semibold rounded-xl border-0"
                   >
                     Accéder au formulaire premium →
                   </Button>
