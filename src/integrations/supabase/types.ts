@@ -22,8 +22,11 @@ export type Database = {
           details: Json | null
           id: string
           ip_address: unknown | null
+          new_values: Json | null
+          old_values: Json | null
           resource: string
           resource_id: string | null
+          resource_type: string | null
           user_agent: string | null
         }
         Insert: {
@@ -33,8 +36,11 @@ export type Database = {
           details?: Json | null
           id?: string
           ip_address?: unknown | null
+          new_values?: Json | null
+          old_values?: Json | null
           resource: string
           resource_id?: string | null
+          resource_type?: string | null
           user_agent?: string | null
         }
         Update: {
@@ -44,8 +50,11 @@ export type Database = {
           details?: Json | null
           id?: string
           ip_address?: unknown | null
+          new_values?: Json | null
+          old_values?: Json | null
           resource?: string
           resource_id?: string | null
+          resource_type?: string | null
           user_agent?: string | null
         }
         Relationships: []
@@ -96,8 +105,10 @@ export type Database = {
           created_by: string | null
           email: string
           id: string
+          last_login: string | null
           name: string | null
           password_hash: string | null
+          phone: string | null
           role: string | null
         }
         Insert: {
@@ -106,8 +117,10 @@ export type Database = {
           created_by?: string | null
           email: string
           id?: string
+          last_login?: string | null
           name?: string | null
           password_hash?: string | null
+          phone?: string | null
           role?: string | null
         }
         Update: {
@@ -116,8 +129,10 @@ export type Database = {
           created_by?: string | null
           email?: string
           id?: string
+          last_login?: string | null
           name?: string | null
           password_hash?: string | null
+          phone?: string | null
           role?: string | null
         }
         Relationships: []
@@ -481,6 +496,90 @@ export type Database = {
           ville?: string
         }
         Relationships: []
+      }
+      lead_notes: {
+        Row: {
+          admin_email: string | null
+          created_at: string | null
+          id: string
+          lead_id: string | null
+          note: string
+          note_type: string | null
+        }
+        Insert: {
+          admin_email?: string | null
+          created_at?: string | null
+          id?: string
+          lead_id?: string | null
+          note: string
+          note_type?: string | null
+        }
+        Update: {
+          admin_email?: string | null
+          created_at?: string | null
+          id?: string
+          lead_id?: string | null
+          note?: string
+          note_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_notes_admin_email_fkey"
+            columns: ["admin_email"]
+            isOneToOne: false
+            referencedRelation: "admin_users"
+            referencedColumns: ["email"]
+          },
+          {
+            foreignKeyName: "lead_notes_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads_raccordement"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lead_status_history: {
+        Row: {
+          admin_email: string | null
+          changed_at: string | null
+          id: string
+          lead_id: string | null
+          new_status: string | null
+          old_status: string | null
+        }
+        Insert: {
+          admin_email?: string | null
+          changed_at?: string | null
+          id?: string
+          lead_id?: string | null
+          new_status?: string | null
+          old_status?: string | null
+        }
+        Update: {
+          admin_email?: string | null
+          changed_at?: string | null
+          id?: string
+          lead_id?: string | null
+          new_status?: string | null
+          old_status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_status_history_admin_email_fkey"
+            columns: ["admin_email"]
+            isOneToOne: false
+            referencedRelation: "admin_users"
+            referencedColumns: ["email"]
+          },
+          {
+            foreignKeyName: "lead_status_history_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads_raccordement"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       lead_tracking: {
         Row: {
