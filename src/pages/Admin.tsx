@@ -73,7 +73,18 @@ const Admin = () => {
       fetchData();
       setupRealtimeSubscriptions();
     }
-  }, [authLoading, user, adminUser]);
+
+    // Add timeout safety net
+    const timeout = setTimeout(() => {
+      if (loading) {
+        console.error('⏰ Data fetch timeout after 15 seconds');
+        setLoading(false);
+        toast.error('Chargement des données trop long - rafraîchissez la page');
+      }
+    }, 15000);
+
+    return () => clearTimeout(timeout);
+  }, [authLoading, user, adminUser, loading]);
 
   const setupRealtimeSubscriptions = () => {
     const leadsChannel = supabase
@@ -106,60 +117,90 @@ const Admin = () => {
 
   const fetchData = async () => {
     try {
-      console.log('🔄 Starting data fetch...', { user: user?.email, role: adminUser?.role });
+      console.log('🔄 Starting data fetch...', { 
+        user: user?.email, 
+        role: adminUser?.role,
+        timestamp: new Date().toISOString()
+      });
       setLoading(true);
 
+      // Test connection first with simple query
+      console.log('🧪 Testing Supabase connection...');
+      const connectionTest = await supabase.from('leads_raccordement').select('count').limit(1);
+      console.log('🔗 Connection test result:', connectionTest);
+
+      if (connectionTest.error) {
+        console.error('❌ Connection test failed:', connectionTest.error);
+        throw new Error(`Connection failed: ${connectionTest.error.message}`);
+      }
+
       // Fetch leads based on role
-      let leadsQuery = supabase.from('leads_raccordement').select('*');
+      let leadsQuery = supabase.from('leads_raccordement').select(`
+        id, nom, prenom, email, telephone, type_client, type_projet, 
+        adresse_chantier, ville, code_postal, type_raccordement, 
+        type_alimentation, puissance, etat_projet, delai_souhaite, 
+        commentaires, assigned_to_email, created_at, updated_at
+      `);
       
       if (isTraiteur && user?.email) {
         console.log('👤 Fetching leads for traiteur:', user.email);
-        // Traiteur can only see leads assigned to them
         leadsQuery = leadsQuery.eq('assigned_to_email', user.email);
       } else {
         console.log('👑 Fetching all leads for admin/manager');
       }
       
+      console.log('📡 Executing queries...');
+      const startTime = Date.now();
+      
       const [leadsRes, messagesRes] = await Promise.all([
-        leadsQuery.order('created_at', { ascending: false }),
-        supabase.from('messages').select('*').order('created_at', { ascending: false }),
+        leadsQuery.order('created_at', { ascending: false }).limit(100),
+        supabase.from('messages').select('*').order('created_at', { ascending: false }).limit(50),
       ]);
+
+      const fetchTime = Date.now() - startTime;
+      console.log(`⚡ Queries completed in ${fetchTime}ms`);
 
       console.log('📊 Data fetch results:', {
         leadsCount: leadsRes.data?.length || 0,
         messagesCount: messagesRes.data?.length || 0,
         leadsError: leadsRes.error,
-        messagesError: messagesRes.error
+        messagesError: messagesRes.error,
+        leadsData: leadsRes.data?.slice(0, 2), // Show first 2 leads for debugging
+        messagesData: messagesRes.data?.slice(0, 2) // Show first 2 messages for debugging
       });
 
       if (leadsRes.error) {
         console.error('❌ Leads fetch error:', leadsRes.error);
-        throw leadsRes.error;
+        throw new Error(`Leads error: ${leadsRes.error.message}`);
       }
       if (messagesRes.error) {
         console.error('❌ Messages fetch error:', messagesRes.error);
-        throw messagesRes.error;
+        throw new Error(`Messages error: ${messagesRes.error.message}`);
       }
 
-      setLeads(leadsRes.data || []);
-      setMessages(messagesRes.data || []);
+      const leadsData = leadsRes.data || [];
+      const messagesData = messagesRes.data || [];
+
+      console.log('💾 Setting data in state...');
+      setLeads(leadsData);
+      setMessages(messagesData);
 
       // Calculate stats
       const now = new Date();
       const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
       const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
-      const weeklyLeads = (leadsRes.data || []).filter(
+      const weeklyLeads = leadsData.filter(
         l => new Date(l.created_at) >= weekAgo
       ).length;
 
-      const monthlyLeads = (leadsRes.data || []).filter(
+      const monthlyLeads = leadsData.filter(
         l => new Date(l.created_at) >= monthAgo
       ).length;
 
       const newStats = {
-        totalLeads: leadsRes.data?.length || 0,
-        totalMessages: messagesRes.data?.length || 0,
+        totalLeads: leadsData.length,
+        totalMessages: messagesData.length,
         weeklyLeads,
         monthlyLeads,
       };
@@ -167,12 +208,26 @@ const Admin = () => {
       console.log('📈 Updated stats:', newStats);
       setStats(newStats);
 
+      console.log('✅ Data fetch completed successfully');
+
     } catch (error: any) {
       console.error('💥 Critical error fetching data:', error);
+      console.error('📍 Error stack:', error.stack);
       toast.error(`Erreur lors du chargement des données: ${error.message}`);
+      
+      // Set fallback data for debugging
+      console.log('🔄 Setting fallback empty data...');
+      setLeads([]);
+      setMessages([]);
+      setStats({
+        totalLeads: 0,
+        totalMessages: 0,
+        weeklyLeads: 0,
+        monthlyLeads: 0,
+      });
     } finally {
+      console.log('🏁 Finalizing data fetch...');
       setLoading(false);
-      console.log('✅ Data fetch completed');
     }
   };
 
@@ -364,7 +419,7 @@ L'équipe Racco-Service`;
     return matchesSearch && matchesStatus && matchesAssigned;
   });
 
-  // Show loading state
+  // Show loading state with timeout warning
   if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-background p-8">
@@ -375,6 +430,16 @@ L'équipe Racco-Service`;
             <p className="mt-2 text-sm text-muted-foreground">
               Utilisateur: {user?.email || 'Non connecté'} | Rôle: {adminUser?.role || 'En attente'}
             </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Si le chargement prend plus de 15 secondes, rafraîchissez la page
+            </p>
+            <Button 
+              onClick={() => window.location.reload()} 
+              variant="outline" 
+              className="mt-4"
+            >
+              Rafraîchir maintenant
+            </Button>
           </div>
         </div>
       </div>
