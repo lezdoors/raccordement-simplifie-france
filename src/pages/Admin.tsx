@@ -69,7 +69,7 @@ const Admin = () => {
   const isTraiteur = adminUser?.role === 'traiteur';
 
   useEffect(() => {
-    if (!authLoading && user) {
+    if (!authLoading && user && adminUser) {
       console.log('🚀 User authenticated, starting data fetch...', { user: user.email, adminUser: adminUser?.role });
       fetchData();
       
@@ -78,6 +78,9 @@ const Admin = () => {
     } else if (!authLoading && !user) {
       console.log('❌ No user found, redirecting to login');
       navigate('/kenitra');
+    } else if (!authLoading && user && !adminUser) {
+      console.log('⏳ User found but admin data pending...');
+      setLoading(false); // Stop loading if admin validation is pending
     }
 
     // Add timeout safety net
@@ -158,10 +161,14 @@ const Admin = () => {
       console.log('📡 Executing queries...');
       const startTime = Date.now();
       
-      const [leadsRes, messagesRes] = await Promise.all([
-        leadsQuery.order('created_at', { ascending: false }).limit(100),
-        supabase.from('messages').select('*').order('created_at', { ascending: false }).limit(50),
-      ]);
+      // Execute queries sequentially to isolate timeout issues
+      console.log('🔍 Fetching leads...');
+      const leadsRes = await leadsQuery.order('created_at', { ascending: false }).limit(100);
+      console.log('✅ Leads query completed:', { count: leadsRes.data?.length, error: leadsRes.error });
+      
+      console.log('🔍 Fetching messages...');
+      const messagesRes = await supabase.from('messages').select('*').order('created_at', { ascending: false }).limit(50);
+      console.log('✅ Messages query completed:', { count: messagesRes.data?.length, error: messagesRes.error });
 
       const fetchTime = Date.now() - startTime;
       console.log(`⚡ Queries completed in ${fetchTime}ms`);
