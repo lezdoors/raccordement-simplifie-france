@@ -107,17 +107,17 @@ export const MultiStepForm = () => {
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      civilite: "monsieur" as const,
-      clientType: "particulier" as const,
+      civilite: "" as any,
+      clientType: "" as any,
       firstName: "",
       lastName: "",
       email: "",
       phone: "",
       postalCode: "",
       city: "",
-      connectionType: "nouveau_raccordement" as const,
-      projectType: "maison_individuelle" as const,
-      powerType: "monophase" as const,
+      connectionType: "" as any,
+      projectType: "" as any,
+      powerType: "" as any,
       powerDemanded: "",
       workStreet: "",
       workAddressComplement: "",
@@ -271,13 +271,13 @@ export const MultiStepForm = () => {
     try {
       setIsSubmitting(true);
       
-      // Trigger Google Ads form_submit conversion tracking
-      if (typeof window !== 'undefined' && (window as any).gtag_report_form_submit_conversion) {
-        (window as any).gtag_report_form_submit_conversion();
-      }
+      // Show confirmation message
+      toast.success("✅ Votre demande a bien été soumise. Vous allez être redirigé(e) vers la page de paiement sécurisé.");
       
-      // Show the professional payment form instead of redirecting to Stripe Checkout
-      setShowPaymentForm(true);
+      // Small delay to show the message, then show payment form
+      setTimeout(() => {
+        setShowPaymentForm(true);
+      }, 2000);
       
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -436,7 +436,7 @@ export const MultiStepForm = () => {
                        disabled={!form.formState.isValid || isSubmitting}
                        size="lg"
                      >
-                       {isSubmitting ? "Préparation du paiement..." : "Payer maintenant (129€ TTC)"}
+                       {isSubmitting ? "Traitement en cours..." : "Soumettre ma demande"}
                      </Button>
                   ) : (
                     <Button
