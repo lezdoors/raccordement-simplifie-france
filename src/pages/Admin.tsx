@@ -546,16 +546,24 @@ L'équipe Racco-Service`;
                               <div className="text-sm">{formatDate(lead.created_at)}</div>
                             </TableCell>
                             <TableCell>
-                              <Dialog>
-                                <DialogTrigger asChild>
-                                  <Button 
-                                    variant="outline" 
-                                    size="sm"
-                                    onClick={() => setSelectedLead(lead)}
-                                  >
-                                    Voir détails
-                                  </Button>
-                                </DialogTrigger>
+                              <div className="flex space-x-2">
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  onClick={() => navigate(`/admin/leads/${lead.id}`)}
+                                >
+                                  Voir détails
+                                </Button>
+                                <Dialog>
+                                  <DialogTrigger asChild>
+                                    <Button 
+                                      variant="ghost" 
+                                      size="sm"
+                                      onClick={() => setSelectedLead(lead)}
+                                    >
+                                      Actions
+                                    </Button>
+                                  </DialogTrigger>
                                 <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
                                   <DialogHeader>
                                     <DialogTitle>
@@ -706,9 +714,10 @@ L'équipe Racco-Service`;
                                       )}
                                     </div>
                                   )}
-                                </DialogContent>
-                              </Dialog>
-                            </TableCell>
+                                 </DialogContent>
+                               </Dialog>
+                              </div>
+                             </TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
