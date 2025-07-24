@@ -54,6 +54,9 @@ const Admin = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [assignedFilter, setAssignedFilter] = useState("all");
+  const [newNote, setNewNote] = useState("");
   const [stats, setStats] = useState({
     totalLeads: 0,
     totalMessages: 0,
@@ -156,7 +159,10 @@ const Admin = () => {
     try {
       const { error } = await supabase
         .from('leads_raccordement')
-        .update({ assigned_to_email: email })
+        .update({ 
+          assigned_to_email: email,
+          updated_at: new Date().toISOString()
+        })
         .eq('id', leadId);
 
       if (error) throw error;
@@ -165,10 +171,120 @@ const Admin = () => {
         l.id === leadId ? { ...l, assigned_to_email: email } : l
       ));
 
+      // Update selected lead if it's the same one
+      if (selectedLead?.id === leadId) {
+        setSelectedLead(prev => prev ? { ...prev, assigned_to_email: email } : null);
+      }
+
       toast.success('Lead assigné avec succès');
     } catch (error: any) {
       console.error('Error assigning lead:', error);
       toast.error('Erreur lors de l\'assignation');
+    }
+  };
+
+  const handleStatusUpdate = async (leadId: string, newStatus: string) => {
+    try {
+      const { error } = await supabase
+        .from('leads_raccordement')
+        .update({ 
+          etat_projet: newStatus,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', leadId);
+
+      if (error) throw error;
+
+      setLeads(prev => prev.map(l => 
+        l.id === leadId ? { ...l, etat_projet: newStatus } : l
+      ));
+
+      // Update selected lead if it's the same one
+      if (selectedLead?.id === leadId) {
+        setSelectedLead(prev => prev ? { ...prev, etat_projet: newStatus } : null);
+      }
+
+      toast.success('Statut mis à jour avec succès');
+    } catch (error: any) {
+      console.error('Error updating status:', error);
+      toast.error('Erreur lors de la mise à jour du statut');
+    }
+  };
+
+  const handleAddNote = async (leadId: string, note: string) => {
+    try {
+      const currentComments = selectedLead?.commentaires || '';
+      const timestamp = new Date().toLocaleString('fr-FR');
+      const newComment = `${timestamp} - ${user?.email}: ${note}`;
+      const updatedComments = currentComments 
+        ? `${currentComments}\n\n${newComment}` 
+        : newComment;
+
+      const { error } = await supabase
+        .from('leads_raccordement')
+        .update({ 
+          commentaires: updatedComments,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', leadId);
+
+      if (error) throw error;
+
+      setLeads(prev => prev.map(l => 
+        l.id === leadId ? { ...l, commentaires: updatedComments } : l
+      ));
+
+      // Update selected lead
+      if (selectedLead?.id === leadId) {
+        setSelectedLead(prev => prev ? { ...prev, commentaires: updatedComments } : null);
+      }
+
+      toast.success('Note ajoutée avec succès');
+    } catch (error: any) {
+      console.error('Error adding note:', error);
+      toast.error('Erreur lors de l\'ajout de la note');
+    }
+  };
+
+  const handleSendEmail = async (lead: Lead) => {
+    try {
+      const subject = `Votre demande de raccordement électrique - ${lead.type_raccordement}`;
+      const message = `Bonjour ${lead.prenom},
+
+Nous avons bien reçu votre demande de raccordement électrique pour votre projet de ${lead.type_projet} à ${lead.ville}.
+
+Voici un récapitulatif de votre demande :
+- Type de raccordement : ${lead.type_raccordement}
+- Puissance souhaitée : ${lead.puissance}
+- Adresse du projet : ${lead.adresse_chantier}
+
+Notre équipe technique va analyser votre dossier et vous recontacter dans les plus brefs délais pour vous proposer un devis personnalisé.
+
+N'hésitez pas à nous contacter si vous avez des questions.
+
+Cordialement,
+L'équipe Racco-Service`;
+
+      const { error } = await supabase.functions.invoke('send-lead-email', {
+        body: {
+          to: lead.email,
+          subject: subject,
+          message: message,
+          leadId: lead.id,
+          leadName: `${lead.prenom} ${lead.nom}`
+        }
+      });
+
+      if (error) throw error;
+
+      // Add note about email sent
+      const emailNote = `Email envoyé: ${subject}`;
+      await handleAddNote(lead.id, emailNote);
+
+      toast.success('Email envoyé avec succès');
+    } catch (error: any) {
+      console.error('Error sending email:', error);
+      toast.error('Erreur lors de l\'envoi de l\'email');
     }
   };
 
@@ -216,7 +332,12 @@ const Admin = () => {
       lead.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       lead.ville?.toLowerCase().includes(searchTerm.toLowerCase());
     
-    return matchesSearch;
+    const matchesStatus = statusFilter === "all" || lead.etat_projet === statusFilter;
+    const matchesAssigned = assignedFilter === "all" || 
+      (assignedFilter === "unassigned" && !lead.assigned_to_email) ||
+      (assignedFilter !== "unassigned" && lead.assigned_to_email === assignedFilter);
+    
+    return matchesSearch && matchesStatus && matchesAssigned;
   });
 
   if (authLoading || loading) {
@@ -322,6 +443,36 @@ const Admin = () => {
                   <div className="flex justify-between items-center">
                     <CardTitle>Gestion des Leads</CardTitle>
                     <div className="flex items-center space-x-2">
+                      {/* Status Filter */}
+                      <Select value={statusFilter} onValueChange={setStatusFilter}>
+                        <SelectTrigger className="w-40">
+                          <SelectValue placeholder="Statut" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">Tous les statuts</SelectItem>
+                          <SelectItem value="nouveau">Nouveau</SelectItem>
+                          <SelectItem value="en_cours">En cours</SelectItem>
+                          <SelectItem value="attente_enedis">Attente Enedis</SelectItem>
+                          <SelectItem value="termine">Terminé</SelectItem>
+                        </SelectContent>
+                      </Select>
+
+                      {/* Assignment Filter */}
+                      <Select value={assignedFilter} onValueChange={setAssignedFilter}>
+                        <SelectTrigger className="w-40">
+                          <SelectValue placeholder="Assigné à" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">Tous</SelectItem>
+                          <SelectItem value="unassigned">Non assigné</SelectItem>
+                          <SelectItem value="hossam@raccordement.net">Hossam</SelectItem>
+                          <SelectItem value="oussama@raccordement.net">Oussama</SelectItem>
+                          <SelectItem value="farah@raccordement.net">Farah</SelectItem>
+                          <SelectItem value="rania@raccordement.net">Rania</SelectItem>
+                        </SelectContent>
+                      </Select>
+
+                      {/* Search */}
                       <div className="relative">
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                         <Input
@@ -464,24 +615,93 @@ const Admin = () => {
                                         <strong>Modifié le:</strong> {formatDate(selectedLead.updated_at)}
                                       </div>
                                       
+                                      {/* Quick Actions Section */}
                                       {(canSeeAllLeads) && (
-                                        <div className="pt-4 border-t">
-                                          <strong>Assigner à:</strong>
-                                          <Select
-                                            value={selectedLead.assigned_to_email || ""}
-                                            onValueChange={(value) => handleAssignLead(selectedLead.id, value)}
-                                          >
-                                            <SelectTrigger className="mt-2">
-                                              <SelectValue placeholder="Sélectionner un traiteur" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                              <SelectItem value="">Non assigné</SelectItem>
-                                              <SelectItem value="hossam@raccordement.net">Hossam</SelectItem>
-                                              <SelectItem value="oussama@raccordement.net">Oussama</SelectItem>
-                                              <SelectItem value="farah@raccordement.net">Farah</SelectItem>
-                                              <SelectItem value="rania@raccordement.net">Rania</SelectItem>
-                                            </SelectContent>
-                                          </Select>
+                                        <div className="pt-4 border-t space-y-4">
+                                          <div className="grid grid-cols-2 gap-4">
+                                            {/* Status Update */}
+                                            <div>
+                                              <strong>Mettre à jour le statut:</strong>
+                                              <Select
+                                                value={selectedLead.etat_projet || ""}
+                                                onValueChange={(value) => handleStatusUpdate(selectedLead.id, value)}
+                                              >
+                                                <SelectTrigger className="mt-2">
+                                                  <SelectValue placeholder="Changer le statut" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                  <SelectItem value="nouveau">Nouveau</SelectItem>
+                                                  <SelectItem value="en_cours">En cours</SelectItem>
+                                                  <SelectItem value="attente_enedis">Attente Enedis</SelectItem>
+                                                  <SelectItem value="termine">Terminé</SelectItem>
+                                                </SelectContent>
+                                              </Select>
+                                            </div>
+
+                                            {/* Assignment */}
+                                            <div>
+                                              <strong>Assigner à:</strong>
+                                              <Select
+                                                value={selectedLead.assigned_to_email || ""}
+                                                onValueChange={(value) => handleAssignLead(selectedLead.id, value)}
+                                              >
+                                                <SelectTrigger className="mt-2">
+                                                  <SelectValue placeholder="Sélectionner un traiteur" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                  <SelectItem value="">Non assigné</SelectItem>
+                                                  <SelectItem value="hossam@raccordement.net">Hossam</SelectItem>
+                                                  <SelectItem value="oussama@raccordement.net">Oussama</SelectItem>
+                                                  <SelectItem value="farah@raccordement.net">Farah</SelectItem>
+                                                  <SelectItem value="rania@raccordement.net">Rania</SelectItem>
+                                                </SelectContent>
+                                              </Select>
+                                            </div>
+                                          </div>
+
+                                           {/* Add Note Section */}
+                                           <div>
+                                             <strong>Ajouter une note:</strong>
+                                             <div className="mt-2 space-y-2">
+                                               <Input
+                                                 value={newNote}
+                                                 onChange={(e) => setNewNote(e.target.value)}
+                                                 placeholder="Tapez votre note ici..."
+                                                 className="w-full"
+                                               />
+                                               <div className="flex gap-2">
+                                                 <Button
+                                                   onClick={() => {
+                                                     if (newNote.trim()) {
+                                                       handleAddNote(selectedLead.id, newNote);
+                                                       setNewNote("");
+                                                     }
+                                                   }}
+                                                   size="sm"
+                                                   disabled={!newNote.trim()}
+                                                 >
+                                                   Ajouter la note
+                                                 </Button>
+                                                 <Button
+                                                   onClick={() => handleSendEmail(selectedLead)}
+                                                   size="sm"
+                                                   variant="outline"
+                                                 >
+                                                   📧 Envoyer email
+                                                 </Button>
+                                               </div>
+                                             </div>
+                                           </div>
+
+                                          {/* Communication History */}
+                                          {selectedLead.commentaires && (
+                                            <div>
+                                              <strong>Historique des communications:</strong>
+                                              <div className="mt-2 p-3 bg-gray-50 rounded-lg max-h-40 overflow-y-auto">
+                                                <pre className="text-sm whitespace-pre-wrap">{selectedLead.commentaires}</pre>
+                                              </div>
+                                            </div>
+                                          )}
                                         </div>
                                       )}
                                     </div>
