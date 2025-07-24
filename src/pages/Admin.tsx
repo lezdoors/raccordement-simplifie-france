@@ -70,21 +70,27 @@ const Admin = () => {
 
   useEffect(() => {
     if (!authLoading && user) {
+      console.log('🚀 User authenticated, starting data fetch...', { user: user.email, adminUser: adminUser?.role });
       fetchData();
-      setupRealtimeSubscriptions();
+      
+      // Disable realtime temporarily for debugging
+      // setupRealtimeSubscriptions();
+    } else if (!authLoading && !user) {
+      console.log('❌ No user found, redirecting to login');
+      navigate('/kenitra');
     }
 
     // Add timeout safety net
     const timeout = setTimeout(() => {
       if (loading) {
-        console.error('⏰ Data fetch timeout after 15 seconds');
+        console.error('⏰ Data fetch timeout after 10 seconds');
         setLoading(false);
-        toast.error('Chargement des données trop long - rafraîchissez la page');
+        toast.error('Chargement des données échoué - veuillez rafraîchir la page');
       }
-    }, 15000);
+    }, 10000);
 
     return () => clearTimeout(timeout);
-  }, [authLoading, user, adminUser, loading]);
+  }, [authLoading, user, adminUser]);
 
   const setupRealtimeSubscriptions = () => {
     const leadsChannel = supabase
@@ -342,7 +348,7 @@ Notre équipe technique va analyser votre dossier et vous recontacter dans les p
 N'hésitez pas à nous contacter si vous avez des questions.
 
 Cordialement,
-L'équipe Racco-Service`;
+L'équipe Raccordement Connect`;
 
       const { error } = await supabase.functions.invoke('send-lead-email', {
         body: {
@@ -373,7 +379,7 @@ L'équipe Racco-Service`;
       toast.error('Erreur lors de la déconnexion');
     } else {
       toast.success('Déconnexion réussie');
-      navigate('/login');
+      navigate('/kenitra');
     }
   };
 
@@ -455,7 +461,7 @@ L'équipe Racco-Service`;
             <AlertCircle className="mx-auto h-12 w-12 text-red-500 mb-4" />
             <p className="text-lg font-semibold text-foreground">Erreur d'authentification</p>
             <p className="mt-2 text-muted-foreground">Veuillez vous reconnecter</p>
-            <Button onClick={() => navigate('/login')} className="mt-4">
+            <Button onClick={() => navigate('/kenitra')} className="mt-4">
               Se reconnecter
             </Button>
           </div>
@@ -657,7 +663,7 @@ L'équipe Racco-Service`;
                                 <Button 
                                   variant="outline" 
                                   size="sm"
-                                  onClick={() => navigate(`/admin/leads/${lead.id}`)}
+                                  onClick={() => navigate(`/kenitra/leads/${lead.id}`)}
                                 >
                                   Voir détails
                                 </Button>

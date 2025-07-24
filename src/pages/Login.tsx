@@ -73,7 +73,7 @@ const Login = () => {
       
       // Small delay for better UX
       setTimeout(() => {
-        window.location.href = "/admin";
+        window.location.href = "/kenitra/dashboard";
       }, 1000);
     } catch (error: any) {
       console.error("Login error:", error);
@@ -98,7 +98,7 @@ const Login = () => {
     setLoading(true);
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/admin`,
+        redirectTo: `${window.location.origin}/kenitra/dashboard`,
       });
 
       if (error) {
@@ -146,7 +146,7 @@ const Login = () => {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="admin@raccordement-elec.fr"
+                  placeholder="serviceclient@raccordement-connect.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10 h-12"
@@ -202,7 +202,7 @@ const Login = () => {
               Problème d'accès ? Contactez l'administrateur système
             </p>
             <p className="text-xs text-muted-foreground">
-              09 69 32 18 00 | admin@raccordement-connect.com
+              09 77 40 50 60 | serviceclient@raccordement-connect.com
             </p>
           </div>
         </CardContent>
