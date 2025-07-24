@@ -23,7 +23,7 @@ serve(async (req) => {
       apiVersion: "2023-10-16",
     });
 
-    // Create a payment intent
+    // Create a payment intent with optimized metadata
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amount, // Amount in cents
       currency: "eur",
@@ -33,7 +33,15 @@ serve(async (req) => {
       description: description || "Demande de raccordement Enedis",
       receipt_email: formData?.email,
       metadata: {
-        formData: JSON.stringify(formData)
+        client_type: formData?.clientType || '',
+        email: formData?.email || '',
+        first_name: formData?.firstName || '',
+        last_name: formData?.lastName || '',
+        connection_type: formData?.connectionType || '',
+        project_type: formData?.projectType || '',
+        power_demanded: formData?.powerDemanded || '',
+        postal_code: formData?.postalCode || '',
+        city: formData?.city || ''
       }
     });
 

@@ -16,7 +16,6 @@ import { StepBillingAddress } from "./steps/StepBillingAddress";
 import { StepTechnicalDetails } from "./steps/StepTechnicalDetails";
 import { StepAdditionalInfo } from "./steps/StepAdditionalInfo";
 import { StepFinalValidation } from "./steps/StepFinalValidation";
-import { ProfessionalPaymentForm } from "@/components/ProfessionalPaymentForm";
 import { supabase } from "@/integrations/supabase/client";
 
 // Complete form schema according to updated specifications
@@ -101,7 +100,6 @@ const STEPS = [
 export const MultiStepForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [savedData, setSavedData] = useState<Partial<FormData> | null>(null);
   
   const form = useForm<FormData>({
@@ -253,10 +251,14 @@ export const MultiStepForm = () => {
       }
       
       if (currentStep < STEPS.length) {
-        // Auto-save to Supabase on step completion
-        await autoSaveToSupabase();
-        setCurrentStep(prev => prev + 1);
+        // Save locally immediately for fast navigation
         localStorage.setItem('raccordement-form-data', JSON.stringify(getValues()));
+        setCurrentStep(prev => prev + 1);
+        
+        // Auto-save to Supabase in background (non-blocking)
+        autoSaveToSupabase().catch(error => 
+          console.warn('Background save failed:', error)
+        );
       }
     }
   };
@@ -271,31 +273,38 @@ export const MultiStepForm = () => {
     try {
       setIsSubmitting(true);
       
-      // Show confirmation message
-      toast.success("✅ Votre demande a bien été soumise. Vous allez être redirigé(e) vers la page de paiement sécurisé.");
+      // First save the data to Supabase
+      await autoSaveToSupabase();
       
-      // Small delay to show the message, then show payment form
-      setTimeout(() => {
-        setShowPaymentForm(true);
-      }, 2000);
+      // Create payment session and redirect directly to Stripe
+      const { data: paymentData, error } = await supabase.functions.invoke('create-payment-session', {
+        body: { 
+          amount: 12900, // €129 in cents
+          formData: data
+        }
+      });
+
+      if (error) throw error;
+
+      // Save form data one more time with stripe session
+      localStorage.setItem('form-submission-data', JSON.stringify({
+        ...data,
+        stripeSessionId: paymentData.sessionId
+      }));
+      
+      // Clear the form data from localStorage since we're redirecting
+      localStorage.removeItem('raccordement-form-data');
+      
+      // Redirect directly to Stripe checkout
+      window.location.href = paymentData.url;
       
     } catch (error) {
       console.error("Error submitting form:", error);
-      toast.error("Une erreur s'est produite. Veuillez réessayer.");
-    } finally {
+      toast.error("Une erreur s'est produite lors de la création du paiement. Veuillez réessayer.");
       setIsSubmitting(false);
     }
   };
 
-  const handlePaymentSuccess = () => {
-    toast.success("Paiement confirmé !");
-    window.location.href = '/merci';
-  };
-
-  const handlePaymentCancel = () => {
-    setShowPaymentForm(false);
-    setIsSubmitting(false);
-  };
 
   const getStepFields = (step: number): (keyof FormData)[] => {
     switch (step) {
@@ -330,20 +339,6 @@ export const MultiStepForm = () => {
 
   const progress = (currentStep / STEPS.length) * 100;
 
-  // If payment form is shown, render it instead of the form
-  if (showPaymentForm) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <ProfessionalPaymentForm
-          amount={12900} // €129 TTC in cents
-          description="Demande de raccordement Enedis"
-          formData={getValues()}
-          onSuccess={handlePaymentSuccess}
-          onCancel={handlePaymentCancel}
-        />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-background">
