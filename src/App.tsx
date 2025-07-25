@@ -35,6 +35,7 @@ import { AdminProvider } from "./contexts/AdminContext";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentSuccessOptimized from "./pages/PaymentSuccessOptimized";
 import PaymentCancel from "./pages/PaymentCancel";
+import Protected from "./pages/Protected";
 
 // Simple loading component without animation
 const PageLoader = () => (
@@ -92,6 +93,7 @@ const AppContent = () => {
         <Route path="/kenitra" element={<Login />} />
         <Route path="/kenitra/dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
         <Route path="/kenitra/leads/:id" element={<ProtectedRoute><AdminLeadDetail /></ProtectedRoute>} />
+        <Route path="/protected" element={<Protected />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

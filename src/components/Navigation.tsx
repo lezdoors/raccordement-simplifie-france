@@ -7,14 +7,14 @@ const Navigation = () => {
   const navigate = useNavigate();
   return <nav className="bg-gradient-to-r from-primary to-primary/90 text-white sticky top-0 z-[60] shadow-lg backdrop-blur-md bg-opacity-95">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20 md:h-32">
+        <div className="flex justify-between items-center h-16 md:h-20">
           {/* Logo Section - Significantly enlarged */}
           <div className="flex items-center cursor-pointer justify-center md:justify-start" onClick={() => navigate("/")}>
-            <div className="h-20 md:h-28 w-auto mr-3 md:mr-4 flex items-center justify-center">
+            <div className="h-12 md:h-20 w-auto mr-3 md:mr-4 flex items-center justify-center">
               <img 
                 src="https://kstugxtmghinprrpkrud.supabase.co/storage/v1/object/public/logo//Votre%20Partenaire%20(Logo)-3.png" 
                 alt="Raccordement Connect - Votre Partenaire Raccordement Électrique" 
-                className="w-[150px] md:w-[200px] h-auto transition-transform hover:scale-105"
+                className="w-[120px] md:w-[180px] h-auto transition-transform hover:scale-105"
               />
             </div>
           </div>
@@ -42,8 +42,8 @@ const Navigation = () => {
                 <Phone className="w-4 h-4" />
                 <span>Appelez nous au</span>
               </div>
-              <a href="tel:0977405060" className="text-lg font-bold text-white hover:text-white/90 transition-colors">
-                09 77 40 50 60
+              <a href="tel:0970709570" className="text-lg font-bold text-white hover:text-white/90 transition-colors">
+                📞 09 70 70 95 70
               </a>
               <p className="text-xs text-white/80">Du lundi au vendredi de 9h à 19h</p>
             </div>
@@ -80,8 +80,8 @@ const Navigation = () => {
             <div className="px-4 py-6 border-t border-white/20 mt-4">
               <div className="text-center mb-4">
                 <p className="text-sm text-white/90 mb-1">Appelez nous au</p>
-                <a href="tel:0977405060" className="text-lg font-bold text-white hover:text-white/90 transition-colors touch-target">
-                  09 77 40 50 60
+                <a href="tel:0970709570" className="text-lg font-bold text-white hover:text-white/90 transition-colors touch-target">
+                  📞 09 70 70 95 70
                 </a>
                 <p className="text-xs text-white/80 mt-1">Lun-Ven 9h-18h</p>
               </div>

@@ -20,7 +20,7 @@ import {
 import MobileMultiStepForm from "@/components/MobileMultiStepForm";
 import Navigation from "@/components/Navigation";
 import FooterSection from "@/components/FooterSection";
-import OptimizedMobileForm from "@/components/OptimizedMobileForm";
+import MobileFormFixed from "@/components/MobileFormFixed";
 
 const services = [
   {
@@ -231,12 +231,12 @@ const MobileHomePage = () => {
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 z-50">
         <div className="flex gap-3">
           <a
-            href="tel:0969321800"
+            href="tel:0970709570"
             className="flex-1"
           >
             <Button variant="outline" className="w-full h-12 text-base">
               <Phone className="h-4 w-4 mr-2" />
-              Appeler
+              📞 Appeler
             </Button>
           </a>
           
@@ -251,7 +251,7 @@ const MobileHomePage = () => {
               <DialogHeader className="sr-only">
                 <DialogTitle>Formulaire de demande</DialogTitle>
               </DialogHeader>
-              <OptimizedMobileForm onClose={() => setIsFormOpen(false)} />
+              <MobileFormFixed onClose={() => setIsFormOpen(false)} />
             </DialogContent>
           </Dialog>
         </div>
