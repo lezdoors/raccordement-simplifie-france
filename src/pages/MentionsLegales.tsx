@@ -13,7 +13,7 @@ const MentionsLegales = () => {
             <section>
               <h2 className="text-2xl font-semibold text-foreground mb-4">Éditeur du site</h2>
               <div className="text-muted-foreground space-y-2">
-                <p><strong>Racco Service</strong></p>
+                <p><strong>Raccordement Connect</strong></p>
                 <p>Société par actions simplifiée</p>
                 <p>Capital social : 10 000 €</p>
                 <p>RCS : Paris B 123 456 789</p>
@@ -21,13 +21,13 @@ const MentionsLegales = () => {
                 <p>Numéro de TVA intracommunautaire : FR12345678901</p>
                 <p>Adresse : 123 Rue de la République, 75001 Paris, France</p>
                 <p>Téléphone : 09 70 95 70 70</p>
-                <p>Email : contact@racco-service.com</p>
+                <p>Email : serviceclient@raccordement-connect.com</p>
               </div>
             </section>
             
             <section>
               <h2 className="text-2xl font-semibold text-foreground mb-4">Directeur de la publication</h2>
-              <p className="text-muted-foreground">Directeur Général de Racco Service</p>
+              <p className="text-muted-foreground">Directeur Général de Raccordement Connect</p>
             </section>
             
             <section>

@@ -14,8 +14,8 @@ const CGU = () => {
               <h2 className="text-2xl font-semibold text-foreground mb-4">Article 1 - Objet</h2>
               <p className="text-muted-foreground">
                 Les présentes conditions générales d'utilisation régissent l'utilisation du site 
-                racco-service.com et des services de raccordement au réseau électrique proposés 
-                par Racco Service.
+                raccordement-connect.com et des services de raccordement au réseau électrique proposés 
+                par Raccordement Connect.
               </p>
             </section>
             
@@ -31,7 +31,7 @@ const CGU = () => {
             <section>
               <h2 className="text-2xl font-semibold text-foreground mb-4">Article 3 - Services proposés</h2>
               <p className="text-muted-foreground mb-4">
-                Racco Service propose les services suivants :
+                Raccordement Connect propose les services suivants :
               </p>
               <ul className="list-disc list-inside text-muted-foreground space-y-2">
                 <li>Accompagnement dans les démarches de raccordement Enedis</li>
@@ -57,7 +57,7 @@ const CGU = () => {
             <section>
               <h2 className="text-2xl font-semibold text-foreground mb-4">Article 5 - Limitation de responsabilité</h2>
               <p className="text-muted-foreground">
-                Racco Service intervient en qualité d'intermédiaire. Notre responsabilité se limite 
+                Raccordement Connect intervient en qualité d'intermédiaire. Notre responsabilité se limite 
                 à la transmission correcte des dossiers aux services d'Enedis. Nous ne saurions être 
                 tenus responsables des décisions prises par Enedis ou des délais de traitement.
               </p>
@@ -84,7 +84,7 @@ const CGU = () => {
               <h2 className="text-2xl font-semibold text-foreground mb-4">Article 8 - Contact</h2>
               <p className="text-muted-foreground">
                 Pour toute question concernant ces conditions générales d'utilisation, 
-                contactez-nous à : contact@racco-service.com
+                contactez-nous à : serviceclient@raccordement-connect.com
               </p>
             </section>
           </div>

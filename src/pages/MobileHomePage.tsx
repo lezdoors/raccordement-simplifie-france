@@ -20,7 +20,7 @@ import {
 import MobileMultiStepForm from "@/components/MobileMultiStepForm";
 import Navigation from "@/components/Navigation";
 import FooterSection from "@/components/FooterSection";
-import EnhancedMobileForm from "@/components/EnhancedMobileForm";
+import SimplifiedMobileForm from "@/components/SimplifiedMobileForm";
 
 const services = [
   {
@@ -251,7 +251,7 @@ const MobileHomePage = () => {
               <DialogHeader className="sr-only">
                 <DialogTitle>Formulaire de demande</DialogTitle>
               </DialogHeader>
-              <EnhancedMobileForm onClose={() => setIsFormOpen(false)} />
+              <SimplifiedMobileForm onClose={() => setIsFormOpen(false)} />
             </DialogContent>
           </Dialog>
         </div>

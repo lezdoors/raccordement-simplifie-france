@@ -54,7 +54,7 @@ const Confidentialite = () => {
                 <li>Droit d'opposition au traitement</li>
               </ul>
               <p className="text-muted-foreground mt-4">
-                Pour exercer ces droits, contactez-nous à : contact@racco-service.com
+                Pour exercer ces droits, contactez-nous à : serviceclient@raccordement-connect.com
               </p>
             </section>
             
@@ -70,7 +70,7 @@ const Confidentialite = () => {
               <h2 className="text-2xl font-semibold text-foreground mb-4">Contact</h2>
               <p className="text-muted-foreground">
                 Pour toute question concernant cette politique de confidentialité, 
-                vous pouvez nous contacter à : contact@racco-service.com
+                vous pouvez nous contacter à : serviceclient@raccordement-connect.com
               </p>
             </section>
           </div>

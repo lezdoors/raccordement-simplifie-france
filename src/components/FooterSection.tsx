@@ -78,7 +78,7 @@ const FooterSection = () => {
           <div className="h-20 md:h-24 w-auto mr-0 md:mr-4 mb-2 md:mb-0 flex items-center justify-center">
             <img 
               src="https://kstugxtmghinprrpkrud.supabase.co/storage/v1/object/public/logo//Votre%20Partenaire%20(Logo)-3.png" 
-              alt="Racco Service - Votre Partenaire Raccordement Électrique" 
+              alt="Raccordement Connect - Votre Partenaire Raccordement Électrique" 
               className="w-[150px] md:w-[200px] h-auto filter brightness-110"
             />
           </div>
@@ -231,7 +231,7 @@ const FooterSection = () => {
               }}
             >
               ©
-            </a> 2024 racco-service.com. Tous droits réservés.
+            </a> 2024 raccordement-connect.com. Tous droits réservés.
           </p>
           <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6 text-sm md:text-base text-gray-400 text-center">
             <a href="/mentions-legales" className="hover:text-blue-400 hover:underline transition-colors duration-200">Mentions légales</a>
