@@ -86,17 +86,19 @@ const AdminLeadDetail = () => {
     if (!lead) return;
     
     try {
+      const assignedEmail = email === "unassigned" ? null : email;
+      
       const { error } = await supabase
         .from('leads_raccordement')
         .update({ 
-          assigned_to_email: email,
+          assigned_to_email: assignedEmail,
           updated_at: new Date().toISOString()
         })
         .eq('id', lead.id);
 
       if (error) throw error;
 
-      setLead(prev => prev ? { ...prev, assigned_to_email: email } : null);
+      setLead(prev => prev ? { ...prev, assigned_to_email: assignedEmail } : null);
       toast.success('Lead assigné avec succès');
     } catch (error: any) {
       console.error('Error assigning lead:', error);
@@ -440,9 +442,9 @@ L'équipe Racco-Service`;
                   <label className="text-sm font-medium text-muted-foreground">
                     Assigner à un membre de l'équipe
                   </label>
-                  <Select
-                    value={lead.assigned_to_email || ""}
-                    onValueChange={handleAssignLead}
+                   <Select
+                     value={lead.assigned_to_email || "unassigned"}
+                     onValueChange={handleAssignLead}
                   >
                     <SelectTrigger className="mt-2">
                       <SelectValue placeholder="Sélectionner un traiteur" />
