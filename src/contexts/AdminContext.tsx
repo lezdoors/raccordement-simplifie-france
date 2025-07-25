@@ -75,25 +75,50 @@ export const AdminProvider = ({ children }: AdminProviderProps) => {
   };
 
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      if (session?.user?.email) {
-        const adminData = await fetchAdminUser(session.user.email);
-        setAdminUser(adminData);
+    const initializeAuth = async () => {
+      try {
+        // Get initial session
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('Error getting session:', error);
+          setLoading(false);
+          return;
+        }
+
+        setUser(session?.user ?? null);
+        
+        if (session?.user?.email) {
+          console.log('Fetching admin data for:', session.user.email);
+          const adminData = await fetchAdminUser(session.user.email);
+          console.log('Admin data fetched:', adminData);
+          setAdminUser(adminData);
+        }
+        
+        setLoading(false);
+      } catch (error) {
+        console.error('Auth initialization error:', error);
+        setLoading(false);
       }
-      setLoading(false);
-    });
+    };
+
+    initializeAuth();
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('Auth state change:', event, session?.user?.email);
+      
       setUser(session?.user ?? null);
+      
       if (session?.user?.email) {
+        console.log('Fetching admin data for auth change:', session.user.email);
         const adminData = await fetchAdminUser(session.user.email);
+        console.log('Admin data from auth change:', adminData);
         setAdminUser(adminData);
       } else {
         setAdminUser(null);
       }
+      
       setLoading(false);
     });
 

@@ -9,9 +9,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { BarChart3, Users, MessageSquare, FileText, LogOut, Search, AlertCircle } from "lucide-react";
+import { BarChart3, Users, MessageSquare, FileText, LogOut, Search, AlertCircle, Bell, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAdmin } from "@/contexts/AdminContext";
+import { useLeadNotifications } from "@/hooks/use-lead-notifications";
+import { PhoneHeader } from "@/components/PhoneHeader";
+import { LeadPreviewModal } from "@/components/LeadPreviewModal";
 
 // Interfaces
 interface Lead {
@@ -49,10 +52,13 @@ interface Message {
 const Admin = () => {
   const navigate = useNavigate();
   const { user, adminUser, loading: authLoading } = useAdmin();
+  const { newLeadsCount, clearNotifications } = useLeadNotifications();
   const [loading, setLoading] = useState(true);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+  const [previewLead, setPreviewLead] = useState<Lead | null>(null);
+  const [showPreview, setShowPreview] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [assignedFilter, setAssignedFilter] = useState("all");
@@ -197,6 +203,9 @@ const Admin = () => {
       console.log('💾 Setting data in state...');
       setLeads(leadsData);
       setMessages(messagesData);
+      
+      // Clear notifications when leads are fetched
+      clearNotifications();
 
       // Calculate stats
       const now = new Date();
@@ -479,6 +488,8 @@ L'équipe Raccordement Connect`;
 
   return (
     <div className="min-h-screen bg-background">
+      <PhoneHeader />
+      
       {/* Top Banner */}
       <div className="bg-primary text-primary-foreground p-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -495,9 +506,16 @@ L'équipe Raccordement Connect`;
               )}
             </div>
           </div>
-          <Button 
-            variant="outline" 
-            onClick={handleLogout}
+          <div className="flex items-center gap-4">
+            {newLeadsCount > 0 && (
+              <Badge variant="default" className="bg-red-500">
+                <Bell className="w-3 h-3 mr-1" />
+                {newLeadsCount} nouveau{newLeadsCount > 1 ? 'x' : ''}
+              </Badge>
+            )}
+            <Button 
+              variant="outline" 
+              onClick={handleLogout}
             className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10"
           >
             <LogOut className="w-4 h-4 mr-2" />
@@ -666,15 +684,26 @@ L'équipe Raccordement Connect`;
                               <div className="text-sm">{formatDate(lead.created_at)}</div>
                             </TableCell>
                             <TableCell>
-                              <div className="flex space-x-2">
-                                <Button 
-                                  variant="outline" 
-                                  size="sm"
-                                  onClick={() => navigate(`/kenitra/leads/${lead.id}`)}
-                                >
-                                  Voir détails
-                                </Button>
-                                <Dialog>
+                               <div className="flex space-x-2">
+                                 <Button 
+                                   variant="ghost" 
+                                   size="sm"
+                                   onClick={() => {
+                                     setPreviewLead(lead);
+                                     setShowPreview(true);
+                                   }}
+                                 >
+                                   <Eye className="w-4 h-4 mr-1" />
+                                   Aperçu
+                                 </Button>
+                                 <Button 
+                                   variant="outline" 
+                                   size="sm"
+                                   onClick={() => navigate(`/kenitra/leads/${lead.id}`)}
+                                 >
+                                   Détails
+                                 </Button>
+                                 <Dialog>
                                   <DialogTrigger asChild>
                                     <Button 
                                       variant="ghost" 
@@ -897,6 +926,12 @@ L'équipe Raccordement Connect`;
           </Tabs>
         </div>
       </div>
+
+      <LeadPreviewModal 
+        lead={previewLead}
+        isOpen={showPreview}
+        onClose={() => setShowPreview(false)}
+      />
     </div>
   );
 };
