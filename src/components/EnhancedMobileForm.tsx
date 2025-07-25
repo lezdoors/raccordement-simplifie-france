@@ -293,10 +293,33 @@ const EnhancedMobileForm = ({ onClose }: EnhancedMobileFormProps) => {
         (window as any).gtag_report_form_submit_conversion();
       }
       
+      // First save to leads_raccordement for CRM
+      const { error: crmError } = await supabase
+        .from('leads_raccordement')
+        .insert({
+          type_client: formData.clientType,
+          nom: formData.lastName,
+          prenom: formData.firstName,
+          email: formData.email,
+          telephone: formData.phone,
+          code_postal: formData.postalCode,
+          ville: formData.city,
+          adresse_chantier: `${formData.address}, ${formData.postalCode} ${formData.city}`,
+          type_projet: formData.projectType,
+          puissance: formData.power,
+          commentaires: formData.comments || null,
+          consent_accepted: true,
+          payment_status: "pending"
+        });
+
+      if (crmError) {
+        console.error('Error saving to CRM:', crmError);
+      }
+
       // Create Stripe payment session
       const { data, error } = await supabase.functions.invoke('create-payment-session', {
         body: {
-          amount: 99, // €99 for the service
+          amount: 9900, // €99 in cents
           formData: formData
         }
       });

@@ -37,7 +37,7 @@ serve(async (req) => {
               name: `Service de raccordement électrique - ${formData.projectType}`,
               description: `Gestion administrative complète pour ${formData.firstName} ${formData.lastName}`,
             },
-            unit_amount: amount * 100, // Convert to cents
+            unit_amount: amount, // Already in cents
           },
           quantity: 1,
         },
@@ -60,20 +60,33 @@ serve(async (req) => {
     const { error: insertError } = await supabase
       .from('form_submissions')
       .insert({
-        client_type: formData.clientType,
-        first_name: formData.firstName,
-        last_name: formData.lastName,
+        client_type: formData.clientType || formData.clientType,
+        nom: formData.lastName || formData.nom,
+        prenom: formData.firstName || formData.prenom,
         email: formData.email,
-        phone: formData.phone,
-        work_address: formData.address,
-        postal_code: formData.postalCode,
-        city: formData.city,
-        project_type: formData.projectType,
-        power_requested: formData.power,
-        comments: formData.comments,
+        telephone: formData.phone || formData.telephone,
+        raison_sociale: formData.companyName || formData.raison_sociale,
+        siren: formData.siret || formData.siren,
+        nom_collectivite: formData.collectivityName || formData.nom_collectivite,
+        siren_collectivite: formData.collectivitySiren || formData.siren_collectivite,
+        adresse: formData.workStreet || formData.address || formData.adresse,
+        complement_adresse: formData.addressComplement || formData.complement_adresse,
+        code_postal: formData.postalCode || formData.code_postal,
+        ville: formData.city || formData.ville,
+        connection_type: formData.connectionType || formData.connection_type,
+        project_type: formData.projectType || formData.project_type,
+        power_type: formData.powerType || formData.power_type,
+        power_kva: formData.powerDemanded || formData.power_kva || formData.power,
+        project_status: formData.projectStatus || formData.project_status,
+        desired_timeline: formData.desiredTimeline || formData.desired_timeline,
+        has_architect: formData.hasArchitect || formData.has_architect || false,
+        architect_name: formData.architectName || formData.architect_name,
+        architect_phone: formData.architectPhone || formData.architect_phone,
+        architect_email: formData.architectEmail || formData.architect_email,
+        additional_comments: formData.additionalComments || formData.comments || formData.additional_comments,
         stripe_session_id: session.id,
-        amount_paid: amount,
-        status: 'pending_payment'
+        total_amount: amount,
+        payment_status: 'pending'
       });
 
     if (insertError) {

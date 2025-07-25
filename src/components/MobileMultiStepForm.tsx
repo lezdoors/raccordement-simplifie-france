@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { ChevronLeft, ChevronRight, Check, Phone, Mail, MapPin, Zap, Building, User, FileText } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface MobileFormStep {
   id: string;
@@ -233,8 +234,30 @@ const MobileMultiStepForm = () => {
         (window as any).gtag_report_form_submit_conversion();
       }
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Save to leads_raccordement for CRM
+      const { error: crmError } = await supabase
+        .from('leads_raccordement')
+        .insert({
+          type_client: formData.clientType,
+          nom: formData.lastName,
+          prenom: formData.firstName,
+          email: formData.email,
+          telephone: formData.phone,
+          code_postal: formData.postalCode,
+          ville: formData.city,
+          adresse_chantier: `${formData.address}, ${formData.postalCode} ${formData.city}`,
+          type_projet: formData.projectType,
+          puissance: formData.power,
+          commentaires: formData.comments || null,
+          consent_accepted: true,
+          payment_status: "pending"
+        });
+
+      if (crmError) {
+        console.error('Error saving to CRM:', crmError);
+        throw crmError;
+      }
+
       toast.success("Demande envoyée avec succès !");
       
       // Reset form or redirect

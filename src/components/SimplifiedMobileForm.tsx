@@ -157,7 +157,21 @@ const SimplifiedMobileForm = ({ onClose }: SimplifiedMobileFormProps) => {
     e.preventDefault();
     
     if (!validateForm()) {
-      toast.error("Veuillez corriger les erreurs dans le formulaire");
+      const errorCount = Object.keys(errors).length;
+      toast.error(`Veuillez corriger ${errorCount} erreur${errorCount > 1 ? 's' : ''} dans le formulaire`);
+      console.log('🔴 Validation errors:', errors);
+      
+      // Scroll to first error
+      const errorFields = Object.keys(errors);
+      if (errorFields.length > 0) {
+        const firstErrorField = errorFields[0];
+        const errorElement = document.getElementById(firstErrorField);
+        if (errorElement) {
+          errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          setTimeout(() => errorElement.focus(), 300);
+        }
+      }
+      setIsSubmitting(false);
       return;
     }
 
@@ -167,6 +181,38 @@ const SimplifiedMobileForm = ({ onClose }: SimplifiedMobileFormProps) => {
       // Trigger Google Ads conversion tracking
       if (typeof window !== 'undefined' && (window as any).gtag_report_conversion) {
         (window as any).gtag_report_conversion();
+      }
+
+      // First save to leads_raccordement for CRM
+      const { error: crmError } = await supabase
+        .from('leads_raccordement')
+        .insert({
+          civilite: formData.civilite,
+          type_client: formData.clientType,
+          nom: formData.lastName,
+          prenom: formData.firstName,
+          email: formData.email,
+          telephone: formData.phone,
+          raison_sociale: formData.companyName || null,
+          siren: formData.siret || null,
+          nom_collectivite: formData.collectivityName || null,
+          siren_collectivite: formData.collectivitySiren || null,
+          code_postal: formData.postalCode,
+          ville: formData.city,
+          adresse_chantier: `${formData.workStreet}, ${formData.postalCode} ${formData.city}`,
+          type_raccordement: formData.connectionType,
+          type_projet: formData.projectType,
+          type_alimentation: formData.powerType,
+          puissance: formData.powerDemanded,
+          etat_projet: formData.projectStatus,
+          delai_souhaite: formData.desiredTimeline,
+          commentaires: formData.additionalComments || null,
+          consent_accepted: formData.consent,
+          payment_status: "pending"
+        });
+
+      if (crmError) {
+        console.error('Error saving to CRM:', crmError);
       }
 
       // Submit to Supabase and create payment session
@@ -180,6 +226,12 @@ const SimplifiedMobileForm = ({ onClose }: SimplifiedMobileFormProps) => {
       if (error) throw error;
 
       if (data?.url) {
+        // Clear form data before redirect to prevent resubmission
+        localStorage.removeItem('raccordement-form-data');
+        
+        // Add debug logging
+        console.log('Redirecting to Stripe checkout:', data.url);
+        
         // Redirect to Stripe Checkout
         window.location.href = data.url;
       } else {
