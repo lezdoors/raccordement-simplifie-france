@@ -586,10 +586,7 @@ const SimplifiedMobileForm = ({ onClose }: SimplifiedMobileFormProps) => {
               Traitement en cours...
             </>
           ) : (
-            <>
-              <CreditCard className="h-5 w-5" />
-              Finaliser ma demande - 129€
-            </>
+            "Soumettre ma demande"
           )}
         </Button>
       </div>
