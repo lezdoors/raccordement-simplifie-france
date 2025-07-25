@@ -27,7 +27,7 @@ import RaccordementChantier from "./pages/RaccordementChantier";
 import ServiceExpress from "./pages/ServiceExpress";
 import Estimation from "./pages/Estimation";
 import CGU from "./pages/CGU";
-import Admin from "./pages/Admin";
+import AdminDashboard from "./pages/AdminDashboard";
 import AdminLeadDetail from "./pages/AdminLeadDetail";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -76,14 +76,21 @@ const AppContent = () => {
         <Route path="/cgu" element={<CGU />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/payment-cancel" element={<PaymentCancel />} />
-        {/* Admin/CRM Pages - Direct access */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
-        <Route path="/admin/leads/:id" element={<ProtectedRoute><AdminLeadDetail /></ProtectedRoute>} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/admin" element={
+                  <ProtectedRoute>
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/leads/:id" element={
+                  <ProtectedRoute>
+                    <AdminLeadDetail />
+                  </ProtectedRoute>
+                } />
         
         {/* Alternative access routes */}
         <Route path="/kenitra" element={<Login />} />
-        <Route path="/kenitra/dashboard" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
+        <Route path="/kenitra/dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
         <Route path="/kenitra/leads/:id" element={<ProtectedRoute><AdminLeadDetail /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
