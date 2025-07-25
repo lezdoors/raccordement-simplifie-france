@@ -521,6 +521,7 @@ L'équipe Raccordement Connect`;
             <LogOut className="w-4 h-4 mr-2" />
             Déconnexion
           </Button>
+          </div>
         </div>
       </div>
 
