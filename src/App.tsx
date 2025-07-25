@@ -76,15 +76,15 @@ const AppContent = () => {
         <Route path="/cgu" element={<CGU />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/payment-cancel" element={<PaymentCancel />} />
-        {/* CRM Pages - New /kenitra structure */}
+        {/* Admin/CRM Pages - Direct access */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
+        <Route path="/admin/leads/:id" element={<ProtectedRoute><AdminLeadDetail /></ProtectedRoute>} />
+        
+        {/* Alternative access routes */}
         <Route path="/kenitra" element={<Login />} />
         <Route path="/kenitra/dashboard" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
         <Route path="/kenitra/leads/:id" element={<ProtectedRoute><AdminLeadDetail /></ProtectedRoute>} />
-        
-        {/* Legacy Admin Routes - Redirect to new structure */}
-        <Route path="/admin" element={<Navigate to="/kenitra/dashboard" replace />} />
-        <Route path="/admin/leads/:id" element={<Navigate to={`/kenitra/leads/${window.location.pathname.split('/').pop()}`} replace />} />
-        <Route path="/login" element={<Navigate to="/kenitra" replace />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

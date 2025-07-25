@@ -73,7 +73,7 @@ const Login = () => {
       
       // Small delay for better UX
       setTimeout(() => {
-        window.location.href = "/kenitra/dashboard";
+        window.location.href = "/admin";
       }, 1000);
     } catch (error: any) {
       console.error("Login error:", error);
@@ -98,7 +98,7 @@ const Login = () => {
     setLoading(true);
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/kenitra/dashboard`,
+        redirectTo: `${window.location.origin}/admin`,
       });
 
       if (error) {

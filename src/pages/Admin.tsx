@@ -77,7 +77,7 @@ const Admin = () => {
       // setupRealtimeSubscriptions();
     } else if (!authLoading && !user) {
       console.log('❌ No user found, redirecting to login');
-      navigate('/kenitra');
+      navigate('/login');
     } else if (!authLoading && user && !adminUser) {
       console.log('⏳ User found but admin data pending...');
       setLoading(false); // Stop loading if admin validation is pending
@@ -386,7 +386,7 @@ L'équipe Raccordement Connect`;
       toast.error('Erreur lors de la déconnexion');
     } else {
       toast.success('Déconnexion réussie');
-      navigate('/kenitra');
+      navigate('/login');
     }
   };
 
@@ -468,7 +468,7 @@ L'équipe Raccordement Connect`;
             <AlertCircle className="mx-auto h-12 w-12 text-red-500 mb-4" />
             <p className="text-lg font-semibold text-foreground">Erreur d'authentification</p>
             <p className="mt-2 text-muted-foreground">Veuillez vous reconnecter</p>
-            <Button onClick={() => navigate('/kenitra')} className="mt-4">
+            <Button onClick={() => navigate('/login')} className="mt-4">
               Se reconnecter
             </Button>
           </div>
