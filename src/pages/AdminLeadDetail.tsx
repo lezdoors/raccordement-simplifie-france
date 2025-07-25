@@ -448,7 +448,7 @@ L'équipe Racco-Service`;
                       <SelectValue placeholder="Sélectionner un traiteur" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">Non assigné</SelectItem>
+                      <SelectItem value="unassigned">Non assigné</SelectItem>
                       <SelectItem value="hossam@raccordement.net">Hossam</SelectItem>
                       <SelectItem value="oussama@raccordement.net">Oussama</SelectItem>
                       <SelectItem value="farah@raccordement.net">Farah</SelectItem>

@@ -99,59 +99,79 @@ export const AdminProvider = ({ children }: AdminProviderProps) => {
   };
 
   useEffect(() => {
+    let isMounted = true;
+    
     const initializeAuth = async () => {
       try {
         console.log('🚀 Initializing admin authentication...');
         
+        // Listen for auth changes first
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+          if (!isMounted) return;
+          
+          console.log('🔄 Auth state change:', event, session?.user?.email || 'No session');
+          setUser(session?.user ?? null);
+          
+          if (session?.user?.email) {
+            console.log('🔍 Fetching admin data for auth change:', session.user.email);
+            const adminData = await fetchAdminUser(session.user.email);
+            if (isMounted) {
+              setAdminUser(adminData);
+              setLoading(false);
+            }
+          } else {
+            if (isMounted) {
+              setAdminUser(null);
+              setError(null);
+              setLoading(false);
+            }
+          }
+        });
+
         // Get initial session
         const { data: { session }, error } = await supabase.auth.getSession();
         
         if (error) {
           console.error('❌ Error getting session:', error);
-          setError('Erreur de session');
-          setLoading(false);
-          return;
+          if (isMounted) {
+            setError('Erreur de session');
+            setLoading(false);
+          }
+          return subscription;
         }
 
         console.log('📋 Initial session:', session?.user?.email || 'No session');
-        setUser(session?.user ?? null);
         
-        if (session?.user?.email) {
-          console.log('🔍 Fetching admin data for initial session:', session.user.email);
-          const adminData = await fetchAdminUser(session.user.email);
-          setAdminUser(adminData);
+        if (isMounted) {
+          setUser(session?.user ?? null);
+          
+          if (session?.user?.email) {
+            console.log('🔍 Fetching admin data for initial session:', session.user.email);
+            const adminData = await fetchAdminUser(session.user.email);
+            if (isMounted) {
+              setAdminUser(adminData);
+            }
+          }
+          setLoading(false);
         }
         
-        setLoading(false);
+        return subscription;
       } catch (error) {
         console.error('💥 Auth initialization error:', error);
-        setError('Erreur d\'initialisation');
-        setLoading(false);
+        if (isMounted) {
+          setError('Erreur d\'initialisation');
+          setLoading(false);
+        }
+        return null;
       }
     };
 
-    initializeAuth();
+    const subscriptionPromise = initializeAuth();
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('🔄 Auth state change:', event, session?.user?.email || 'No session');
-      
-      setUser(session?.user ?? null);
-      
-      if (session?.user?.email) {
-        console.log('🔍 Fetching admin data for auth change:', session.user.email);
-        setLoading(true);
-        const adminData = await fetchAdminUser(session.user.email);
-        setAdminUser(adminData);
-        setLoading(false);
-      } else {
-        setAdminUser(null);
-        setError(null);
-        setLoading(false);
-      }
-    });
-
-    return () => subscription.unsubscribe();
+    return () => {
+      isMounted = false;
+      subscriptionPromise.then(subscription => subscription?.unsubscribe());
+    };
   }, []);
 
   return (

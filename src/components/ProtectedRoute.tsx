@@ -15,13 +15,13 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const [timeoutReached, setTimeoutReached] = useState(false);
 
   useEffect(() => {
-    // Set timeout for loading state - reduced from 10s to 5s
+    // Set timeout for loading state - reduced to 3s
     const timeout = setTimeout(() => {
       if (loading) {
-        console.warn('⚠️ Auth timeout reached after 5 seconds');
+        console.warn('⚠️ Auth timeout reached after 3 seconds');
         setTimeoutReached(true);
       }
-    }, 5000); // 5 seconds timeout
+    }, 3000); // 3 seconds timeout
 
     return () => clearTimeout(timeout);
   }, [loading]);
