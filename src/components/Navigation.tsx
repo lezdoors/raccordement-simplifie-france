@@ -48,7 +48,7 @@ const Navigation = () => {
               <p className="text-xs text-white/80">Du lundi au vendredi de 9h à 19h</p>
             </div>
             
-            <Button size="lg" onClick={() => navigate("/raccordement-enedis")} className="btn-cta font-semibold">
+            <Button size="lg" onClick={() => navigate("/raccordement-enedis")} className="font-semibold bg-gradient-to-r from-[#1b2b65] to-[#edc674] hover:from-[#15254b] hover:to-[#d4b666] text-white">
               Démarrer ma demande
             </Button>
           </div>
@@ -86,9 +86,9 @@ const Navigation = () => {
                 <p className="text-xs text-white/80 mt-1">Lun-Ven 9h-18h</p>
               </div>
               <Button onClick={() => {
-            navigate("/raccordement-enedis");
-            setIsMenuOpen(false);
-          }} className="w-full btn-cta mobile-button font-semibold touch-feedback">
+                navigate("/raccordement-enedis");
+                setIsMenuOpen(false);
+              }} className="w-full font-semibold bg-gradient-to-r from-[#1b2b65] to-[#edc674] hover:from-[#15254b] hover:to-[#d4b666] text-white mobile-button touch-feedback">
                 Démarrer ma demande
               </Button>
             </div>
@@ -97,7 +97,7 @@ const Navigation = () => {
 
       {/* Floating CTA for mobile */}
       <div className="md:hidden fixed bottom-6 right-4 z-[55]">
-        <Button onClick={() => navigate("/raccordement-enedis")} className="btn-cta mobile-button font-semibold shadow-2xl rounded-full px-6 py-4 touch-feedback mobile-optimized" size="lg">
+        <Button onClick={() => navigate("/raccordement-enedis")} className="font-semibold bg-gradient-to-r from-[#1b2b65] to-[#edc674] hover:from-[#15254b] hover:to-[#d4b666] text-white mobile-button shadow-2xl rounded-full px-6 py-4 touch-feedback mobile-optimized" size="lg">
           Démarrer ma demande
         </Button>
       </div>

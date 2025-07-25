@@ -20,7 +20,7 @@ import {
 import MobileMultiStepForm from "@/components/MobileMultiStepForm";
 import Navigation from "@/components/Navigation";
 import FooterSection from "@/components/FooterSection";
-import SimplifiedMobileForm from "@/components/SimplifiedMobileForm";
+import OptimizedMobileForm from "@/components/OptimizedMobileForm";
 
 const services = [
   {
@@ -242,7 +242,7 @@ const MobileHomePage = () => {
           
           <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
             <DialogTrigger asChild>
-            <Button className="flex-[2] h-12 text-base bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800">
+            <Button className="flex-[2] h-12 text-base bg-gradient-to-r from-[#1b2b65] to-[#edc674] hover:from-[#15254b] hover:to-[#d4b666] text-white font-semibold">
                 Démarrer ma demande
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
@@ -251,7 +251,7 @@ const MobileHomePage = () => {
               <DialogHeader className="sr-only">
                 <DialogTitle>Formulaire de demande</DialogTitle>
               </DialogHeader>
-              <SimplifiedMobileForm onClose={() => setIsFormOpen(false)} />
+              <OptimizedMobileForm onClose={() => setIsFormOpen(false)} />
             </DialogContent>
           </Dialog>
         </div>

@@ -471,4 +471,74 @@
     min-height: 100vh;
     min-height: -webkit-fill-available;
   }
+
+  /* Dégradés optimisés */
+  .mobile-gradient-primary {
+    background: linear-gradient(90deg, #1b2b65, #edc674);
+  }
+
+  .mobile-gradient-primary:hover {
+    background: linear-gradient(90deg, #15254b, #d4b666);
+  }
+
+  /* Animations pour formulaire mobile */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes stepTransition {
+    0% {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .step-content {
+    animation: stepTransition 0.3s ease-out;
+  }
+
+  /* Styles pour validation d'erreurs */
+  .error-shake {
+    animation: shake 0.5s ease-in-out;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+
+  /* Progress bar animée */
+  .progress-animated {
+    transition: width 0.5s ease-out;
+  }
+
+  /* Styles pour sélection active */
+  .selected-option {
+    background: linear-gradient(135deg, #edc674 0%, #f4d03f 100%);
+    border-color: #1b2b65;
+    box-shadow: 0 0 0 2px rgba(27, 43, 101, 0.2);
+  }
 }
