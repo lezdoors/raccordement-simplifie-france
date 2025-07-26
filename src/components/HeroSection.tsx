@@ -45,7 +45,7 @@ const HeroSection = () => {
             <Button 
               size="lg" 
               className="font-bold px-4 py-2 rounded-lg text-[#1E1E1E] hover:opacity-90 hover:scale-105 transition-all duration-300 mobile-button touch-feedback mobile-optimized shadow-xl" 
-              onClick={() => navigate("/raccordement-enedis")}
+              onClick={() => navigate("/commencer")}
               style={{ background: 'linear-gradient(90deg, #FFD77A 0%, #F2B736 100%)' }}
             >
               Démarrer ma demande

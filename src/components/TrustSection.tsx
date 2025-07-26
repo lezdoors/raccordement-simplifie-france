@@ -171,7 +171,7 @@ const TrustSection = () => {
                   size="lg" 
                   variant="secondary"
                   className="w-full lg:w-auto bg-white text-primary hover:bg-white/90"
-                  onClick={() => navigate("/raccordement-enedis")}
+                  onClick={() => navigate("/commencer")}
                 >
                   Commencer maintenant
                 </Button>

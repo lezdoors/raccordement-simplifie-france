@@ -80,7 +80,7 @@ const ProcessSection = () => {
             <Button 
               size="lg" 
               className="bg-primary hover:bg-primary/90 px-8"
-              onClick={() => navigate("/raccordement-enedis")}
+              onClick={() => navigate("/commencer")}
             >
               Démarrer ma demande
             </Button>

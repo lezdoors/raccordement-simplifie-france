@@ -10,7 +10,7 @@ const MobileNavigation = () => {
 
   const navigationItems = [
     { name: "Accueil", href: "/", icon: Home },
-    { name: "Raccordement Enedis", href: "/raccordement-enedis", icon: FileText },
+    { name: "Raccordement Enedis", href: "/commencer", icon: FileText },
     { name: "À propos", href: "/a-propos", icon: Users },
     { name: "Contact", href: "/contact", icon: Mail },
     { name: "FAQ", href: "/faq", icon: HelpCircle },

@@ -12,6 +12,7 @@ import ServiceWorker from "./components/ServiceWorker";
 import OptimizedHomePage from "./pages/OptimizedHomePage";
 import NotFound from "./pages/NotFound";
 import EnedisRaccordement from "./pages/EnedisRaccordement";
+import Commencer from "./pages/Commencer";
 import Merci from "./pages/Merci";
 import APropos from "./pages/APropos";
 import Contact from "./pages/Contact";
@@ -51,9 +52,9 @@ const AppContent = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<OptimizedHomePage />} />
-        <Route path="/raccordement-enedis" element={<EnedisRaccordement />} />
-        <Route path="/enedis-raccordement" element={<Navigate to="/raccordement-enedis" replace />} />
-        <Route path="/commencer" element={<Navigate to="/raccordement-enedis" replace />} />
+        <Route path="/commencer" element={<Commencer />} />
+        <Route path="/raccordement-enedis" element={<Navigate to="/commencer" replace />} />
+        <Route path="/enedis-raccordement" element={<Navigate to="/commencer" replace />} />
         <Route path="/merci" element={<Merci />} />
         <Route path="/a-propos" element={<APropos />} />
         <Route path="/contact" element={<Contact />} />

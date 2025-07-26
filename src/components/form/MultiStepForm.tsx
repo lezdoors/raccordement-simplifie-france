@@ -341,9 +341,9 @@ export const MultiStepForm = () => {
 
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background mobile-content-padding">
       {/* Sticky Progress Bar for Mobile */}
-      <div className="md:hidden sticky top-0 z-40 bg-white border-b shadow-sm">
+      <div className="md:hidden sticky top-0 z-40 bg-white border-b shadow-sm mobile-nav-safe">
         <div className="px-4 py-3">
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm font-medium text-foreground">

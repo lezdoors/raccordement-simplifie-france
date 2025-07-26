@@ -15,6 +15,10 @@
     /* Royal Blue & Gold Premium Palette */
     --background: 0 0% 100%;
     --foreground: 220 26% 14%;
+    
+    /* Mobile viewport height for sticky elements */
+    --mobile-safe-area-inset-top: env(safe-area-inset-top, 0px);
+    --mobile-safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
 
     --card: 0 0% 100%;
     --card-foreground: 220 26% 14%;
@@ -411,6 +415,31 @@
   to {
     opacity: 1;
     transform: translateX(0);
+  }
+  
+  /* Mobile Navigation Safe Area */
+  .mobile-nav-safe {
+    padding-top: var(--mobile-safe-area-inset-top);
+    padding-bottom: calc(var(--mobile-safe-area-inset-bottom) + 1rem);
+  }
+  
+  /* Fixed Mobile CTA Button */
+  .mobile-cta-fixed {
+    position: fixed;
+    bottom: calc(var(--mobile-safe-area-inset-bottom) + 1.5rem);
+    right: 1rem;
+    z-index: 60;
+    max-width: calc(100vw - 2rem);
+    background: var(--gradient-cta);
+    border-radius: 2rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15), 0 4px 10px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  /* Prevent CTA overlap with content */
+  .mobile-content-padding {
+    padding-bottom: calc(80px + var(--mobile-safe-area-inset-bottom));
   }
 }
 

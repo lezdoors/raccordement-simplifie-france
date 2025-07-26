@@ -78,7 +78,7 @@ const PaymentCancel = () => {
               </Button>
               
               <Button
-                onClick={() => navigate("/raccordement-enedis")}
+                onClick={() => navigate("/commencer")}
                 className="flex items-center gap-2"
               >
                 <RefreshCw className="h-4 w-4" />

@@ -4,8 +4,7 @@ import { MessageCircle, Clock } from "lucide-react";
 
 export const SupportSection = () => {
   const handleGetHelp = () => {
-    // Scroll to contact form or open WhatsApp - can be customized later
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.open('tel:0189701200', '_self');
   };
 
   return (

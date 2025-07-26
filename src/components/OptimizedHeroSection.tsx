@@ -82,7 +82,7 @@ const OptimizedHeroSection = () => {
               <Button 
                 size="lg" 
                 className="mobile-button bg-primary text-primary-foreground hover:bg-primary/90 font-semibold px-8 py-6 text-lg min-h-[44px] h-auto transform hover:scale-105 transition-all duration-300 touch-feedback mobile-optimized" 
-                onClick={() => navigate("/raccordement-enedis")}
+                onClick={() => navigate("/commencer")}
               >
                 Démarrer ma demande
               </Button>

@@ -110,7 +110,7 @@ const Merci = () => {
               <Button onClick={() => navigate("/")} variant="outline">
                 Retour à l'accueil
               </Button>
-              <Button onClick={() => navigate("/raccordement-enedis")}>
+              <Button onClick={() => navigate("/commencer")}>
                 Nouvelle demande
               </Button>
             </div>

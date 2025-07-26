@@ -46,7 +46,7 @@ const Navigation = () => {
           
           <Button 
             size="lg" 
-            onClick={() => navigate("/raccordement-enedis")} 
+            onClick={() => navigate("/commencer")} 
             className="font-bold px-4 py-2 rounded-lg text-[#1E1E1E] hover:opacity-90 transition-all duration-300"
             style={{ background: 'linear-gradient(90deg, #FFD77A 0%, #F2B736 100%)' }}
           >
@@ -87,7 +87,7 @@ const Navigation = () => {
             </div>
             <Button 
               onClick={() => {
-                navigate("/raccordement-enedis");
+                navigate("/commencer");
                 setIsMenuOpen(false);
               }} 
               className="w-full font-bold px-4 py-2 rounded-lg text-[#1E1E1E] hover:opacity-90 transition-all duration-300 mobile-button touch-feedback"
@@ -99,10 +99,10 @@ const Navigation = () => {
           </div>
         </div>}
 
-      {/* Floating CTA for mobile */}
-      <div className="md:hidden fixed bottom-6 right-4 z-[55]">
+      {/* Floating CTA for mobile - Better positioned */}
+      <div className="md:hidden mobile-cta-fixed">
         <Button 
-          onClick={() => navigate("/raccordement-enedis")} 
+          onClick={() => navigate("/commencer")} 
           className="font-bold px-6 py-4 rounded-full text-[#1E1E1E] hover:opacity-90 transition-all duration-300 mobile-button shadow-2xl touch-feedback mobile-optimized" 
           size="lg"
           style={{ background: 'linear-gradient(90deg, #FFD77A 0%, #F2B736 100%)' }}
