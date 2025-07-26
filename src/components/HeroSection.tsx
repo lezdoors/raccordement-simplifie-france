@@ -3,6 +3,25 @@ import { Headphones, Phone, Mail, Star, Users, CheckCircle, Award } from "lucide
 import { useNavigate } from "react-router-dom";
 const HeroSection = () => {
   const navigate = useNavigate();
+
+  const scrollToForm = () => {
+    const formElement = document.getElementById('form');
+    if (formElement) {
+      formElement.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      // If no form on current page, navigate to home page with form
+      navigate('/#form');
+    }
+  };
+
+  const handleContactExpert = () => {
+    // On mobile, call the number; on desktop, scroll to form
+    if (window.innerWidth < 768) {
+      window.location.href = 'tel:0970709570';
+    } else {
+      scrollToForm();
+    }
+  };
   const stats = {
     clients: 15000,
     satisfaction: 98,
@@ -45,7 +64,7 @@ const HeroSection = () => {
             <Button 
               size="lg" 
               className="font-bold px-4 py-2 rounded-lg text-[#1E1E1E] hover:opacity-90 hover:scale-105 transition-all duration-300 mobile-button touch-feedback mobile-optimized shadow-xl" 
-              onClick={() => navigate("/commencer")}
+              onClick={scrollToForm}
               style={{ background: 'linear-gradient(90deg, #FFD77A 0%, #F2B736 100%)' }}
             >
               Démarrer ma demande
@@ -54,7 +73,7 @@ const HeroSection = () => {
               <Button 
                 variant="outline" 
                 size="lg" 
-                onClick={() => window.location.href = 'tel:0189701200'}
+                onClick={handleContactExpert}
                 className="mobile-button bg-white text-primary border-primary hover:bg-white/90 font-semibold px-8 py-6 text-lg h-auto touch-feedback"
               >
                 <Headphones className="mr-2 h-5 w-5" />

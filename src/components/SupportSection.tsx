@@ -4,8 +4,8 @@ import { MessageCircle, Clock } from "lucide-react";
 
 export const SupportSection = () => {
   const handleGetHelp = () => {
-    // Use window.location.href for better mobile compatibility
-    window.location.href = 'tel:0189701200';
+    // Use the correct phone number for support
+    window.location.href = 'tel:0970709570';
   };
 
   return (

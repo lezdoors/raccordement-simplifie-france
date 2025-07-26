@@ -13,6 +13,7 @@ import ConnectionTypesSection from "@/components/ConnectionTypesSection";
 import FAQSection from "@/components/FAQSection";
 import ContactFormSection from "@/components/ContactFormSection";
 import FooterSection from "@/components/FooterSection";
+import { SmartStickyButton } from "@/components/SmartStickyButton";
 
 const HomePage = () => {
   return (
@@ -32,6 +33,8 @@ const HomePage = () => {
       <FAQSection />
       <ContactFormSection />
       <FooterSection />
+      
+      <SmartStickyButton />
     </div>
   );
 };

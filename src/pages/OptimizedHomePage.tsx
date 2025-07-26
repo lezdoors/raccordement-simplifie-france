@@ -1,6 +1,7 @@
 import Navigation from "@/components/Navigation";
 import OptimizedHeroSection from "@/components/OptimizedHeroSection";
 import SwipeableServiceCards from "@/components/SwipeableServiceCards";
+import { SmartStickyButton } from "@/components/SmartStickyButton";
 import { LazyComponent } from "@/components/PerformanceOptimizer";
 import { lazy } from "react";
 
@@ -67,6 +68,8 @@ const OptimizedHomePage = () => {
       <LazyComponent threshold={0.1}>
         <FooterSection />
       </LazyComponent>
+      
+      <SmartStickyButton />
     </div>
   );
 };

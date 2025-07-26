@@ -5,6 +5,16 @@ import { useNavigate } from "react-router-dom";
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
+
+  const scrollToForm = () => {
+    const formElement = document.getElementById('form');
+    if (formElement) {
+      formElement.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      // If no form on current page, navigate to home page with form
+      navigate('/#form');
+    }
+  };
   return <nav className="bg-gradient-to-r from-primary to-primary/90 text-white sticky top-0 z-[60] shadow-lg backdrop-blur-md bg-opacity-95">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 md:h-20">
@@ -50,7 +60,7 @@ const Navigation = () => {
           
           <Button 
             size="lg" 
-            onClick={() => navigate("/commencer")} 
+            onClick={scrollToForm} 
             className="font-bold px-4 py-2 rounded-lg text-[#1E1E1E] hover:opacity-90 transition-all duration-300"
             style={{ background: 'linear-gradient(90deg, #FFD77A 0%, #F2B736 100%)' }}
           >
@@ -95,7 +105,7 @@ const Navigation = () => {
             </div>
             <Button 
               onClick={() => {
-                navigate("/commencer");
+                scrollToForm();
                 setIsMenuOpen(false);
               }} 
               className="w-full font-bold px-4 py-2 rounded-lg text-[#1E1E1E] hover:opacity-90 transition-all duration-300 mobile-button touch-feedback"
@@ -107,17 +117,6 @@ const Navigation = () => {
           </div>
         </div>}
 
-      {/* Floating CTA for mobile - Fixed positioning */}
-      <div className="md:hidden fixed bottom-6 left-4 right-4 z-50">
-        <Button 
-          onClick={() => navigate("/commencer")} 
-          className="w-full font-bold px-6 py-4 rounded-xl text-[#1E1E1E] hover:opacity-90 transition-all duration-300 mobile-button shadow-2xl touch-feedback mobile-optimized" 
-          size="lg"
-          style={{ background: 'linear-gradient(90deg, #FFD77A 0%, #F2B736 100%)' }}
-        >
-          Démarrer ma demande
-        </Button>
-      </div>
     </nav>;
 };
 export default Navigation;

@@ -7,6 +7,25 @@ const OptimizedHeroSection = () => {
   const navigate = useNavigate();
   const [mounted, setMounted] = useState(false);
 
+  const scrollToForm = () => {
+    const formElement = document.getElementById('form');
+    if (formElement) {
+      formElement.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      // If no form on current page, navigate to home page with form
+      navigate('/#form');
+    }
+  };
+
+  const handleContactExpert = () => {
+    // On mobile, call the number; on desktop, scroll to form
+    if (window.innerWidth < 768) {
+      window.location.href = 'tel:0970709570';
+    } else {
+      scrollToForm();
+    }
+  };
+
   // Simplified stats without heavy animations
   const stats = {
     clients: 15000,
@@ -82,7 +101,7 @@ const OptimizedHeroSection = () => {
               <Button 
                 size="lg" 
                 className="mobile-button bg-primary text-primary-foreground hover:bg-primary/90 font-semibold px-8 py-6 text-lg min-h-[44px] h-auto transform hover:scale-105 transition-all duration-300 touch-feedback mobile-optimized" 
-                onClick={() => navigate("/commencer")}
+                onClick={scrollToForm}
               >
                 Démarrer ma demande
               </Button>
@@ -90,6 +109,7 @@ const OptimizedHeroSection = () => {
               <Button 
                 variant="outline" 
                 size="lg" 
+                onClick={handleContactExpert}
                 className="mobile-button bg-white text-primary border-primary hover:bg-white/90 font-semibold px-8 py-6 text-lg min-h-[44px] h-auto touch-feedback"
               >
                 <Headphones className="mr-2 h-5 w-5" />
