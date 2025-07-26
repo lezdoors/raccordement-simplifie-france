@@ -28,6 +28,9 @@
     }
   ],
   "rewrites": [
-    { "source": "/((?!api/).*)", "destination": "/" }
+    {
+      "source": "/((?!api|_next|static|favicon.ico|robots.txt|sw.js|lovable-uploads).*)",
+      "destination": "/index.html"
+    }
   ]
 }
