@@ -52,11 +52,11 @@ export const FormFooter = () => {
             <div className="flex items-center gap-2">
               <Phone className="w-4 h-4 text-primary" />
               <a 
-                href="tel:0189701200" 
+                href="tel:0970709570" 
                 className="text-primary hover:text-primary/80 font-medium transition-colors touch-feedback"
                 aria-label="Appeler le support"
               >
-                📞 01 89 70 12 00
+                📞 09 70 70 95 70
               </a>
             </div>
             <span className="hidden md:inline text-muted-foreground">|</span>

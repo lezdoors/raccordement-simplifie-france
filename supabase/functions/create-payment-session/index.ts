@@ -48,7 +48,7 @@ serve(async (req) => {
       ],
       mode: "payment",
       success_url: `${req.headers.get("origin")}/merci?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${req.headers.get("origin")}/raccordement-enedis?canceled=true`,
+      cancel_url: `${req.headers.get("origin")}/commencer?canceled=true`,
       customer_email: formData?.email,
       metadata: {
         customer_name: `${formData?.firstName} ${formData?.lastName}`,

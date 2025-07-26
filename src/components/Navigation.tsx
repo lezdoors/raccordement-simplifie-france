@@ -49,11 +49,11 @@ const Navigation = () => {
           <div className="hidden md:flex items-center space-x-6">
           <div className="text-center">
             <a 
-              href="tel:0189701200" 
+              href="tel:0970709570" 
               className="text-lg font-bold text-white hover:text-white/90 transition-colors touch-feedback"
-              aria-label="Appeler le 01 89 70 12 00"
+              aria-label="Appeler le 09 70 70 95 70"
             >
-              📞 01 89 70 12 00
+              📞 09 70 70 95 70
             </a>
             <p className="text-xs text-white/80">Du lundi au vendredi de 9h à 19h</p>
           </div>
@@ -95,11 +95,11 @@ const Navigation = () => {
             <div className="px-4 py-6 border-t border-white/20 mt-4">
             <div className="text-center mb-4">
             <a 
-              href="tel:0189701200" 
+              href="tel:0970709570" 
               className="text-lg font-bold text-white hover:text-white/90 transition-colors touch-target touch-feedback"
-              aria-label="Appeler le 01 89 70 12 00"
+              aria-label="Appeler le 09 70 70 95 70"
             >
-              📞 01 89 70 12 00
+              📞 09 70 70 95 70
             </a>
               <p className="text-xs text-white/80 mt-1">Lun-Ven 9h-18h</p>
             </div>
