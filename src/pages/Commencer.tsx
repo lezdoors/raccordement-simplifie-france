@@ -9,6 +9,7 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { MultiStepForm } from "@/components/form/MultiStepForm";
 import { SupportSection } from "@/components/SupportSection";
+import { FormFooter } from "@/components/FormFooter";
 
 const Commencer = () => {
   const navigate = useNavigate();
@@ -30,6 +31,8 @@ const Commencer = () => {
           <MultiStepForm />
           
           <SupportSection />
+          
+          <FormFooter />
         </div>
       </div>
     </div>

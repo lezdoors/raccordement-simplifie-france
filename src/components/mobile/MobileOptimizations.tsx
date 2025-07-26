@@ -41,21 +41,19 @@ export const MobileOptimizations = () => {
     // Enhanced scroll behavior
     document.documentElement.style.scrollBehavior = 'smooth';
 
-    // Prevent pull-to-refresh on forms
-    const preventPullRefresh = (e: TouchEvent) => {
-      if (window.scrollY === 0) {
-        e.preventDefault();
-      }
-    };
-
-    document.addEventListener('touchstart', preventPullRefresh, { passive: false });
+    // REMOVED: Prevent pull-to-refresh (was causing scroll issues)
+    // const preventPullRefresh = (e: TouchEvent) => {
+    //   if (window.scrollY === 0) {
+    //     e.preventDefault();
+    //   }
+    // };
+    // document.addEventListener('touchstart', preventPullRefresh, { passive: false });
 
     return () => {
       inputs.forEach(input => {
         input.removeEventListener('focusin', addNoZoomMeta);
         input.removeEventListener('focusout', restoreZoomMeta);
       });
-      document.removeEventListener('touchstart', preventPullRefresh);
     };
   }, [isMobile]);
 

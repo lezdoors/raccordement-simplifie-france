@@ -173,6 +173,27 @@
     @apply bg-background text-foreground font-body antialiased;
     font-feature-settings: 'cv11', 'ss01';
     font-variation-settings: 'opsz' 32;
+    /* Critical: Ensure body can scroll on mobile */
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    /* Prevent unwanted zoom on iOS */
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+  }
+  
+  /* Ensure html allows scroll */
+  html {
+    overflow-x: hidden;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    height: 100%;
+  }
+  
+  /* Root container fix */
+  #root {
+    min-height: 100vh;
+    overflow-x: hidden;
   }
   
   /* Premium Typography Classes */
@@ -421,25 +442,6 @@
   .mobile-nav-safe {
     padding-top: var(--mobile-safe-area-inset-top);
     padding-bottom: calc(var(--mobile-safe-area-inset-bottom) + 1rem);
-  }
-  
-  /* Fixed Mobile CTA Button */
-  .mobile-cta-fixed {
-    position: fixed;
-    bottom: calc(var(--mobile-safe-area-inset-bottom) + 1.5rem);
-    right: 1rem;
-    z-index: 60;
-    max-width: calc(100vw - 2rem);
-    background: var(--gradient-cta);
-    border-radius: 2rem;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15), 0 4px 10px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-  }
-  
-  /* Prevent CTA overlap with content */
-  .mobile-content-padding {
-    padding-bottom: calc(80px + var(--mobile-safe-area-inset-bottom));
   }
 }
 

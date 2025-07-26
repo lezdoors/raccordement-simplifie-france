@@ -30,7 +30,7 @@ const formSchema = z.object({
   email: z.string().email("Email invalide"),
   phone: z.string()
     .min(10, "Le numéro de téléphone doit contenir 10 chiffres")
-    .regex(/^[0-9]{10}$/, "Format de téléphone invalide"),
+    .regex(/^0[1-9][0-9]{8}$/, "Format de téléphone français invalide (ex: 0123456789)"),
   postalCode: z.string()
     .min(5, "Le code postal doit contenir 5 chiffres")
     .max(5, "Le code postal doit contenir 5 chiffres")
@@ -133,15 +133,6 @@ export const MultiStepForm = () => {
     mode: "onChange",
   });
 
-  // Debug logging
-  useEffect(() => {
-    console.log("🎯 Form initialized, current step:", currentStep);
-    console.log("📱 Form state:", {
-      isValid: form.formState.isValid,
-      isSubmitting: form.formState.isSubmitting,
-      errors: form.formState.errors
-    });
-  }, [currentStep, form.formState]);
 
   const { watch, trigger, getValues } = form;
   const watchedValues = watch();
@@ -254,16 +245,11 @@ export const MultiStepForm = () => {
   };
 
   const handleNext = async () => {
-    console.log("🔄 handleNext called, current step:", currentStep);
     const stepFields = getStepFields(currentStep);
-    console.log("📝 Validating fields:", stepFields);
-    
     const isValid = await trigger(stepFields);
-    console.log("✅ Validation result:", isValid);
     
     if (isValid) {
       setIsLoading(true);
-      console.log("⏳ Starting navigation to next step");
       
       // Trigger Google Ads conversion tracking only on first step
       if (currentStep === 1 && typeof window !== 'undefined' && (window as any).gtag_report_conversion) {
@@ -280,14 +266,11 @@ export const MultiStepForm = () => {
         );
         
         setTimeout(() => {
-          console.log("🎯 Moving to step:", currentStep + 1);
           setCurrentStep(prev => prev + 1);
           setIsLoading(false);
         }, 300); // Small delay for better UX
       }
     } else {
-      console.log("❌ Validation failed, errors:", form.formState.errors);
-      // Shake animation for errors
       toast.error("Veuillez corriger les erreurs avant de continuer");
     }
   };
@@ -385,9 +368,9 @@ export const MultiStepForm = () => {
 
 
   return (
-    <div className="min-h-screen bg-background mobile-content-padding">
+    <div className="min-h-screen bg-background pb-32">
       {/* Simple Mobile Progress Bar - No Animations */}
-      <div className="md:hidden sticky top-0 z-40 bg-white/95 backdrop-blur-lg border-b shadow-sm mobile-nav-safe">
+      <div className="md:hidden sticky top-0 z-40 bg-white/95 backdrop-blur-lg border-b shadow-sm">
         <div className="px-4 py-4">
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm font-medium text-foreground">
@@ -454,7 +437,7 @@ export const MultiStepForm = () => {
             {/* Step Content - Simplified */}
             <Form {...form}>
               <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 md:space-y-8">
-                <div className="min-h-[400px] px-2 md:px-0 relative overflow-hidden">
+                <div className="min-h-[400px] px-2 md:px-0 relative">
                   <div className={`transition-opacity duration-300 ${isLoading ? 'opacity-50' : 'opacity-100'}`}>
                     {getCurrentComponent()}
                   </div>

@@ -1,8 +1,23 @@
-/* Mobile-first Stripe-inspired animations and utilities */
+/* Mobile-first optimizations with scroll fixes */
 
-/* Touch-friendly interactions */
+/* Touch-friendly interactions - Enhanced */
 .mobile-touch-target {
   @apply min-h-[48px] min-w-[48px];
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Critical: Mobile scroll and viewport fixes */
+.mobile-scroll-container {
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.mobile-no-zoom {
+  font-size: 16px; /* Prevents iOS zoom */
+  transform: scale(1); /* Prevents iOS zoom */
 }
 
 .mobile-card {

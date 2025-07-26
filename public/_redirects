@@ -1,1 +1,6 @@
+# SEO-friendly 301 redirects for route consolidation
+/raccordement-enedis    /commencer    301
+/enedis-raccordement    /commencer    301
+
+# Catch-all for SPA
 /*    /index.html   200

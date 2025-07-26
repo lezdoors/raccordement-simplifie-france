@@ -59,13 +59,6 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
 
   return (
     <div className="space-y-6 md:space-y-8">
-      {/* DEBUG INFO - TEMPORARY */}
-      <div className="md:hidden bg-yellow-100 p-3 rounded text-xs">
-        <div>🔍 Debug Info:</div>
-        <div>Civilité: {form.watch("civilite") || "Non sélectionné"}</div>
-        <div>Type client: {form.watch("clientType") || "Non sélectionné"}</div>
-        <div>Errors: {JSON.stringify(form.formState.errors)}</div>
-      </div>
       
       <div className="text-center space-y-3">
         <h2 className="text-xl md:text-2xl font-semibold text-foreground leading-relaxed">
@@ -95,10 +88,7 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
                     <Label 
                       htmlFor="monsieur" 
                       className={`peer-checked:selected border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 w-full text-center font-medium block mobile-touch-target ${field.value === "monsieur" ? "selected" : ""}`}
-                      onClick={() => {
-                        console.log("🎯 Monsieur clicked!");
-                        field.onChange("monsieur");
-                      }}
+                       onClick={() => field.onChange("monsieur")}
                     >
                       Monsieur
                     </Label>
@@ -108,10 +98,7 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
                     <Label 
                       htmlFor="madame" 
                       className={`peer-checked:selected border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 w-full text-center font-medium block mobile-touch-target ${field.value === "madame" ? "selected" : ""}`}
-                      onClick={() => {
-                        console.log("🎯 Madame clicked!");
-                        field.onChange("madame");
-                      }}
+                       onClick={() => field.onChange("madame")}
                     >
                       Madame
                     </Label>
@@ -121,10 +108,7 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
                     <Label 
                       htmlFor="autre" 
                       className={`peer-checked:selected border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 w-full text-center font-medium block mobile-touch-target ${field.value === "autre" ? "selected" : ""}`}
-                      onClick={() => {
-                        console.log("🎯 Autre clicked!");
-                        field.onChange("autre");
-                      }}
+                       onClick={() => field.onChange("autre")}
                     >
                       Autre
                     </Label>
@@ -268,10 +252,11 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
               <FormItem>
                 <FormLabel className="text-base font-medium">Prénom *</FormLabel>
                 <FormControl>
-                  <Input
+                   <Input
                     {...field}
                     placeholder="Votre prénom"
-                    className="h-12 text-base"
+                    className="h-12 text-base mobile-no-zoom"
+                    autoComplete="given-name"
                   />
                 </FormControl>
                 <FormMessage />
@@ -286,10 +271,11 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
               <FormItem>
                 <FormLabel className="text-base font-medium">Nom *</FormLabel>
                 <FormControl>
-                  <Input
+                   <Input
                     {...field}
                     placeholder="Votre nom"
-                    className="h-12 text-base"
+                    className="h-12 text-base mobile-no-zoom"
+                    autoComplete="family-name"
                   />
                 </FormControl>
                 <FormMessage />
@@ -327,16 +313,74 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
               <FormItem>
                 <FormLabel className="text-base font-medium">Téléphone *</FormLabel>
                 <FormControl>
-                  <Input
+                   <Input
                     value={phoneValue}
                     onChange={(e) => handlePhoneChange(e.target.value, field.onChange)}
                     type="tel"
                     inputMode="tel"
                     autoComplete="tel"
                     placeholder="06 12 34 56 78"
-                    className="h-12 text-base"
+                    className="h-12 text-base mobile-no-zoom"
                     maxLength={14}
                   />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        {/* Postal Code and City */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FormField
+            control={form.control}
+            name="postalCode"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-medium">Code postal *</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="75001"
+                    className="h-12 text-base mobile-no-zoom"
+                    maxLength={5}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="city"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-medium">Ville *</FormLabel>
+                <FormControl>
+                  {cityOptions.length > 1 ? (
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="h-12 text-base">
+                        <SelectValue placeholder={loadingCities ? "Chargement..." : "Sélectionnez une ville"} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {cityOptions.map((city) => (
+                          <SelectItem key={city} value={city}>
+                            {city}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <Input
+                      {...field}
+                      placeholder={loadingCities ? "Chargement..." : "Ville"}
+                      className="h-12 text-base mobile-no-zoom"
+                      readOnly={cityOptions.length === 1}
+                    />
+                  )}
                 </FormControl>
                 <FormMessage />
               </FormItem>

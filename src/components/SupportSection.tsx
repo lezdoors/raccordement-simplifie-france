@@ -4,7 +4,8 @@ import { MessageCircle, Clock } from "lucide-react";
 
 export const SupportSection = () => {
   const handleGetHelp = () => {
-    window.open('tel:0189701200', '_self');
+    // Use window.location.href for better mobile compatibility
+    window.location.href = 'tel:0189701200';
   };
 
   return (
@@ -32,7 +33,8 @@ export const SupportSection = () => {
             <Button 
               onClick={handleGetHelp}
               size="lg"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-8 py-3"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-8 py-3 touch-feedback mobile-button"
+              aria-label="Appeler le support au 01 89 70 12 00"
             >
               Obtenir de l'aide
             </Button>

@@ -38,8 +38,12 @@ const Navigation = () => {
           {/* Contact Info & CTA - Desktop */}
           <div className="hidden md:flex items-center space-x-6">
           <div className="text-center">
-            <a href="tel:0970709570" className="text-lg font-bold text-white hover:text-white/90 transition-colors">
-              📞 09 70 70 95 70
+            <a 
+              href="tel:0189701200" 
+              className="text-lg font-bold text-white hover:text-white/90 transition-colors touch-feedback"
+              aria-label="Appeler le 01 89 70 12 00"
+            >
+              📞 01 89 70 12 00
             </a>
             <p className="text-xs text-white/80">Du lundi au vendredi de 9h à 19h</p>
           </div>
@@ -80,9 +84,13 @@ const Navigation = () => {
             </a>
             <div className="px-4 py-6 border-t border-white/20 mt-4">
             <div className="text-center mb-4">
-              <a href="tel:0970709570" className="text-lg font-bold text-white hover:text-white/90 transition-colors touch-target">
-                📞 09 70 70 95 70
-              </a>
+            <a 
+              href="tel:0189701200" 
+              className="text-lg font-bold text-white hover:text-white/90 transition-colors touch-target touch-feedback"
+              aria-label="Appeler le 01 89 70 12 00"
+            >
+              📞 01 89 70 12 00
+            </a>
               <p className="text-xs text-white/80 mt-1">Lun-Ven 9h-18h</p>
             </div>
             <Button 
@@ -99,16 +107,18 @@ const Navigation = () => {
           </div>
         </div>}
 
-      {/* Floating CTA for mobile - Better positioned */}
-      <div className="md:hidden mobile-cta-fixed">
-        <Button 
-          onClick={() => navigate("/commencer")} 
-          className="font-bold px-6 py-4 rounded-full text-[#1E1E1E] hover:opacity-90 transition-all duration-300 mobile-button shadow-2xl touch-feedback mobile-optimized" 
-          size="lg"
-          style={{ background: 'linear-gradient(90deg, #FFD77A 0%, #F2B736 100%)' }}
-        >
-          Démarrer ma demande
-        </Button>
+      {/* Floating CTA for mobile - Improved positioning */}
+      <div className="md:hidden fixed bottom-6 left-4 right-4 z-50 pointer-events-none">
+        <div className="pointer-events-auto">
+          <Button 
+            onClick={() => navigate("/commencer")} 
+            className="w-full font-bold px-6 py-4 rounded-xl text-[#1E1E1E] hover:opacity-90 transition-all duration-300 mobile-button shadow-2xl touch-feedback mobile-optimized" 
+            size="lg"
+            style={{ background: 'linear-gradient(90deg, #FFD77A 0%, #F2B736 100%)' }}
+          >
+            Démarrer ma demande
+          </Button>
+        </div>
       </div>
     </nav>;
 };
