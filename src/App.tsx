@@ -5,13 +5,11 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ErrorBoundary from "./components/ui/error-boundary";
-import MobileDetector from "./components/MobileDetector";
 import { AccessibilityProvider } from "./components/AccessibilityProvider";
 import ServiceWorker from "./components/ServiceWorker";
 
 // Direct imports - no lazy loading
 import OptimizedHomePage from "./pages/OptimizedHomePage";
-import MobileHomePage from "./pages/MobileHomePage";
 import NotFound from "./pages/NotFound";
 import EnedisRaccordement from "./pages/EnedisRaccordement";
 import Merci from "./pages/Merci";
@@ -51,14 +49,7 @@ const AppContent = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={
-          <MobileDetector>
-            {({ isMobile }) => isMobile ? 
-              <MobileHomePage /> : 
-              <OptimizedHomePage />
-            }
-          </MobileDetector>
-        } />
+        <Route path="/" element={<OptimizedHomePage />} />
         <Route path="/raccordement-enedis" element={<EnedisRaccordement />} />
         <Route path="/enedis-raccordement" element={<Navigate to="/raccordement-enedis" replace />} />
         <Route path="/commencer" element={<Navigate to="/raccordement-enedis" replace />} />
