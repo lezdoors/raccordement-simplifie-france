@@ -1,4 +1,10 @@
 {
+  "rewrites": [
+    {
+      "source": "/((?!api|_next|static|favicon.ico|robots.txt|sw.js|lovable-uploads|_vercel).*)",
+      "destination": "/index.html"
+    }
+  ],
   "headers": [
     {
       "source": "/static/(.*)",
@@ -25,12 +31,6 @@
           "value": "1; mode=block"
         }
       ]
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/((?!api|_next|static|favicon.ico|robots.txt|sw.js|lovable-uploads).*)",
-      "destination": "/index.html"
     }
   ]
 }
