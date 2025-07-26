@@ -185,6 +185,7 @@ export type Database = {
       leads_raccordement: {
         Row: {
           adresse_chantier: string | null
+          amount: number | null
           assigned_to: string | null
           assigned_to_email: string | null
           civilite: string | null
@@ -218,6 +219,7 @@ export type Database = {
         }
         Insert: {
           adresse_chantier?: string | null
+          amount?: number | null
           assigned_to?: string | null
           assigned_to_email?: string | null
           civilite?: string | null
@@ -251,6 +253,7 @@ export type Database = {
         }
         Update: {
           adresse_chantier?: string | null
+          amount?: number | null
           assigned_to?: string | null
           assigned_to_email?: string | null
           civilite?: string | null
