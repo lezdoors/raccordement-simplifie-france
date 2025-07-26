@@ -219,9 +219,9 @@ const FooterSection = () => {
         <div className="border-t border-slate-700 mt-8 md:mt-12 pt-6 md:pt-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <p className="text-sm md:text-base text-gray-400 text-center md:text-left leading-relaxed">
             <a 
-              href="/admin" 
+              href="/login" 
               className="text-gray-400 hover:text-blue-400 transition-colors duration-300 no-underline cursor-pointer select-none" 
-              title="Espace CRM"
+              title="Connexion CRM"
               style={{ textDecoration: 'none' }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.textShadow = '0 0 8px rgba(59, 130, 246, 0.5)';

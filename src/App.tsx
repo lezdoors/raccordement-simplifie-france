@@ -25,7 +25,7 @@ import RaccordementChantier from "./pages/RaccordementChantier";
 import ServiceExpress from "./pages/ServiceExpress";
 import Estimation from "./pages/Estimation";
 import CGU from "./pages/CGU";
-import AdminDashboard from "./pages/AdminDashboard";
+import Admin from "./pages/Admin";
 import AdminLeadDetail from "./pages/AdminLeadDetail";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -34,6 +34,7 @@ import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentSuccessOptimized from "./pages/PaymentSuccessOptimized";
 import PaymentCancel from "./pages/PaymentCancel";
 import Protected from "./pages/Protected";
+import AuthTest from "./pages/AuthTest";
 
 // Simple loading component without animation
 const PageLoader = () => (
@@ -68,12 +69,12 @@ const AppContent = () => {
         <Route path="/cgu" element={<CGU />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/payment-cancel" element={<PaymentCancel />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/admin" element={
-                  <ProtectedRoute>
-                    <AdminDashboard />
-                  </ProtectedRoute>
-                } />
+        <Route path="/login" element={<Login />} />
+        <Route path="/admin" element={
+          <ProtectedRoute>
+            <Admin />
+          </ProtectedRoute>
+        } />
                 <Route path="/admin/leads/:id" element={
                   <ProtectedRoute>
                     <AdminLeadDetail />
@@ -82,9 +83,10 @@ const AppContent = () => {
         
         {/* Alternative access routes */}
         <Route path="/kenitra" element={<Login />} />
-        <Route path="/kenitra/dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+        <Route path="/kenitra/dashboard" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
         <Route path="/kenitra/leads/:id" element={<ProtectedRoute><AdminLeadDetail /></ProtectedRoute>} />
         <Route path="/protected" element={<Protected />} />
+        <Route path="/auth-test" element={<AuthTest />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
