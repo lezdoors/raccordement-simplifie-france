@@ -202,6 +202,7 @@ L'équipe Raccordement Connect`;
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Mobile-responsive phone header */}
       <PhoneHeader />
       
       {/* Top Banner */}
@@ -285,20 +286,22 @@ L'équipe Raccordement Connect`;
           </div>
 
           <Tabs defaultValue="leads" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="leads">Dossiers Leads ({stats.totalLeads})</TabsTrigger>
-              <TabsTrigger value="messages">Messages ({stats.totalMessages})</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsTrigger value="leads" className="text-sm sm:text-base">Dossiers ({stats.totalLeads})</TabsTrigger>
+              <TabsTrigger value="messages" className="text-sm sm:text-base">Messages ({stats.totalMessages})</TabsTrigger>
             </TabsList>
 
             <TabsContent value="leads" className="space-y-6">
               <Card>
                 <CardHeader>
-                  <div className="flex justify-between items-center">
-                    <CardTitle>Gestion des Leads</CardTitle>
-                    <div className="flex items-center space-x-2">
+                  <div className="flex flex-col space-y-4 lg:flex-row lg:justify-between lg:items-center lg:space-y-0">
+                    <CardTitle className="text-lg">Gestion des Leads</CardTitle>
+                    
+                    {/* Mobile-optimized filters */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:items-center gap-3 lg:space-x-2">
                       {/* Status Filter */}
                       <Select value={statusFilter} onValueChange={setStatusFilter}>
-                        <SelectTrigger className="w-40">
+                        <SelectTrigger className="w-full lg:w-40">
                           <SelectValue placeholder="Statut" />
                         </SelectTrigger>
                         <SelectContent>
@@ -312,7 +315,7 @@ L'équipe Raccordement Connect`;
 
                       {/* Assignment Filter */}
                       <Select value={assignedFilter} onValueChange={setAssignedFilter}>
-                        <SelectTrigger className="w-40">
+                        <SelectTrigger className="w-full lg:w-40">
                           <SelectValue placeholder="Assigné à" />
                         </SelectTrigger>
                         <SelectContent>
@@ -326,13 +329,13 @@ L'équipe Raccordement Connect`;
                       </Select>
 
                       {/* Search */}
-                      <div className="relative">
+                      <div className="relative col-span-full sm:col-span-2 lg:col-span-1">
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                         <Input
-                          placeholder="Rechercher par nom, email, ville..."
+                          placeholder="Rechercher..."
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
-                          className="pl-10 w-80"
+                          className="pl-10 w-full lg:w-60"
                         />
                       </div>
                     </div>
