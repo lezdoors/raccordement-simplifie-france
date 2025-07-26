@@ -17,7 +17,6 @@ import {
   Factory,
   ChevronRight
 } from "lucide-react";
-import MobileMultiStepForm from "@/components/MobileMultiStepForm";
 import Navigation from "@/components/Navigation";
 import FooterSection from "@/components/FooterSection";
 import MobileFormFixed from "@/components/MobileFormFixed";
