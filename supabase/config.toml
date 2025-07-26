@@ -19,3 +19,9 @@ enable_anonymous_users = false
 
 [functions.notify-admin]
 verify_jwt = false
+
+[functions.create-payment-session]
+verify_jwt = false
+
+[functions.verify-payment]
+verify_jwt = false

@@ -54,7 +54,7 @@ const AppContent = () => {
         <Route path="/raccordement-enedis" element={<EnedisRaccordement />} />
         <Route path="/enedis-raccordement" element={<Navigate to="/raccordement-enedis" replace />} />
         <Route path="/commencer" element={<Navigate to="/raccordement-enedis" replace />} />
-        <Route path="/merci" element={<PaymentSuccessOptimized />} />
+        <Route path="/merci" element={<Merci />} />
         <Route path="/a-propos" element={<APropos />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/mentions-legales" element={<MentionsLegales />} />
