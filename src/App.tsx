@@ -36,6 +36,7 @@ import PaymentSuccessOptimized from "./pages/PaymentSuccessOptimized";
 import PaymentCancel from "./pages/PaymentCancel";
 import Protected from "./pages/Protected";
 import AuthTest from "./pages/AuthTest";
+import { MobileOptimizations } from "./components/mobile/MobileOptimizations";
 
 // Simple loading component without animation
 const PageLoader = () => (
@@ -95,6 +96,7 @@ const App = () => (
       <TooltipProvider>
         <AdminProvider>
           <ServiceWorker />
+          <MobileOptimizations />
           <Toaster />
           <Sonner />
           <ErrorBoundary>

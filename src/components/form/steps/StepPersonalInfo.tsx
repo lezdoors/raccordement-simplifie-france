@@ -280,6 +280,8 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
                   <Input
                     {...field}
                     type="email"
+                    inputMode="email"
+                    autoComplete="email"
                     placeholder="votre.email@exemple.fr"
                     className="h-12 text-base"
                   />
@@ -299,6 +301,9 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
                   <Input
                     value={phoneValue}
                     onChange={(e) => handlePhoneChange(e.target.value, field.onChange)}
+                    type="tel"
+                    inputMode="tel"
+                    autoComplete="tel"
                     placeholder="06 12 34 56 78"
                     className="h-12 text-base"
                     maxLength={14}

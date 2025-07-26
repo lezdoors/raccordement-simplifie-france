@@ -8,6 +8,8 @@ import { Card } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
+import { useSwipeNavigation } from "@/hooks/use-swipe-navigation";
+import { MobileFormProgressIndicator } from "@/components/mobile/MobileFormProgressIndicator";
 
 import { StepClientType } from "./steps/StepClientType";
 import { StepPersonalInfo } from "./steps/StepPersonalInfo";
@@ -101,6 +103,7 @@ export const MultiStepForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [savedData, setSavedData] = useState<Partial<FormData> | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -245,6 +248,8 @@ export const MultiStepForm = () => {
     const isValid = await trigger(stepFields);
     
     if (isValid) {
+      setIsLoading(true);
+      
       // Trigger Google Ads conversion tracking only on first step
       if (currentStep === 1 && typeof window !== 'undefined' && (window as any).gtag_report_conversion) {
         (window as any).gtag_report_conversion();
@@ -253,21 +258,43 @@ export const MultiStepForm = () => {
       if (currentStep < STEPS.length) {
         // Save locally immediately for fast navigation
         localStorage.setItem('raccordement-form-data', JSON.stringify(getValues()));
-        setCurrentStep(prev => prev + 1);
         
         // Auto-save to Supabase in background (non-blocking)
         autoSaveToSupabase().catch(error => 
           console.warn('Background save failed:', error)
         );
+        
+        setTimeout(() => {
+          setCurrentStep(prev => prev + 1);
+          setIsLoading(false);
+        }, 300); // Small delay for better UX
       }
+    } else {
+      // Shake animation for errors
+      toast.error("Veuillez corriger les erreurs avant de continuer");
     }
   };
 
   const handlePrevious = () => {
     if (currentStep > 1) {
-      setCurrentStep(prev => prev - 1);
+      setIsLoading(true);
+      setTimeout(() => {
+        setCurrentStep(prev => prev - 1);
+        setIsLoading(false);
+      }, 200);
     }
   };
+
+  // Swipe navigation
+  const swipeRef = useSwipeNavigation({
+    onSwipeLeft: () => {
+      if (currentStep < STEPS.length) handleNext();
+    },
+    onSwipeRight: () => {
+      if (currentStep > 1) handlePrevious();
+    },
+    disabled: isSubmitting || isLoading
+  });
 
   const handleSubmit = async (data: FormData) => {
     try {
@@ -342,23 +369,14 @@ export const MultiStepForm = () => {
 
   return (
     <div className="min-h-screen bg-background mobile-content-padding">
-      {/* Sticky Progress Bar for Mobile */}
-      <div className="md:hidden sticky top-0 z-40 bg-white border-b shadow-sm mobile-nav-safe">
-        <div className="px-4 py-3">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm font-medium text-foreground">
-              Étape {currentStep} sur {STEPS.length}
-            </span>
-            <span className="text-xs text-muted-foreground">
-              {Math.round(progress)}% complété
-            </span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div 
-              className="bg-primary h-2 rounded-full transition-all duration-300" 
-              style={{ width: `${progress}%` }}
-            ></div>
-          </div>
+      {/* Enhanced Mobile Progress Bar */}
+      <div className="md:hidden sticky top-0 z-40 bg-white/95 backdrop-blur-lg border-b shadow-sm mobile-nav-safe">
+        <div className="px-4 py-4">
+          <MobileFormProgressIndicator 
+            steps={STEPS}
+            currentStep={currentStep}
+            progress={progress}
+          />
         </div>
       </div>
 
@@ -404,11 +422,27 @@ export const MultiStepForm = () => {
               </p>
             </div>
 
-            {/* Step Content */}
+            {/* Step Content with Swipe Support */}
             <Form {...form}>
               <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 md:space-y-8">
-                <div className="min-h-[400px] px-2 md:px-0">
-                  {getCurrentComponent()}
+                <div 
+                  ref={swipeRef}
+                  className="min-h-[400px] px-2 md:px-0 relative overflow-hidden"
+                >
+                  <div className={`transition-opacity duration-300 ${isLoading ? 'opacity-50' : 'opacity-100'}`}>
+                    {getCurrentComponent()}
+                  </div>
+                  
+                  {/* Loading overlay */}
+                  {isLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-white/50 backdrop-blur-sm">
+                      <div className="mobile-loading-dots text-primary">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Navigation Buttons - Mobile optimized */}
