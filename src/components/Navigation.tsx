@@ -37,20 +37,16 @@ const Navigation = () => {
 
           {/* Contact Info & CTA - Desktop */}
           <div className="hidden md:flex items-center space-x-6">
-            <div className="text-center">
-              <div className="flex items-center justify-center gap-2 text-sm text-white/90">
-                <Phone className="w-4 h-4" />
-                <span>Appelez nous au</span>
-              </div>
-              <a href="tel:0970709570" className="text-lg font-bold text-white hover:text-white/90 transition-colors">
-                📞 09 70 70 95 70
-              </a>
-              <p className="text-xs text-white/80">Du lundi au vendredi de 9h à 19h</p>
-            </div>
-            
-            <Button size="lg" onClick={() => navigate("/raccordement-enedis")} className="font-semibold bg-gradient-to-r from-[#1b2b65] to-[#edc674] hover:from-[#15254b] hover:to-[#d4b666] text-white">
-              Démarrer ma demande
-            </Button>
+          <div className="text-center">
+            <a href="tel:0970709570" className="text-lg font-bold text-white hover:text-white/90 transition-colors">
+              📞 09 70 70 95 70
+            </a>
+            <p className="text-xs text-white/80">Du lundi au vendredi de 9h à 19h</p>
+          </div>
+          
+          <Button size="lg" onClick={() => navigate("/raccordement-enedis")} className="font-semibold bg-gradient-to-r from-primary to-gold hover:from-primary/90 hover:to-gold/90 text-white">
+            Démarrer ma demande
+          </Button>
           </div>
 
           {/* Mobile menu button */}
@@ -78,26 +74,25 @@ const Navigation = () => {
               À propos
             </a>
             <div className="px-4 py-6 border-t border-white/20 mt-4">
-              <div className="text-center mb-4">
-                <p className="text-sm text-white/90 mb-1">Appelez nous au</p>
-                <a href="tel:0970709570" className="text-lg font-bold text-white hover:text-white/90 transition-colors touch-target">
-                  📞 09 70 70 95 70
-                </a>
-                <p className="text-xs text-white/80 mt-1">Lun-Ven 9h-18h</p>
-              </div>
-              <Button onClick={() => {
-                navigate("/raccordement-enedis");
-                setIsMenuOpen(false);
-              }} className="w-full font-semibold bg-gradient-to-r from-[#1b2b65] to-[#edc674] hover:from-[#15254b] hover:to-[#d4b666] text-white mobile-button touch-feedback">
-                Démarrer ma demande
-              </Button>
+            <div className="text-center mb-4">
+              <a href="tel:0970709570" className="text-lg font-bold text-white hover:text-white/90 transition-colors touch-target">
+                📞 09 70 70 95 70
+              </a>
+              <p className="text-xs text-white/80 mt-1">Lun-Ven 9h-18h</p>
+            </div>
+            <Button onClick={() => {
+              navigate("/raccordement-enedis");
+              setIsMenuOpen(false);
+            }} className="w-full font-semibold bg-gradient-to-r from-primary to-gold hover:from-primary/90 hover:to-gold/90 text-white mobile-button touch-feedback">
+              Démarrer ma demande
+            </Button>
             </div>
           </div>
         </div>}
 
       {/* Floating CTA for mobile */}
       <div className="md:hidden fixed bottom-6 right-4 z-[55]">
-        <Button onClick={() => navigate("/raccordement-enedis")} className="font-semibold bg-gradient-to-r from-[#1b2b65] to-[#edc674] hover:from-[#15254b] hover:to-[#d4b666] text-white mobile-button shadow-2xl rounded-full px-6 py-4 touch-feedback mobile-optimized" size="lg">
+        <Button onClick={() => navigate("/raccordement-enedis")} className="font-semibold bg-gradient-to-r from-primary to-gold hover:from-primary/90 hover:to-gold/90 text-white mobile-button shadow-2xl rounded-full px-6 py-4 touch-feedback mobile-optimized" size="lg">
           Démarrer ma demande
         </Button>
       </div>

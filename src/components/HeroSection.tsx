@@ -42,13 +42,13 @@ const HeroSection = () => {
 
             {/* Premium CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button 
-                size="lg" 
-                className="btn-cta mobile-button font-semibold px-8 py-6 text-lg h-auto transform hover:scale-105 transition-all duration-300 touch-feedback mobile-optimized" 
-                onClick={() => navigate("/raccordement-enedis")}
-              >
-                Démarrer ma demande
-              </Button>
+            <Button 
+              size="lg" 
+              className="bg-gradient-to-r from-gold to-gold/80 hover:from-gold/90 hover:to-gold/70 text-primary mobile-button font-semibold px-8 py-6 text-lg h-auto transform hover:scale-105 transition-all duration-300 touch-feedback mobile-optimized shadow-xl" 
+              onClick={() => navigate("/raccordement-enedis")}
+            >
+              Démarrer ma demande
+            </Button>
               
               <Button 
                 variant="outline" 
