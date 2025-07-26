@@ -44,7 +44,12 @@ const Navigation = () => {
             <p className="text-xs text-white/80">Du lundi au vendredi de 9h à 19h</p>
           </div>
           
-          <Button size="lg" onClick={() => navigate("/raccordement-enedis")} className="font-semibold bg-gradient-to-r from-primary to-gold hover:from-primary/90 hover:to-gold/90 text-white">
+          <Button 
+            size="lg" 
+            onClick={() => navigate("/raccordement-enedis")} 
+            className="font-bold px-4 py-2 rounded-lg text-[#1E1E1E] hover:opacity-90 transition-all duration-300"
+            style={{ background: 'linear-gradient(90deg, #FFD77A 0%, #F2B736 100%)' }}
+          >
             Démarrer ma demande
           </Button>
           </div>
@@ -80,10 +85,14 @@ const Navigation = () => {
               </a>
               <p className="text-xs text-white/80 mt-1">Lun-Ven 9h-18h</p>
             </div>
-            <Button onClick={() => {
-              navigate("/raccordement-enedis");
-              setIsMenuOpen(false);
-            }} className="w-full font-semibold bg-gradient-to-r from-primary to-gold hover:from-primary/90 hover:to-gold/90 text-white mobile-button touch-feedback">
+            <Button 
+              onClick={() => {
+                navigate("/raccordement-enedis");
+                setIsMenuOpen(false);
+              }} 
+              className="w-full font-bold px-4 py-2 rounded-lg text-[#1E1E1E] hover:opacity-90 transition-all duration-300 mobile-button touch-feedback"
+              style={{ background: 'linear-gradient(90deg, #FFD77A 0%, #F2B736 100%)' }}
+            >
               Démarrer ma demande
             </Button>
             </div>
@@ -92,7 +101,12 @@ const Navigation = () => {
 
       {/* Floating CTA for mobile */}
       <div className="md:hidden fixed bottom-6 right-4 z-[55]">
-        <Button onClick={() => navigate("/raccordement-enedis")} className="font-semibold bg-gradient-to-r from-primary to-gold hover:from-primary/90 hover:to-gold/90 text-white mobile-button shadow-2xl rounded-full px-6 py-4 touch-feedback mobile-optimized" size="lg">
+        <Button 
+          onClick={() => navigate("/raccordement-enedis")} 
+          className="font-bold px-6 py-4 rounded-full text-[#1E1E1E] hover:opacity-90 transition-all duration-300 mobile-button shadow-2xl touch-feedback mobile-optimized" 
+          size="lg"
+          style={{ background: 'linear-gradient(90deg, #FFD77A 0%, #F2B736 100%)' }}
+        >
           Démarrer ma demande
         </Button>
       </div>

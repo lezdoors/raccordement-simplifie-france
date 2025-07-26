@@ -44,8 +44,9 @@ const HeroSection = () => {
             <div className="flex flex-col sm:flex-row gap-4">
             <Button 
               size="lg" 
-              className="bg-gradient-to-r from-gold to-gold/80 hover:from-gold/90 hover:to-gold/70 text-primary mobile-button font-semibold px-8 py-6 text-lg h-auto transform hover:scale-105 transition-all duration-300 touch-feedback mobile-optimized shadow-xl" 
+              className="font-bold px-4 py-2 rounded-lg text-[#1E1E1E] hover:opacity-90 hover:scale-105 transition-all duration-300 mobile-button touch-feedback mobile-optimized shadow-xl" 
               onClick={() => navigate("/raccordement-enedis")}
+              style={{ background: 'linear-gradient(90deg, #FFD77A 0%, #F2B736 100%)' }}
             >
               Démarrer ma demande
             </Button>

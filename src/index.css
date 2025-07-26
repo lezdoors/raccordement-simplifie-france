@@ -34,7 +34,7 @@
     --muted: 220 14% 98%;
     --muted-foreground: 220 9% 46%;
 
-    /* Luxury Gold Accent */
+    /* Luxury Gold Accent - User's specific gold gradient (#FFD77A to #F2B736) */
     --accent: 42 78% 60%;
     --accent-foreground: 220 26% 14%;
 
@@ -49,9 +49,16 @@
     --royal-blue: 220 91% 24%;
     --royal-blue-light: 220 91% 35%;
     --royal-blue-dark: 220 91% 18%;
-    --luxury-gold: 42 78% 60%;
-    --luxury-gold-light: 42 78% 70%;
-    --luxury-gold-dark: 42 78% 50%;
+    
+    /* User's specific gold colors converted to HSL */
+    --gold: 43 100% 73%;  /* #FFD77A */
+    --gold-light: 43 100% 78%;
+    --gold-dark: 42 82% 56%;  /* #F2B736 */
+    
+    /* Legacy gold tokens for compatibility */
+    --luxury-gold: 43 100% 73%;
+    --luxury-gold-light: 43 100% 78%;
+    --luxury-gold-dark: 42 82% 56%;
     
   /* Premium Gradients */
   --gradient-royal: linear-gradient(135deg, hsl(220 91% 24%), hsl(220 91% 35%));
@@ -59,8 +66,9 @@
   --gradient-hero: linear-gradient(135deg, hsl(220 91% 18%) 0%, hsl(220 91% 24%) 50%, hsl(220 91% 35%) 100%);
   --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
   
-  /* CTA Button Gradient (Blue to Gold) - Fixed HSL */
-  --gradient-cta: linear-gradient(90deg, hsl(220 91% 24%) 0%, hsl(42 78% 60%) 100%);
+  /* User's specific gold gradient - #FFD77A to #F2B736 */
+  --gradient-gold: linear-gradient(90deg, hsl(43 100% 73%) 0%, hsl(42 82% 56%) 100%);
+  --gradient-cta: linear-gradient(90deg, hsl(43 100% 73%) 0%, hsl(42 82% 56%) 100%);
     
     /* Premium Shadows & Effects */
     --shadow-luxury: 0 20px 40px -10px hsl(220 91% 24% / 0.15);
