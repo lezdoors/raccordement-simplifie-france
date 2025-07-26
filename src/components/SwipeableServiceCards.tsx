@@ -206,7 +206,7 @@ const SwipeableServiceCards = () => {
                     onClick={() => navigate("/commencer")}
                     className="btn-cta px-10 py-6 text-lg min-h-[44px] h-auto touch-target font-semibold rounded-xl border-0"
                   >
-                    Accéder au formulaire premium →
+                    Démarrer ma demande
                   </Button>
                 </div>
                 

@@ -69,7 +69,7 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 md:gap-8">
+      <div className="grid grid-cols-1 gap-6 md:gap-8 mobile-form-container mobile-cta-spacing">
         {/* Civilité */}
         <FormField
           control={form.control}
@@ -78,16 +78,16 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
             <FormItem className="space-y-3">
               <FormLabel className="text-base md:text-lg font-medium">Civilité *</FormLabel>
               <FormControl>
-                <RadioGroup
-                  value={field.value}
-                  onValueChange={field.onChange}
-                  className="grid grid-cols-3 gap-4"
-                >
-                  <div className="relative">
-                    <RadioGroupItem value="monsieur" id="monsieur" className="peer sr-only" />
-                    <Label 
-                      htmlFor="monsieur" 
-                      className={`peer-checked:selected border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 w-full text-center font-medium block mobile-touch-target ${field.value === "monsieur" ? "selected" : ""}`}
+                  <RadioGroup
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    className="grid grid-cols-1 sm:grid-cols-3 gap-4"
+                  >
+                    <div className="relative">
+                      <RadioGroupItem value="monsieur" id="monsieur" className="peer sr-only" />
+                      <Label 
+                        htmlFor="monsieur" 
+                        className={`peer-checked:selected border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 w-full text-center font-medium block mobile-touch-target ${field.value === "monsieur" ? "selected" : ""}`}
                        onClick={() => field.onChange("monsieur")}
                     >
                       Monsieur

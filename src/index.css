@@ -180,6 +180,10 @@
     /* Prevent unwanted zoom on iOS */
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
+    /* Prevent scroll issues on mobile */
+    position: relative;
+    height: auto;
+    min-height: 100vh;
   }
   
   /* Ensure html allows scroll */
@@ -188,12 +192,15 @@
     overflow-y: auto;
     scroll-behavior: smooth;
     height: 100%;
+    /* Add mobile scroll fixes */
+    -webkit-overflow-scrolling: touch;
   }
   
   /* Root container fix */
   #root {
     min-height: 100vh;
     overflow-x: hidden;
+    position: relative;
   }
   
   /* Premium Typography Classes */

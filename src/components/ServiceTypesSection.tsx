@@ -117,7 +117,7 @@ const ServiceTypesSection = () => {
                     onClick={() => navigate("/commencer")}
                     className="btn-luxury bg-gradient-luxury text-white hover:shadow-floating px-10 py-6 text-lg h-auto touch-target font-semibold rounded-xl border-0"
                   >
-                    Accéder au formulaire premium →
+                    Démarrer ma demande
                   </Button>
                 </div>
                 

@@ -368,10 +368,10 @@ export const MultiStepForm = () => {
 
 
   return (
-    <div className="min-h-screen bg-background pb-32">
-      {/* Simple Mobile Progress Bar - No Animations */}
+    <div className="min-h-screen bg-background">
+      {/* Simple Mobile Progress Bar - Fixed top positioning */}
       <div className="md:hidden sticky top-0 z-40 bg-white/95 backdrop-blur-lg border-b shadow-sm">
-        <div className="px-4 py-4">
+        <div className="px-4 py-4 safe-area-top">
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm font-medium text-foreground">
               Étape {currentStep} sur {STEPS.length}
@@ -382,7 +382,7 @@ export const MultiStepForm = () => {
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div 
-              className="bg-primary h-2 rounded-full transition-all duration-300" 
+              className="bg-primary h-2 rounded-full transition-all duration-300 progress-animated" 
               style={{ width: `${progress}%` }}
             ></div>
           </div>
@@ -392,7 +392,8 @@ export const MultiStepForm = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-4 md:py-8">
+      {/* Add padding for mobile CTA */}
+      <div className="container mx-auto px-4 py-4 md:py-8 pb-32 md:pb-8">
         <div className="max-w-4xl mx-auto">
           <Card className="p-4 md:p-6 lg:p-8">
             {/* Desktop Progress Indicator */}
@@ -457,30 +458,31 @@ export const MultiStepForm = () => {
                     variant="outline"
                     onClick={handlePrevious}
                     disabled={isFirstStep}
-                    className="flex items-center justify-center gap-2 w-full md:w-auto order-2 md:order-1"
+                    className="flex items-center justify-center gap-2 w-full md:w-auto order-2 md:order-1 h-12 mobile-button"
                   >
-                    <ChevronLeft className="w-4 h-4" />
+                    <ChevronLeft className="h-4 w-4" />
                     Précédent
                   </Button>
 
                   {isLastStep ? (
-                     <Button
-                       type="submit"
-                       className="btn-cta flex items-center justify-center gap-2 w-full md:w-auto order-1 md:order-2"
-                       disabled={!form.formState.isValid || isSubmitting}
-                       size="lg"
-                     >
-                       {isSubmitting ? "Traitement en cours..." : "Soumettre ma demande"}
-                     </Button>
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full md:w-auto order-1 md:order-2 h-12 mobile-button font-semibold"
+                      style={{ background: 'linear-gradient(90deg, #FFD77A 0%, #F2B736 100%)', color: '#1E1E1E' }}
+                    >
+                      {isSubmitting ? 'Finalisation...' : 'Finaliser ma demande'}
+                    </Button>
                   ) : (
                     <Button
                       type="button"
                       onClick={handleNext}
-                      className="btn-cta flex items-center justify-center gap-2 w-full md:w-auto order-1 md:order-2"
-                      size="lg"
+                      disabled={isLoading}
+                      className="w-full md:w-auto order-1 md:order-2 h-12 mobile-button font-semibold"
+                      style={{ background: 'linear-gradient(90deg, #FFD77A 0%, #F2B736 100%)', color: '#1E1E1E' }}
                     >
-                      Suivant
-                      <ChevronRight className="w-4 h-4" />
+                      {isLoading ? 'Chargement...' : 'Continuer'}
+                      <ChevronRight className="h-4 w-4 ml-2" />
                     </Button>
                   )}
                 </div>

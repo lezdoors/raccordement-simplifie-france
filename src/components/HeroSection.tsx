@@ -54,6 +54,7 @@ const HeroSection = () => {
               <Button 
                 variant="outline" 
                 size="lg" 
+                onClick={() => window.location.href = 'tel:0189701200'}
                 className="mobile-button bg-white text-primary border-primary hover:bg-white/90 font-semibold px-8 py-6 text-lg h-auto touch-feedback"
               >
                 <Headphones className="mr-2 h-5 w-5" />
@@ -123,7 +124,7 @@ const HeroSection = () => {
                 <div className="flex items-center p-4 rounded-xl bg-white/5 border border-white/10">
                   <Phone className="w-5 h-5 text-accent mr-3" />
                   <div>
-                    <div className="text-white font-medium">09 77 40 50 60</div>
+                    <div className="text-white font-medium">01 89 70 12 00</div>
                     <div className="text-white/60 text-xs">Lun-Ven 9h-18h</div>
                   </div>
                 </div>
