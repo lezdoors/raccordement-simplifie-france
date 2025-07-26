@@ -75,16 +75,11 @@ const AppContent = () => {
             <Admin />
           </ProtectedRoute>
         } />
-                <Route path="/admin/leads/:id" element={
-                  <ProtectedRoute>
-                    <AdminLeadDetail />
-                  </ProtectedRoute>
-                } />
-        
-        {/* Alternative access routes */}
-        <Route path="/kenitra" element={<Login />} />
-        <Route path="/kenitra/dashboard" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
-        <Route path="/kenitra/leads/:id" element={<ProtectedRoute><AdminLeadDetail /></ProtectedRoute>} />
+        <Route path="/admin/leads/:id" element={
+          <ProtectedRoute>
+            <AdminLeadDetail />
+          </ProtectedRoute>
+        } />
         <Route path="/protected" element={<Protected />} />
         <Route path="/auth-test" element={<AuthTest />} />
         <Route path="*" element={<NotFound />} />
