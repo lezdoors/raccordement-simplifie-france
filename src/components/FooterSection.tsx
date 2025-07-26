@@ -71,7 +71,7 @@ const FooterSection = () => {
   };
 
   return (
-    <footer className="bg-slate-800 text-white">
+    <footer className="bg-slate-800 text-white mobile-safe-bottom">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         {/* Logo Section - Enhanced */}
         <div className="flex flex-col md:flex-row items-center justify-center mb-8 md:mb-12">
@@ -203,7 +203,6 @@ const FooterSection = () => {
                 <span className="text-sm">Lun-Ven: 8h-18h</span>
               </div>
               <div className="flex items-center justify-center md:justify-start">
-                <Phone className="w-4 h-4 mr-2 text-blue-400" />
                 <a 
                   href="tel:0970709570" 
                   className="text-blue-400 hover:text-blue-300 transition-colors duration-200 font-semibold text-lg"

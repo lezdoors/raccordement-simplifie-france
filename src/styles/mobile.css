@@ -180,7 +180,7 @@
 }
 
 .mobile-safe-bottom {
-  padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
+  padding-bottom: calc(env(safe-area-inset-bottom) + 100px);
 }
 
 .mobile-safe-left {

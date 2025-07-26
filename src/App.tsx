@@ -51,7 +51,8 @@ const AppContent = () => {
 
   return (
     <BrowserRouter>
-      <Routes>
+      <div className="mobile-safe-bottom">
+        <Routes>
         <Route path="/" element={<OptimizedHomePage />} />
         <Route path="/commencer" element={<Commencer />} />
         <Route path="/raccordement-enedis" element={<Navigate to="/commencer" replace />} />
@@ -86,6 +87,7 @@ const AppContent = () => {
         <Route path="/auth-test" element={<AuthTest />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      </div>
     </BrowserRouter>
   );
 };
