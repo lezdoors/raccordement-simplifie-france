@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -13,341 +12,48 @@ import { BarChart3, Users, MessageSquare, FileText, LogOut, Search, AlertCircle,
 import { useNavigate } from "react-router-dom";
 import { useAdmin } from "@/contexts/AdminContext";
 import { useLeadNotifications } from "@/hooks/use-lead-notifications";
+import { useCRMData } from "@/hooks/use-crm-data";
 import { PhoneHeader } from "@/components/PhoneHeader";
 import { LeadPreviewModal } from "@/components/LeadPreviewModal";
-
-// Interfaces
-interface Lead {
-  id: string;
-  nom: string;
-  prenom: string;
-  email: string;
-  telephone: string;
-  type_client: string;
-  type_projet: string;
-  adresse_chantier: string;
-  ville: string;
-  code_postal: string;
-  type_raccordement: string;
-  type_alimentation: string;
-  puissance: string;
-  etat_projet: string;
-  delai_souhaite: string;
-  commentaires: string;
-  assigned_to_email: string;
-  created_at: string;
-  updated_at: string;
-}
-
-interface Message {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  message: string;
-  request_type: string;
-  created_at: string;
-}
+import { supabase } from "@/integrations/supabase/client";
 
 const Admin = () => {
   const navigate = useNavigate();
   const { user, adminUser, loading: authLoading } = useAdmin();
   const { newLeadsCount, clearNotifications } = useLeadNotifications();
-  const [loading, setLoading] = useState(true);
-  const [leads, setLeads] = useState<Lead[]>([]);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
-  const [previewLead, setPreviewLead] = useState<Lead | null>(null);
+  const { 
+    leads, 
+    messages, 
+    stats, 
+    loading: crmLoading, 
+    error: crmError,
+    updateLeadStatus,
+    assignLead,
+    addNote
+  } = useCRMData();
+  
+  const [selectedLead, setSelectedLead] = useState<any>(null);
+  const [previewLead, setPreviewLead] = useState<any>(null);
   const [showPreview, setShowPreview] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [assignedFilter, setAssignedFilter] = useState("all");
   const [newNote, setNewNote] = useState("");
-  const [stats, setStats] = useState({
-    totalLeads: 0,
-    totalMessages: 0,
-    weeklyLeads: 0,
-    monthlyLeads: 0,
-  });
 
   const isPendingValidation = user && !adminUser;
   const canSeeAllLeads = adminUser?.can_see_all_leads || adminUser?.role === 'superadmin' || adminUser?.role === 'manager';
   const isTraiteur = adminUser?.role === 'traiteur';
 
   useEffect(() => {
-    if (!authLoading && user && adminUser) {
-      console.log('🚀 User authenticated, starting data fetch...', { user: user.email, adminUser: adminUser?.role });
-      fetchData();
-      
-      // Disable realtime temporarily for debugging
-      // setupRealtimeSubscriptions();
-    } else if (!authLoading && !user) {
+    if (!authLoading && !user) {
       console.log('❌ No user found, redirecting to login');
       navigate('/login');
     } else if (!authLoading && user && !adminUser) {
       console.log('⏳ User found but admin data pending...');
-      setLoading(false); // Stop loading if admin validation is pending
     }
+  }, [authLoading, user, adminUser, navigate]);
 
-    // Add timeout safety net
-    const timeout = setTimeout(() => {
-      if (loading) {
-        console.error('⏰ Data fetch timeout after 10 seconds');
-        setLoading(false);
-        toast.error('Chargement des données échoué - veuillez rafraîchir la page');
-      }
-    }, 10000);
-
-    return () => clearTimeout(timeout);
-  }, [authLoading, user, adminUser]);
-
-  const setupRealtimeSubscriptions = () => {
-    const leadsChannel = supabase
-      .channel('leads-realtime')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'leads_raccordement'
-      }, () => {
-        fetchData();
-      })
-      .subscribe();
-
-    const messagesChannel = supabase
-      .channel('messages-realtime')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'messages'
-      }, () => {
-        fetchData();
-      })
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(leadsChannel);
-      supabase.removeChannel(messagesChannel);
-    };
-  };
-
-  const fetchData = async () => {
-    try {
-      console.log('🔄 Starting data fetch...', { 
-        user: user?.email, 
-        role: adminUser?.role,
-        timestamp: new Date().toISOString()
-      });
-      setLoading(true);
-
-      // Test connection first with simple query
-      console.log('🧪 Testing Supabase connection...');
-      const connectionTest = await supabase.from('leads_raccordement').select('count').limit(1);
-      console.log('🔗 Connection test result:', connectionTest);
-
-      if (connectionTest.error) {
-        console.error('❌ Connection test failed:', connectionTest.error);
-        throw new Error(`Connection failed: ${connectionTest.error.message}`);
-      }
-
-      // Fetch leads based on role
-      let leadsQuery = supabase.from('leads_raccordement').select(`
-        id, nom, prenom, email, telephone, type_client, type_projet, 
-        adresse_chantier, ville, code_postal, type_raccordement, 
-        type_alimentation, puissance, etat_projet, delai_souhaite, 
-        commentaires, assigned_to_email, created_at, updated_at
-      `);
-      
-      if (isTraiteur && user?.email) {
-        console.log('👤 Fetching leads for traiteur:', user.email);
-        leadsQuery = leadsQuery.eq('assigned_to_email', user.email);
-      } else {
-        console.log('👑 Fetching all leads for admin/manager');
-      }
-      
-      console.log('📡 Executing queries...');
-      const startTime = Date.now();
-      
-      // Execute queries sequentially to isolate timeout issues
-      console.log('🔍 Fetching leads...');
-      const leadsRes = await leadsQuery.order('created_at', { ascending: false }).limit(100);
-      console.log('✅ Leads query completed:', { count: leadsRes.data?.length, error: leadsRes.error });
-      
-      console.log('🔍 Fetching messages...');
-      const messagesRes = await supabase.from('messages').select('*').order('created_at', { ascending: false }).limit(50);
-      console.log('✅ Messages query completed:', { count: messagesRes.data?.length, error: messagesRes.error });
-
-      const fetchTime = Date.now() - startTime;
-      console.log(`⚡ Queries completed in ${fetchTime}ms`);
-
-      console.log('📊 Data fetch results:', {
-        leadsCount: leadsRes.data?.length || 0,
-        messagesCount: messagesRes.data?.length || 0,
-        leadsError: leadsRes.error,
-        messagesError: messagesRes.error,
-        leadsData: leadsRes.data?.slice(0, 2), // Show first 2 leads for debugging
-        messagesData: messagesRes.data?.slice(0, 2) // Show first 2 messages for debugging
-      });
-
-      if (leadsRes.error) {
-        console.error('❌ Leads fetch error:', leadsRes.error);
-        throw new Error(`Leads error: ${leadsRes.error.message}`);
-      }
-      if (messagesRes.error) {
-        console.error('❌ Messages fetch error:', messagesRes.error);
-        throw new Error(`Messages error: ${messagesRes.error.message}`);
-      }
-
-      const leadsData = leadsRes.data || [];
-      const messagesData = messagesRes.data || [];
-
-      console.log('💾 Setting data in state...');
-      setLeads(leadsData);
-      setMessages(messagesData);
-      
-      // Clear notifications when leads are fetched
-      clearNotifications();
-
-      // Calculate stats
-      const now = new Date();
-      const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-      const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-
-      const weeklyLeads = leadsData.filter(
-        l => new Date(l.created_at) >= weekAgo
-      ).length;
-
-      const monthlyLeads = leadsData.filter(
-        l => new Date(l.created_at) >= monthAgo
-      ).length;
-
-      const newStats = {
-        totalLeads: leadsData.length,
-        totalMessages: messagesData.length,
-        weeklyLeads,
-        monthlyLeads,
-      };
-
-      console.log('📈 Updated stats:', newStats);
-      setStats(newStats);
-
-      console.log('✅ Data fetch completed successfully');
-
-    } catch (error: any) {
-      console.error('💥 Critical error fetching data:', error);
-      console.error('📍 Error stack:', error.stack);
-      toast.error(`Erreur lors du chargement des données: ${error.message}`);
-      
-      // Set fallback data for debugging
-      console.log('🔄 Setting fallback empty data...');
-      setLeads([]);
-      setMessages([]);
-      setStats({
-        totalLeads: 0,
-        totalMessages: 0,
-        weeklyLeads: 0,
-        monthlyLeads: 0,
-      });
-    } finally {
-      console.log('🏁 Finalizing data fetch...');
-      setLoading(false);
-    }
-  };
-
-  const handleAssignLead = async (leadId: string, email: string) => {
-    try {
-      // Convert "unassigned" to null
-      const assignedEmail = email === "unassigned" ? null : email;
-      
-      const { error } = await supabase
-        .from('leads_raccordement')
-        .update({ 
-          assigned_to_email: assignedEmail,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', leadId);
-
-      if (error) throw error;
-
-      setLeads(prev => prev.map(l => 
-        l.id === leadId ? { ...l, assigned_to_email: assignedEmail } : l
-      ));
-
-      // Update selected lead if it's the same one
-      if (selectedLead?.id === leadId) {
-        setSelectedLead(prev => prev ? { ...prev, assigned_to_email: assignedEmail } : null);
-      }
-
-      toast.success('Lead assigné avec succès');
-    } catch (error: any) {
-      console.error('Error assigning lead:', error);
-      toast.error('Erreur lors de l\'assignation');
-    }
-  };
-
-  const handleStatusUpdate = async (leadId: string, newStatus: string) => {
-    try {
-      const { error } = await supabase
-        .from('leads_raccordement')
-        .update({ 
-          etat_projet: newStatus,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', leadId);
-
-      if (error) throw error;
-
-      setLeads(prev => prev.map(l => 
-        l.id === leadId ? { ...l, etat_projet: newStatus } : l
-      ));
-
-      // Update selected lead if it's the same one
-      if (selectedLead?.id === leadId) {
-        setSelectedLead(prev => prev ? { ...prev, etat_projet: newStatus } : null);
-      }
-
-      toast.success('Statut mis à jour avec succès');
-    } catch (error: any) {
-      console.error('Error updating status:', error);
-      toast.error('Erreur lors de la mise à jour du statut');
-    }
-  };
-
-  const handleAddNote = async (leadId: string, note: string) => {
-    try {
-      const currentComments = selectedLead?.commentaires || '';
-      const timestamp = new Date().toLocaleString('fr-FR');
-      const newComment = `${timestamp} - ${user?.email}: ${note}`;
-      const updatedComments = currentComments 
-        ? `${currentComments}\n\n${newComment}` 
-        : newComment;
-
-      const { error } = await supabase
-        .from('leads_raccordement')
-        .update({ 
-          commentaires: updatedComments,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', leadId);
-
-      if (error) throw error;
-
-      setLeads(prev => prev.map(l => 
-        l.id === leadId ? { ...l, commentaires: updatedComments } : l
-      ));
-
-      // Update selected lead
-      if (selectedLead?.id === leadId) {
-        setSelectedLead(prev => prev ? { ...prev, commentaires: updatedComments } : null);
-      }
-
-      toast.success('Note ajoutée avec succès');
-    } catch (error: any) {
-      console.error('Error adding note:', error);
-      toast.error('Erreur lors de l\'ajout de la note');
-    }
-  };
-
-  const handleSendEmail = async (lead: Lead) => {
+  const handleSendEmail = async (lead: any) => {
     try {
       const subject = `Votre demande de raccordement électrique - ${lead.type_raccordement}`;
       const message = `Bonjour ${lead.prenom},
@@ -380,7 +86,7 @@ L'équipe Raccordement Connect`;
 
       // Add note about email sent
       const emailNote = `Email envoyé: ${subject}`;
-      await handleAddNote(lead.id, emailNote);
+      await addNote(lead.id, emailNote);
 
       toast.success('Email envoyé avec succès');
     } catch (error: any) {
@@ -441,8 +147,8 @@ L'équipe Raccordement Connect`;
     return matchesSearch && matchesStatus && matchesAssigned;
   });
 
-  // Show loading state with timeout warning
-  if (authLoading || loading) {
+  // Show loading state
+  if (authLoading || crmLoading) {
     return (
       <div className="min-h-screen bg-background p-8">
         <div className="max-w-7xl mx-auto">
@@ -452,16 +158,6 @@ L'équipe Raccordement Connect`;
             <p className="mt-2 text-sm text-muted-foreground">
               Utilisateur: {user?.email || 'Non connecté'} | Rôle: {adminUser?.role || 'En attente'}
             </p>
-            <p className="mt-2 text-xs text-muted-foreground">
-              Si le chargement prend plus de 15 secondes, rafraîchissez la page
-            </p>
-            <Button 
-              onClick={() => window.location.reload()} 
-              variant="outline" 
-              className="mt-4"
-            >
-              Rafraîchir maintenant
-            </Button>
           </div>
         </div>
       </div>
@@ -479,6 +175,24 @@ L'équipe Raccordement Connect`;
             <p className="mt-2 text-muted-foreground">Veuillez vous reconnecter</p>
             <Button onClick={() => navigate('/login')} className="mt-4">
               Se reconnecter
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show CRM error if there's an error
+  if (crmError) {
+    return (
+      <div className="min-h-screen bg-background p-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center py-20">
+            <AlertCircle className="mx-auto h-12 w-12 text-red-500 mb-4" />
+            <p className="text-lg font-semibold text-foreground">Erreur de chargement</p>
+            <p className="mt-2 text-muted-foreground">{crmError}</p>
+            <Button onClick={() => window.location.reload()} className="mt-4">
+              Rafraîchir la page
             </Button>
           </div>
         </div>
@@ -516,11 +230,11 @@ L'équipe Raccordement Connect`;
             <Button 
               variant="outline" 
               onClick={handleLogout}
-            className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10"
-          >
-            <LogOut className="w-4 h-4 mr-2" />
-            Déconnexion
-          </Button>
+              className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Déconnexion
+            </Button>
           </div>
         </div>
       </div>
@@ -700,7 +414,7 @@ L'équipe Raccordement Connect`;
                                  <Button 
                                    variant="outline" 
                                    size="sm"
-                                   onClick={() => navigate(`/kenitra/leads/${lead.id}`)}
+                                   onClick={() => navigate(`/admin/leads/${lead.id}`)}
                                  >
                                    Détails
                                  </Button>
@@ -782,7 +496,7 @@ L'équipe Raccordement Connect`;
                                               <strong>Mettre à jour le statut:</strong>
                                               <Select
                                                 value={selectedLead.etat_projet || ""}
-                                                onValueChange={(value) => handleStatusUpdate(selectedLead.id, value)}
+                                                onValueChange={(value) => updateLeadStatus(selectedLead.id, value)}
                                               >
                                                 <SelectTrigger className="mt-2">
                                                   <SelectValue placeholder="Changer le statut" />
@@ -801,7 +515,7 @@ L'équipe Raccordement Connect`;
                                               <strong>Assigner à:</strong>
                                                <Select
                                                  value={selectedLead.assigned_to_email || "unassigned"}
-                                                 onValueChange={(value) => handleAssignLead(selectedLead.id, value)}
+                                                 onValueChange={(value) => assignLead(selectedLead.id, value)}
                                               >
                                                 <SelectTrigger className="mt-2">
                                                   <SelectValue placeholder="Sélectionner un traiteur" />
@@ -831,7 +545,7 @@ L'équipe Raccordement Connect`;
                                                  <Button
                                                    onClick={() => {
                                                      if (newNote.trim()) {
-                                                       handleAddNote(selectedLead.id, newNote);
+                                                       addNote(selectedLead.id, newNote);
                                                        setNewNote("");
                                                      }
                                                    }}

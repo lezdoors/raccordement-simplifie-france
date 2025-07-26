@@ -66,7 +66,7 @@ const AdminLeadDetail = () => {
       if (error) {
         if (error.code === 'PGRST116') {
           toast.error('Lead non trouvé ou accès non autorisé');
-        navigate('/kenitra/dashboard');
+        navigate('/admin');
           return;
         }
         throw error;
@@ -76,7 +76,7 @@ const AdminLeadDetail = () => {
     } catch (error: any) {
       console.error('Error fetching lead:', error);
       toast.error('Erreur lors du chargement du lead');
-      navigate('/kenitra/dashboard');
+      navigate('/admin');
     } finally {
       setLoading(false);
     }
@@ -278,7 +278,7 @@ L'équipe Racco-Service`;
           <div className="flex items-center space-x-4">
             <Button 
               variant="outline" 
-              onClick={() => navigate('/kenitra/dashboard')}
+              onClick={() => navigate('/admin')}
               className="flex items-center space-x-2"
             >
               <ArrowLeft className="w-4 h-4" />
