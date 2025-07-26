@@ -8,8 +8,8 @@ import { Card } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
-import { useSwipeNavigation } from "@/hooks/use-swipe-navigation";
-import { MobileFormProgressIndicator } from "@/components/mobile/MobileFormProgressIndicator";
+// import { useSwipeNavigation } from "@/hooks/use-swipe-navigation";
+// import { MobileFormProgressIndicator } from "@/components/mobile/MobileFormProgressIndicator";
 
 import { StepClientType } from "./steps/StepClientType";
 import { StepPersonalInfo } from "./steps/StepPersonalInfo";
@@ -133,6 +133,16 @@ export const MultiStepForm = () => {
     mode: "onChange",
   });
 
+  // Debug logging
+  useEffect(() => {
+    console.log("🎯 Form initialized, current step:", currentStep);
+    console.log("📱 Form state:", {
+      isValid: form.formState.isValid,
+      isSubmitting: form.formState.isSubmitting,
+      errors: form.formState.errors
+    });
+  }, [currentStep, form.formState]);
+
   const { watch, trigger, getValues } = form;
   const watchedValues = watch();
 
@@ -244,11 +254,16 @@ export const MultiStepForm = () => {
   };
 
   const handleNext = async () => {
+    console.log("🔄 handleNext called, current step:", currentStep);
     const stepFields = getStepFields(currentStep);
+    console.log("📝 Validating fields:", stepFields);
+    
     const isValid = await trigger(stepFields);
+    console.log("✅ Validation result:", isValid);
     
     if (isValid) {
       setIsLoading(true);
+      console.log("⏳ Starting navigation to next step");
       
       // Trigger Google Ads conversion tracking only on first step
       if (currentStep === 1 && typeof window !== 'undefined' && (window as any).gtag_report_conversion) {
@@ -265,11 +280,13 @@ export const MultiStepForm = () => {
         );
         
         setTimeout(() => {
+          console.log("🎯 Moving to step:", currentStep + 1);
           setCurrentStep(prev => prev + 1);
           setIsLoading(false);
         }, 300); // Small delay for better UX
       }
     } else {
+      console.log("❌ Validation failed, errors:", form.formState.errors);
       // Shake animation for errors
       toast.error("Veuillez corriger les erreurs avant de continuer");
     }
@@ -285,16 +302,16 @@ export const MultiStepForm = () => {
     }
   };
 
-  // Swipe navigation
-  const swipeRef = useSwipeNavigation({
-    onSwipeLeft: () => {
-      if (currentStep < STEPS.length) handleNext();
-    },
-    onSwipeRight: () => {
-      if (currentStep > 1) handlePrevious();
-    },
-    disabled: isSubmitting || isLoading
-  });
+  // TEMPORARILY DISABLED - Swipe navigation (might be causing freezing)
+  // const swipeRef = useSwipeNavigation({
+  //   onSwipeLeft: () => {
+  //     if (currentStep < STEPS.length) handleNext();
+  //   },
+  //   onSwipeRight: () => {
+  //     if (currentStep > 1) handlePrevious();
+  //   },
+  //   disabled: isSubmitting || isLoading
+  // });
 
   const handleSubmit = async (data: FormData) => {
     try {
@@ -369,14 +386,26 @@ export const MultiStepForm = () => {
 
   return (
     <div className="min-h-screen bg-background mobile-content-padding">
-      {/* Enhanced Mobile Progress Bar */}
+      {/* Simple Mobile Progress Bar - No Animations */}
       <div className="md:hidden sticky top-0 z-40 bg-white/95 backdrop-blur-lg border-b shadow-sm mobile-nav-safe">
         <div className="px-4 py-4">
-          <MobileFormProgressIndicator 
-            steps={STEPS}
-            currentStep={currentStep}
-            progress={progress}
-          />
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-sm font-medium text-foreground">
+              Étape {currentStep} sur {STEPS.length}
+            </span>
+            <span className="text-xs text-muted-foreground">
+              {Math.round(progress)}% complété
+            </span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div 
+              className="bg-primary h-2 rounded-full transition-all duration-300" 
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
+          <p className="text-xs text-muted-foreground mt-2 text-center">
+            {STEPS[currentStep - 1]?.title}
+          </p>
         </div>
       </div>
 
@@ -422,25 +451,18 @@ export const MultiStepForm = () => {
               </p>
             </div>
 
-            {/* Step Content with Swipe Support */}
+            {/* Step Content - Simplified */}
             <Form {...form}>
               <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 md:space-y-8">
-                <div 
-                  ref={swipeRef}
-                  className="min-h-[400px] px-2 md:px-0 relative overflow-hidden"
-                >
+                <div className="min-h-[400px] px-2 md:px-0 relative overflow-hidden">
                   <div className={`transition-opacity duration-300 ${isLoading ? 'opacity-50' : 'opacity-100'}`}>
                     {getCurrentComponent()}
                   </div>
                   
-                  {/* Loading overlay */}
+                  {/* Simple loading overlay */}
                   {isLoading && (
                     <div className="absolute inset-0 flex items-center justify-center bg-white/50 backdrop-blur-sm">
-                      <div className="mobile-loading-dots text-primary">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                      </div>
+                      <div className="text-primary text-sm">Chargement...</div>
                     </div>
                   )}
                 </div>

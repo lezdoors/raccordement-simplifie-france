@@ -59,6 +59,14 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
 
   return (
     <div className="space-y-6 md:space-y-8">
+      {/* DEBUG INFO - TEMPORARY */}
+      <div className="md:hidden bg-yellow-100 p-3 rounded text-xs">
+        <div>🔍 Debug Info:</div>
+        <div>Civilité: {form.watch("civilite") || "Non sélectionné"}</div>
+        <div>Type client: {form.watch("clientType") || "Non sélectionné"}</div>
+        <div>Errors: {JSON.stringify(form.formState.errors)}</div>
+      </div>
+      
       <div className="text-center space-y-3">
         <h2 className="text-xl md:text-2xl font-semibold text-foreground leading-relaxed">
           Informations personnelles
@@ -84,19 +92,40 @@ export const StepPersonalInfo = ({ form }: StepPersonalInfoProps) => {
                 >
                   <div className="relative">
                     <RadioGroupItem value="monsieur" id="monsieur" className="peer sr-only" />
-                    <Label htmlFor="monsieur" className={`peer-checked:selected border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 w-full text-center font-medium block ${field.value === "monsieur" ? "selected" : ""}`}>
+                    <Label 
+                      htmlFor="monsieur" 
+                      className={`peer-checked:selected border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 w-full text-center font-medium block mobile-touch-target ${field.value === "monsieur" ? "selected" : ""}`}
+                      onClick={() => {
+                        console.log("🎯 Monsieur clicked!");
+                        field.onChange("monsieur");
+                      }}
+                    >
                       Monsieur
                     </Label>
                   </div>
                   <div className="relative">
                     <RadioGroupItem value="madame" id="madame" className="peer sr-only" />
-                    <Label htmlFor="madame" className={`peer-checked:selected border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 w-full text-center font-medium block ${field.value === "madame" ? "selected" : ""}`}>
+                    <Label 
+                      htmlFor="madame" 
+                      className={`peer-checked:selected border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 w-full text-center font-medium block mobile-touch-target ${field.value === "madame" ? "selected" : ""}`}
+                      onClick={() => {
+                        console.log("🎯 Madame clicked!");
+                        field.onChange("madame");
+                      }}
+                    >
                       Madame
                     </Label>
                   </div>
                   <div className="relative">
                     <RadioGroupItem value="autre" id="autre" className="peer sr-only" />
-                    <Label htmlFor="autre" className={`peer-checked:selected border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 w-full text-center font-medium block ${field.value === "autre" ? "selected" : ""}`}>
+                    <Label 
+                      htmlFor="autre" 
+                      className={`peer-checked:selected border-2 border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 w-full text-center font-medium block mobile-touch-target ${field.value === "autre" ? "selected" : ""}`}
+                      onClick={() => {
+                        console.log("🎯 Autre clicked!");
+                        field.onChange("autre");
+                      }}
+                    >
                       Autre
                     </Label>
                   </div>
