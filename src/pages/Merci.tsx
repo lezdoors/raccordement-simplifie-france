@@ -6,13 +6,16 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import { toast } from "sonner";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 const Merci = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [paymentVerified, setPaymentVerified] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [hasTrackedPurchase, setHasTrackedPurchase] = useState(false);
   const sessionId = searchParams.get('session_id');
+  const { trackPurchaseComplete } = useAnalytics();
 
   // Verify payment on page load
   useEffect(() => {
@@ -47,15 +50,14 @@ const Merci = () => {
     verifyPayment();
   }, [sessionId]);
 
-  // Track purchase conversion on page load
+  // Track Google Ads "Purchase Complete" conversion (only once per session)
   useEffect(() => {
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'conversion', {
-        'send_to': 'AW-16698052873/IFUxCJLHtMUaEImioJo-',
-        'transaction_id': sessionId || Math.random().toString(36).substr(2, 9).toUpperCase()
-      });
+    if (!hasTrackedPurchase && sessionId) {
+      const orderId = sessionId || Math.random().toString(36).substr(2, 9).toUpperCase();
+      trackPurchaseComplete(orderId);
+      setHasTrackedPurchase(true);
     }
-  }, [sessionId]);
+  }, [sessionId, hasTrackedPurchase, trackPurchaseComplete]);
 
   if (loading) {
     return (

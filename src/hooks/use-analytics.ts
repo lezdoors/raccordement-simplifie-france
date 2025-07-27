@@ -14,6 +14,10 @@ interface UseAnalyticsReturn {
   trackFormSubmission: (formName: string, success: boolean) => void;
   trackPhoneCall: () => void;
   trackDownload: (fileName: string) => void;
+  trackGoogleAdsConversion: (conversionId: string, transactionId?: string) => void;
+  trackFormStart: () => void;
+  trackFormSubmit: () => void;
+  trackPurchaseComplete: (orderId?: string) => void;
 }
 
 export const useAnalytics = (): UseAnalyticsReturn => {
@@ -84,12 +88,42 @@ export const useAnalytics = (): UseAnalyticsReturn => {
     });
   }, [track]);
 
+  const trackGoogleAdsConversion = useCallback((conversionId: string, transactionId?: string) => {
+    if (typeof window !== 'undefined' && window.gtag) {
+      const conversionData: any = {
+        'send_to': `AW-16683623620/${conversionId}`
+      };
+      
+      if (transactionId) {
+        conversionData.transaction_id = transactionId;
+      }
+      
+      window.gtag('event', 'conversion', conversionData);
+    }
+  }, []);
+
+  const trackFormStart = useCallback(() => {
+    trackGoogleAdsConversion('FORMSTART_ID');
+  }, [trackGoogleAdsConversion]);
+
+  const trackFormSubmit = useCallback(() => {
+    trackGoogleAdsConversion('FORMSUBMIT_ID');
+  }, [trackGoogleAdsConversion]);
+
+  const trackPurchaseComplete = useCallback((orderId?: string) => {
+    trackGoogleAdsConversion('PURCHASE_ID', orderId);
+  }, [trackGoogleAdsConversion]);
+
   return {
     track,
     trackPageView,
     trackFormSubmission,
     trackPhoneCall,
-    trackDownload
+    trackDownload,
+    trackGoogleAdsConversion,
+    trackFormStart,
+    trackFormSubmit,
+    trackPurchaseComplete
   };
 };
 

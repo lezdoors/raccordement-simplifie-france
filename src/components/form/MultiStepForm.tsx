@@ -9,6 +9,7 @@ import { Form } from "@/components/ui/form";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useAnalytics } from "@/hooks/use-analytics";
 // import { useSwipeNavigation } from "@/hooks/use-swipe-navigation";
 // import { MobileFormProgressIndicator } from "@/components/mobile/MobileFormProgressIndicator";
 
@@ -105,7 +106,9 @@ export const MultiStepForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [savedData, setSavedData] = useState<Partial<FormData> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasTrackedFormStart, setHasTrackedFormStart] = useState(false);
   const isMobile = useIsMobile();
+  const { trackFormStart, trackFormSubmit } = useAnalytics();
   
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -260,9 +263,10 @@ export const MultiStepForm = () => {
     if (isValid) {
       setIsLoading(true);
       
-      // Trigger Google Ads conversion tracking only on first step
-      if (currentStep === 1 && typeof window !== 'undefined' && (window as any).gtag_report_conversion) {
-        (window as any).gtag_report_conversion();
+      // Track Google Ads "Form Started" conversion only after step 1 completion (once per session)
+      if (currentStep === 1 && !hasTrackedFormStart) {
+        trackFormStart();
+        setHasTrackedFormStart(true);
       }
       
       if (currentStep < STEPS.length) {
@@ -328,6 +332,9 @@ export const MultiStepForm = () => {
       await autoSaveToSupabase();
       
       console.log("📤 Creating payment session...");
+      
+      // Track Google Ads "Form Submit" conversion before Stripe redirect
+      trackFormSubmit();
       
       // Create payment session and redirect directly to Stripe
       const { data: paymentData, error } = await supabase.functions.invoke('create-payment-session', {
