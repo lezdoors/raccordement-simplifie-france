@@ -11,6 +11,9 @@ import { BarChart3, Users, MessageSquare, FileText, Search, AlertCircle, Bell, E
 import { useNavigate } from "react-router-dom";
 import { useCRMData } from "@/hooks/use-crm-data";
 import { useDataExport } from "@/hooks/use-data-export";
+import { CRMStatsCards } from './CRMStatsCards';
+import { CRMLeadActions } from './CRMLeadActions';
+import { CRMFilters } from './CRMFilters';
 
 interface CRMDashboardProps {
   leads: any[];
@@ -23,6 +26,7 @@ interface CRMDashboardProps {
 const CRMDashboard = ({ leads, stats, onStatusUpdate, onAssignLead, onAddNote }: CRMDashboardProps) => {
   const navigate = useNavigate();
   const { exportLeads, exporting } = useDataExport();
+  const { refetch } = useCRMData();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [formTypeFilter, setFormTypeFilter] = useState("all");
@@ -118,51 +122,7 @@ const CRMDashboard = ({ leads, stats, onStatusUpdate, onAssignLead, onAddNote }:
   return (
     <div className="space-y-6">
       {/* Enhanced Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Leads</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.totalLeads}</div>
-            <p className="text-xs text-muted-foreground">+{stats.weeklyLeads} cette semaine</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Leads Payés</CardTitle>
-            <TrendingUp className="h-4 w-4 text-green-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">{stats.totalFullSubmissions}</div>
-            <p className="text-xs text-muted-foreground">Formulaires complets</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">À Relancer</CardTitle>
-            <AlertCircle className="h-4 w-4 text-orange-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-orange-600">{stats.totalPartialSubmissions}</div>
-            <p className="text-xs text-muted-foreground">Soumissions partielles</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Rappels</CardTitle>
-            <Phone className="h-4 w-4 text-purple-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-purple-600">{stats.totalCallbackRequests}</div>
-            <p className="text-xs text-muted-foreground">Demandes de rappel</p>
-          </CardContent>
-        </Card>
-      </div>
+      <CRMStatsCards stats={stats} leads={leads} />
 
       {/* Enhanced Filters */}
       <Card>
@@ -353,27 +313,16 @@ const CRMDashboard = ({ leads, stats, onStatusUpdate, onAssignLead, onAddNote }:
                               <UserPlus className="w-4 h-4" />
                             </Button>
                           </DialogTrigger>
-                          <DialogContent>
+                          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
                             <DialogHeader>
-                              <DialogTitle>Actions rapides</DialogTitle>
+                              <DialogTitle>Gestion du Lead</DialogTitle>
                             </DialogHeader>
-                            <div className="space-y-4">
-                              <div className="space-y-2">
-                                <label className="text-sm font-medium">Changer le statut</label>
-                                <Select onValueChange={(value) => onStatusUpdate(lead.id, value)}>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Nouveau statut" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="nouveau">Nouveau</SelectItem>
-                                    <SelectItem value="en_cours">En cours</SelectItem>
-                                    <SelectItem value="valide">Validé</SelectItem>
-                                    <SelectItem value="termine">Terminé</SelectItem>
-                                    <SelectItem value="annule">Annulé</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </div>
-                            </div>
+                            <CRMLeadActions 
+                              lead={lead}
+                              onStatusUpdate={onStatusUpdate}
+                              onAssignLead={onAssignLead}
+                              onAddNote={onAddNote}
+                            />
                           </DialogContent>
                         </Dialog>
                       </div>
