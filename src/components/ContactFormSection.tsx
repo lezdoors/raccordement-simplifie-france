@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const contactSchema = z.object({
   firstName: z.string().min(1, "Le prénom est requis"),
@@ -45,20 +46,44 @@ const ContactFormSection = () => {
 
   const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true);
+    
+    // Send to Supabase
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Insert message to Supabase
+      const { error: messageError } = await supabase
+        .from('messages')
+        .insert({
+          name: `${data.firstName} ${data.lastName}`,
+          email: data.email,
+          phone: data.phone,
+          message: data.message,
+          request_type: 'contact'
+        });
+
+      if (messageError) throw messageError;
+
+      // Send notification to team
+      await supabase.functions.invoke('notify-team-message', {
+        body: {
+          name: `${data.firstName} ${data.lastName}`,
+          email: data.email,
+          phone: data.phone,
+          message: data.message,
+          request_type: 'contact'
+        }
+      });
       
-      console.log("Contact form submitted:", data);
       toast({
         title: "Message envoyé !",
-        description: "Nous vous recontacterons dans les plus brefs délais.",
+        description: "Nous vous répondrons dans les plus brefs délais.",
       });
+      
       form.reset();
     } catch (error) {
+      console.error('Error submitting contact form:', error);
       toast({
         title: "Erreur",
-        description: "Une erreur est survenue. Veuillez réessayer.",
+        description: "Une erreur est survenue lors de l'envoi du message.",
         variant: "destructive",
       });
     } finally {

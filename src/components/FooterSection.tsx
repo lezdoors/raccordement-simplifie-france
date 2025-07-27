@@ -48,6 +48,22 @@ const FooterSection = () => {
         });
       
       if (error) throw error;
+
+      // Send notification to team
+      try {
+        await supabase.functions.invoke('notify-team-message', {
+          body: {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            message: "Demande de rappel depuis le footer",
+            request_type: 'callback'
+          }
+        });
+      } catch (notificationError) {
+        console.error('Error sending notification:', notificationError);
+        // Don't throw - the message was saved successfully
+      }
       
       setSubmitted(true);
       setFormData({
@@ -55,6 +71,7 @@ const FooterSection = () => {
         phone: "",
         email: ""
       });
+      toast.success("Message envoyé ! Un conseiller vous contactera rapidement.");
     } catch (error) {
       console.error('Error submitting footer form:', error);
       toast.error("Une erreur est survenue lors de l'envoi de la demande.");

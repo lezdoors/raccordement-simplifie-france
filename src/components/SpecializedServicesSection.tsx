@@ -2,8 +2,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Building2, Factory, Home, Zap } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { useState } from "react";
 
 const SpecializedServicesSection = () => {
+  const navigate = useNavigate();
+  const [isContactingTeam, setIsContactingTeam] = useState(false);
   const services = [
     {
       category: "Services Particuliers",
@@ -71,7 +77,11 @@ const SpecializedServicesSection = () => {
                     </li>
                   ))}
                 </ul>
-                <Button variant="outline" className="w-full group-hover:border-primary group-hover:text-primary transition-colors">
+                <Button 
+                  variant="outline" 
+                  className="w-full group-hover:border-primary group-hover:text-primary transition-colors"
+                  onClick={() => navigate('/raccordement-enedis')}
+                >
                   Voir tous les services
                 </Button>
               </CardContent>
@@ -96,8 +106,46 @@ const SpecializedServicesSection = () => {
               <div className="flex items-center gap-2 text-lg font-semibold text-primary">
                 <span>Questions fréquentes</span>
               </div>
-              <Button variant="outline">
-                Contact
+              <Button 
+                variant="outline"
+                disabled={isContactingTeam}
+                onClick={async () => {
+                  setIsContactingTeam(true);
+                  try {
+                    // Insert message to Supabase
+                    const { error: messageError } = await supabase
+                      .from('messages')
+                      .insert({
+                        name: 'Contact Rapide - Services Spécialisés',
+                        email: 'contact@raccordement-connect.com',
+                        phone: '',
+                        message: 'Demande de contact depuis la section Services Spécialisés',
+                        request_type: 'contact'
+                      });
+
+                    if (messageError) throw messageError;
+
+                    // Send notification to team
+                    await supabase.functions.invoke('notify-team-message', {
+                      body: {
+                        name: 'Contact Rapide - Services Spécialisés',
+                        email: 'contact@raccordement-connect.com',
+                        message: 'Demande de contact depuis la section Services Spécialisés',
+                        request_type: 'contact'
+                      }
+                    });
+
+                    toast.success("Message envoyé ! Notre équipe vous contactera rapidement.");
+                    navigate('/contact');
+                  } catch (error) {
+                    console.error('Error:', error);
+                    toast.error("Erreur lors de l'envoi. Veuillez réessayer.");
+                  } finally {
+                    setIsContactingTeam(false);
+                  }
+                }}
+              >
+                {isContactingTeam ? "Envoi..." : "Contact"}
               </Button>
             </div>
           </div>

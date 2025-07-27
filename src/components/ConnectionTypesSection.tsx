@@ -2,8 +2,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Home, Building, Zap, Wrench } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const ConnectionTypesSection = () => {
+  const navigate = useNavigate();
   const connectionTypes = [
     {
       icon: Home,
@@ -90,7 +92,11 @@ const ConnectionTypesSection = () => {
                     </li>
                   ))}
                 </ul>
-                <Button variant="outline" className="w-full group-hover:border-primary group-hover:text-primary transition-colors">
+                <Button 
+                  variant="outline" 
+                  className="w-full group-hover:border-primary group-hover:text-primary transition-colors"
+                  onClick={() => navigate('/raccordement-enedis')}
+                >
                   En savoir plus
                 </Button>
               </CardContent>
@@ -106,7 +112,11 @@ const ConnectionTypesSection = () => {
             <p className="text-muted-foreground mb-6">
               Interface claire et démarches administratives simplifiées.
             </p>
-            <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
+            <Button 
+              size="lg" 
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
+              onClick={() => navigate('/raccordement-enedis')}
+            >
               Accéder au formulaire →
             </Button>
           </div>
