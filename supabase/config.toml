@@ -14,7 +14,7 @@ site_url = "http://localhost:3000"
 additional_redirect_urls = ["https://localhost:3000"]
 jwt_expiry = 3600
 refresh_token_rotation_enabled = true
-secure_password_change_enabled = false
+secure_password_change_enabled = true
 enable_anonymous_users = false
 
 [functions.notify-admin]
@@ -24,4 +24,7 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.verify-payment]
+verify_jwt = false
+
+[functions.rate-limited-form-submit]
 verify_jwt = false
