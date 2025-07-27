@@ -37,6 +37,7 @@ import PaymentCancel from "./pages/PaymentCancel";
 import Protected from "./pages/Protected";
 import AuthTest from "./pages/AuthTest";
 import { MobileOptimizations } from "./components/mobile/MobileOptimizations";
+import { MobilePerformanceProvider } from "./components/mobile/MobilePerformanceProvider";
 
 // Simple loading component without animation
 const PageLoader = () => (
@@ -96,15 +97,17 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <AccessibilityProvider>
       <TooltipProvider>
-        <AdminProvider>
-          <ServiceWorker />
-          <MobileOptimizations />
-          <Toaster />
-          <Sonner />
-          <ErrorBoundary>
-            <AppContent />
-          </ErrorBoundary>
-        </AdminProvider>
+        <MobilePerformanceProvider>
+          <AdminProvider>
+            <ServiceWorker />
+            <MobileOptimizations />
+            <Toaster />
+            <Sonner />
+            <ErrorBoundary>
+              <AppContent />
+            </ErrorBoundary>
+          </AdminProvider>
+        </MobilePerformanceProvider>
       </TooltipProvider>
     </AccessibilityProvider>
   </QueryClientProvider>

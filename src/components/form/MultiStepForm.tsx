@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
+import { useIsMobile } from "@/hooks/use-mobile";
 // import { useSwipeNavigation } from "@/hooks/use-swipe-navigation";
 // import { MobileFormProgressIndicator } from "@/components/mobile/MobileFormProgressIndicator";
 
@@ -104,6 +105,7 @@ export const MultiStepForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [savedData, setSavedData] = useState<Partial<FormData> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const isMobile = useIsMobile();
   
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
