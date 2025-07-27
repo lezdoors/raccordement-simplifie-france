@@ -195,7 +195,7 @@ export const MultiStepForm = () => {
         commentaires: null,
         consent_accepted: data.consent || false,
         form_step: currentStep,
-        amount: 29900, // €299 in cents - CORRECTED AMOUNT
+        amount: 12980, // €129.80 in cents - CORRECTED PRICE
         payment_status: "pending",
         updated_at: new Date().toISOString()
       };
@@ -324,7 +324,7 @@ export const MultiStepForm = () => {
       // Create payment session and redirect directly to Stripe
       const { data: paymentData, error } = await supabase.functions.invoke('create-payment-session', {
         body: { 
-          amount: 29900, // €299 in cents - CORRECTED AMOUNT
+          amount: 12980, // €129.80 in cents - CORRECTED PRICE
           formData: data
         }
       });
