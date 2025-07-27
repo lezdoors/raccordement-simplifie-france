@@ -66,12 +66,15 @@ const AppContent = () => {
         <Route path="/mentions-legales" element={<MentionsLegales />} />
         <Route path="/confidentialite" element={<Confidentialite />} />
         <Route path="/maison-neuve" element={<MaisonNeuve />} />
+        <Route path="/raccordement-maison-neuve" element={<Navigate to="/maison-neuve" replace />} />
         <Route path="/photovoltaique" element={<Photovoltaique />} />
+        <Route path="/raccordement-photovoltaique" element={<Navigate to="/photovoltaique" replace />} />
         <Route path="/modification-branchement" element={<ModificationBranchement />} />
         <Route path="/raccordement-industriel" element={<RaccordementIndustriel />} />
         <Route path="/raccordement-chantier" element={<RaccordementChantier />} />
         <Route path="/service-express" element={<ServiceExpress />} />
         <Route path="/estimation" element={<Estimation />} />
+        <Route path="/estimation-couts" element={<Navigate to="/estimation" replace />} />
         <Route path="/cgu" element={<CGU />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/payment-cancel" element={<PaymentCancel />} />
