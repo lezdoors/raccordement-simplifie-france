@@ -18,6 +18,7 @@ import {
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import CallbackRequestModal from "./CallbackRequestModal";
 
 const contactSchema = z.object({
   firstName: z.string().min(1, "Le prénom est requis"),
@@ -31,6 +32,7 @@ type ContactFormData = z.infer<typeof contactSchema>;
 
 const ContactFormSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showCallbackModal, setShowCallbackModal] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<ContactFormData>({
@@ -249,7 +251,11 @@ const ContactFormSection = () => {
                 <p className="text-muted-foreground mb-6">
                   Laissez-nous vos coordonnées et nous vous rappelons dans les plus brefs délais.
                 </p>
-                <Button className="w-full bg-primary hover:bg-primary/90" size="lg">
+                <Button 
+                  className="w-full bg-primary hover:bg-primary/90" 
+                  size="lg"
+                  onClick={() => setShowCallbackModal(true)}
+                >
                   Demander un rappel
                 </Button>
               </CardContent>
@@ -282,6 +288,11 @@ const ContactFormSection = () => {
           </div>
         </div>
       </div>
+
+      <CallbackRequestModal 
+        open={showCallbackModal} 
+        onOpenChange={setShowCallbackModal} 
+      />
     </section>
   );
 };

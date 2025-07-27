@@ -35,6 +35,7 @@ interface Lead {
 interface CRMStats {
   totalLeads: number;
   totalQuickContacts: number;
+  totalCallbackRequests: number;
   totalPartialSubmissions: number;
   totalFullSubmissions: number;
   weeklyLeads: number;
@@ -47,6 +48,7 @@ export const useCRMData = () => {
   const [stats, setStats] = useState<CRMStats>({
     totalLeads: 0,
     totalQuickContacts: 0,
+    totalCallbackRequests: 0,
     totalPartialSubmissions: 0,
     totalFullSubmissions: 0,
     weeklyLeads: 0,
@@ -109,12 +111,14 @@ export const useCRMData = () => {
 
     // Calculate stats by form type
     const quickContacts = leadsData.filter(l => l.form_type === 'quick').length;
+    const callbackRequests = leadsData.filter(l => l.form_type === 'callback').length;
     const partialSubmissions = leadsData.filter(l => l.form_type === 'step1').length;
     const fullSubmissions = leadsData.filter(l => l.form_type === 'full').length;
 
     setStats({
       totalLeads: leadsData.length,
       totalQuickContacts: quickContacts,
+      totalCallbackRequests: callbackRequests,
       totalPartialSubmissions: partialSubmissions,
       totalFullSubmissions: fullSubmissions,
       weeklyLeads,

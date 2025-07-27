@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { BarChart3, Users, MessageSquare, FileText, LogOut, Search, AlertCircle, Bell, Eye } from "lucide-react";
+import { BarChart3, Users, MessageSquare, FileText, LogOut, Search, AlertCircle, Bell, Eye, Phone } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAdmin } from "@/contexts/AdminContext";
 import { useLeadNotifications } from "@/hooks/use-lead-notifications";
@@ -635,6 +635,17 @@ L'équipe Raccordement Connect`;
                   <CardContent>
                     <div className="text-2xl font-bold text-orange-600">{stats.totalPartialSubmissions}</div>
                     <p className="text-xs text-muted-foreground">Étape 1 du formulaire</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Demandes de rappel</CardTitle>
+                    <Phone className="h-4 w-4 text-purple-600" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-purple-600">{stats.totalCallbackRequests}</div>
+                    <p className="text-xs text-muted-foreground">Rappels demandés</p>
                   </CardContent>
                 </Card>
 
