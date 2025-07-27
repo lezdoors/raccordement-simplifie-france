@@ -175,28 +175,29 @@ export const MultiStepForm = () => {
         .maybeSingle();
 
       const submissionData = {
-        civilite: data.civilite,
+        civilite: data.civilite || '',
         type_client: data.clientType,
         nom: data.lastName,
         prenom: data.firstName,
         email: data.email,
         telephone: data.phone,
         raison_sociale: data.companyName || null,
-        siren: data.siret || null,
-        nom_collectivite: data.collectivityName || null,
-        code_postal: data.postalCode,
-        ville: data.city,
-        type_raccordement: data.connectionType,
-        type_projet: data.projectType,
-        type_alimentation: data.powerType,
+        siren: data.siret || data.collectivitySiren || null,
+        code_postal: data.postalCode || '',
+        ville: data.city || '',
+        type_raccordement: data.connectionType || null,
+        type_projet: data.projectType || null,
+        type_alimentation: data.powerType || null,
         puissance: data.powerDemanded || null,
-        adresse_chantier: data.workStreet ? `${data.workStreet}, ${data.postalCode} ${data.city}` : `${data.postalCode} ${data.city}`,
+        adresse_chantier: data.workStreet ? `${data.workStreet}, ${data.postalCode || ''} ${data.city || ''}` : `${data.postalCode || ''} ${data.city || ''}`,
         etat_projet: data.projectStatus || 'nouveau',
         delai_souhaite: data.desiredTimeline || null,
         commentaires: null,
         consent_accepted: data.consent || false,
         form_step: currentStep,
-        payment_status: "pending"
+        amount: 29900, // €299 in cents - CORRECTED AMOUNT
+        payment_status: "pending",
+        updated_at: new Date().toISOString()
       };
 
       if (existingRecord) {
@@ -300,34 +301,68 @@ export const MultiStepForm = () => {
     try {
       setIsSubmitting(true);
       
+      console.log("🚀 Starting form submission...", data);
+      
+      // Validate all required fields are present
+      if (!data.consent) {
+        toast.error("Vous devez accepter les conditions pour continuer");
+        setIsSubmitting(false);
+        return;
+      }
+      
+      if (!data.email || !data.firstName || !data.lastName) {
+        toast.error("Les informations personnelles sont incomplètes");
+        setIsSubmitting(false);
+        return;
+      }
+      
       // First save the data to Supabase
       await autoSaveToSupabase();
+      
+      console.log("📤 Creating payment session...");
       
       // Create payment session and redirect directly to Stripe
       const { data: paymentData, error } = await supabase.functions.invoke('create-payment-session', {
         body: { 
-          amount: 12900, // €129 in cents
+          amount: 29900, // €299 in cents - CORRECTED AMOUNT
           formData: data
         }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error("❌ Payment session error:", error);
+        throw new Error(`Erreur de paiement: ${error.message || 'Problème de connexion'}`);
+      }
+      
+      if (!paymentData?.url) {
+        throw new Error("URL de paiement non reçue");
+      }
+
+      console.log("✅ Payment session created, redirecting to Stripe...");
 
       // Save form data one more time with stripe session
       localStorage.setItem('form-submission-data', JSON.stringify({
         ...data,
-        stripeSessionId: paymentData.sessionId
+        stripeSessionId: paymentData.sessionId,
+        timestamp: new Date().toISOString()
       }));
       
       // Clear the form data from localStorage since we're redirecting
       localStorage.removeItem('raccordement-form-data');
       
-      // Redirect directly to Stripe checkout
-      window.location.href = paymentData.url;
+      // Show success message briefly before redirect
+      toast.success("Redirection vers le paiement...");
+      
+      // Small delay to ensure data is saved
+      setTimeout(() => {
+        window.location.href = paymentData.url;
+      }, 500);
       
     } catch (error) {
-      console.error("Error submitting form:", error);
-      toast.error("Une erreur s'est produite lors de la création du paiement. Veuillez réessayer.");
+      console.error("❌ Form submission error:", error);
+      
+      const errorMessage = error instanceof Error ? error.message : "Une erreur inattendue s'est produite";
+      toast.error(errorMessage);
       setIsSubmitting(false);
     }
   };
