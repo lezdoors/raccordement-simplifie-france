@@ -26,7 +26,6 @@ const Admin = () => {
   const { newLeadsCount, clearNotifications } = useLeadNotifications();
   const { 
     leads, 
-    messages, 
     stats, 
     loading: crmLoading, 
     error: crmError,
@@ -325,19 +324,19 @@ L'équipe Raccordement Connect`;
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Messages</CardTitle>
+                <CardTitle className="text-sm font-medium">Contacts rapides</CardTitle>
                 <MessageSquare className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{stats.totalMessages}</div>
+                <div className="text-2xl font-bold">{stats.totalQuickContacts}</div>
               </CardContent>
             </Card>
           </div>
 
           <Tabs defaultValue="leads" className="space-y-6">
             <TabsList className={`grid w-full ${adminUser?.can_manage_users ? 'grid-cols-3' : 'grid-cols-2'} mb-6`}>
-              <TabsTrigger value="leads" className="text-sm sm:text-base">Dossiers ({stats.totalLeads})</TabsTrigger>
-              <TabsTrigger value="messages" className="text-sm sm:text-base">Messages ({stats.totalMessages})</TabsTrigger>
+              <TabsTrigger value="leads" className="text-sm sm:text-base">Tous les Leads ({stats.totalLeads})</TabsTrigger>
+              <TabsTrigger value="summary" className="text-sm sm:text-base">Résumé par Type</TabsTrigger>
               {adminUser?.can_manage_users && (
                 <TabsTrigger value="users" className="text-sm sm:text-base">Utilisateurs</TabsTrigger>
               )}
@@ -614,16 +613,56 @@ L'équipe Raccordement Connect`;
               </Card>
             </TabsContent>
 
-            <TabsContent value="messages" className="space-y-6">
+            <TabsContent value="summary" className="space-y-6">
+              {/* Lead Statistics by Form Type */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Formulaires complets</CardTitle>
+                    <FileText className="h-4 w-4 text-green-600" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-green-600">{stats.totalFullSubmissions}</div>
+                    <p className="text-xs text-muted-foreground">Devis payés et validés</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Soumissions partielles</CardTitle>
+                    <Users className="h-4 w-4 text-orange-600" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-orange-600">{stats.totalPartialSubmissions}</div>
+                    <p className="text-xs text-muted-foreground">Étape 1 du formulaire</p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Contacts rapides</CardTitle>
+                    <MessageSquare className="h-4 w-4 text-blue-600" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-blue-600">{stats.totalQuickContacts}</div>
+                    <p className="text-xs text-muted-foreground">Formulaire de contact</p>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Quick Contact Leads */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Messages de Contact</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <MessageSquare className="w-5 h-5 text-blue-600" />
+                    Contacts Rapides ({leads.filter(l => l.form_type === 'quick').length})
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {messages.length === 0 ? (
+                  {leads.filter(l => l.form_type === 'quick').length === 0 ? (
                     <div className="text-center py-8">
                       <MessageSquare className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-                      <p className="text-muted-foreground">Aucun message pour le moment.</p>
+                      <p className="text-muted-foreground">Aucun contact rapide pour le moment.</p>
                     </div>
                   ) : (
                     <Table>
@@ -631,28 +670,98 @@ L'équipe Raccordement Connect`;
                         <TableRow>
                           <TableHead>Nom</TableHead>
                           <TableHead>Contact</TableHead>
-                          <TableHead>Type</TableHead>
                           <TableHead>Message</TableHead>
+                          <TableHead>Statut</TableHead>
                           <TableHead>Date</TableHead>
+                          <TableHead>Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {messages.map((message) => (
-                          <TableRow key={message.id}>
-                            <TableCell className="font-medium">{message.name}</TableCell>
+                        {leads.filter(l => l.form_type === 'quick').map((lead) => (
+                          <TableRow key={lead.id}>
+                            <TableCell className="font-medium">{lead.prenom} {lead.nom}</TableCell>
                             <TableCell>
                               <div>
-                                <div className="text-sm">{message.email}</div>
-                                <div className="text-sm text-muted-foreground">{message.phone}</div>
+                                <div className="text-sm">{lead.email}</div>
+                                <div className="text-sm text-muted-foreground">{lead.telephone}</div>
                               </div>
                             </TableCell>
                             <TableCell>
-                              <Badge variant="outline">{message.request_type}</Badge>
+                              <div className="max-w-xs truncate">{lead.commentaires}</div>
                             </TableCell>
                             <TableCell>
-                              <div className="max-w-xs truncate">{message.message}</div>
+                              {getStatusBadge(lead.etat_projet)}
                             </TableCell>
-                            <TableCell>{formatDate(message.created_at)}</TableCell>
+                            <TableCell>{formatDate(lead.created_at)}</TableCell>
+                            <TableCell>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => navigate(`/admin/leads/${lead.id}`)}
+                              >
+                                Détails
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Partial Submissions */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Users className="w-5 h-5 text-orange-600" />
+                    Soumissions Partielles - À relancer ({leads.filter(l => l.form_type === 'step1').length})
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {leads.filter(l => l.form_type === 'step1').length === 0 ? (
+                    <div className="text-center py-8">
+                      <Users className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+                      <p className="text-muted-foreground">Aucune soumission partielle.</p>
+                    </div>
+                  ) : (
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Client</TableHead>
+                          <TableHead>Contact</TableHead>
+                          <TableHead>Type Client</TableHead>
+                          <TableHead>Statut</TableHead>
+                          <TableHead>Date</TableHead>
+                          <TableHead>Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {leads.filter(l => l.form_type === 'step1').map((lead) => (
+                          <TableRow key={lead.id}>
+                            <TableCell className="font-medium">{lead.prenom} {lead.nom}</TableCell>
+                            <TableCell>
+                              <div>
+                                <div className="text-sm">{lead.email}</div>
+                                <div className="text-sm text-muted-foreground">{lead.telephone}</div>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant="outline">{lead.type_client}</Badge>
+                            </TableCell>
+                            <TableCell>
+                              {getStatusBadge(lead.etat_projet)}
+                            </TableCell>
+                            <TableCell>{formatDate(lead.created_at)}</TableCell>
+                            <TableCell>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => navigate(`/admin/leads/${lead.id}`)}
+                              >
+                                Relancer
+                              </Button>
+                            </TableCell>
                           </TableRow>
                         ))}
                       </TableBody>

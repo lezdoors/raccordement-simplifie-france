@@ -197,6 +197,7 @@ export const MultiStepForm = () => {
         commentaires: null,
         consent_accepted: data.consent || false,
         form_step: currentStep,
+        form_type: currentStep === 1 ? 'step1' : 'full',
         amount: 12980, // €129.80 in cents - CORRECTED PRICE
         payment_status: "pending",
         updated_at: new Date().toISOString()
@@ -229,17 +230,22 @@ export const MultiStepForm = () => {
         }
       }
 
-      // Send partial notification email for step 1
-      if (currentStep === 1) {
+      // Send notification email for all step 1 submissions and full submissions
+      if (currentStep === 1 || currentStep === STEPS.length) {
         try {
-          await supabase.functions.invoke('notify-admin', {
-            body: { 
-              formData: data,
-              isPartial: true
+          await supabase.functions.invoke('notify-team-message', {
+            body: {
+              name: `${data.firstName} ${data.lastName}`,
+              email: data.email,
+              phone: data.phone,
+              message: currentStep === 1 ? 
+                `Demande partielle (Étape 1) - Type: ${data.clientType || 'Non spécifié'}, Raccordement: ${data.connectionType || 'Non spécifié'}` :
+                `Demande complète - Type: ${data.clientType}, Raccordement: ${data.connectionType}, Projet: ${data.projectType}`,
+              request_type: currentStep === 1 ? 'step1' : 'full'
             }
           });
         } catch (emailError) {
-          console.error("Partial email notification error:", emailError);
+          console.error("Email notification error:", emailError);
         }
       }
     } catch (error) {

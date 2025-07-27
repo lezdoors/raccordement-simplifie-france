@@ -47,20 +47,25 @@ const ContactFormSection = () => {
   const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true);
     
-    // Send to Supabase
+    // Save to unified leads table
     try {
-      // Insert message to Supabase
-      const { error: messageError } = await supabase
-        .from('messages')
+      // Insert to leads_raccordement table (unified lead management)
+      const { error: leadError } = await supabase
+        .from('leads_raccordement')
         .insert({
-          name: `${data.firstName} ${data.lastName}`,
+          nom: data.lastName,
+          prenom: data.firstName,
           email: data.email,
-          phone: data.phone,
-          message: data.message,
-          request_type: 'contact'
+          telephone: data.phone,
+          type_client: 'particulier', // Default for quick contact
+          commentaires: data.message,
+          form_type: 'quick',
+          etat_projet: 'nouveau',
+          consent_accepted: true, // Implicit consent for contact form
+          amount: 0 // No payment for quick contact
         });
 
-      if (messageError) throw messageError;
+      if (leadError) throw leadError;
 
       // Send notification to team
       await supabase.functions.invoke('notify-team-message', {

@@ -24,24 +24,19 @@ interface Lead {
   assigned_to_email: string;
   payment_status: string;
   amount: number;
+  form_type: string;
   created_at: string;
   updated_at: string;
   status: string;
 }
 
-interface Message {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  message: string;
-  request_type: string;
-  created_at: string;
-}
+// Message interface removed - all data now unified in Lead interface
 
 interface CRMStats {
   totalLeads: number;
-  totalMessages: number;
+  totalQuickContacts: number;
+  totalPartialSubmissions: number;
+  totalFullSubmissions: number;
   weeklyLeads: number;
   monthlyLeads: number;
 }
@@ -49,10 +44,11 @@ interface CRMStats {
 export const useCRMData = () => {
   const { user, adminUser } = useAdmin();
   const [leads, setLeads] = useState<Lead[]>([]);
-  const [messages, setMessages] = useState<Message[]>([]);
   const [stats, setStats] = useState<CRMStats>({
     totalLeads: 0,
-    totalMessages: 0,
+    totalQuickContacts: 0,
+    totalPartialSubmissions: 0,
+    totalFullSubmissions: 0,
     weeklyLeads: 0,
     monthlyLeads: 0,
   });
@@ -96,26 +92,9 @@ export const useCRMData = () => {
     }
   };
 
-  const fetchMessages = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('messages')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(50);
+  // No longer needed - all messages/contacts are now leads in the unified table
 
-      if (error) {
-        console.error('❌ Error fetching messages:', error);
-        return;
-      }
-
-      setMessages(data || []);
-    } catch (err) {
-      console.error('❌ Error fetching messages:', err);
-    }
-  };
-
-  const calculateStats = (leadsData: Lead[], messagesData: Message[]) => {
+  const calculateStats = (leadsData: Lead[]) => {
     const now = new Date();
     const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
     const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
@@ -128,9 +107,16 @@ export const useCRMData = () => {
       l => new Date(l.created_at) >= monthAgo
     ).length;
 
+    // Calculate stats by form type
+    const quickContacts = leadsData.filter(l => l.form_type === 'quick').length;
+    const partialSubmissions = leadsData.filter(l => l.form_type === 'step1').length;
+    const fullSubmissions = leadsData.filter(l => l.form_type === 'full').length;
+
     setStats({
       totalLeads: leadsData.length,
-      totalMessages: messagesData.length,
+      totalQuickContacts: quickContacts,
+      totalPartialSubmissions: partialSubmissions,
+      totalFullSubmissions: fullSubmissions,
       weeklyLeads,
       monthlyLeads,
     });
@@ -151,7 +137,7 @@ export const useCRMData = () => {
         role: adminUser?.role 
       });
 
-      await Promise.all([fetchLeads(), fetchMessages()]);
+      await fetchLeads();
     } catch (err) {
       console.error('💥 Critical error fetching CRM data:', err);
       setError('Erreur lors du chargement des données du CRM');
@@ -243,8 +229,8 @@ export const useCRMData = () => {
 
   // Calculate stats when data changes
   useEffect(() => {
-    calculateStats(leads, messages);
-  }, [leads, messages]);
+    calculateStats(leads);
+  }, [leads]);
 
   // Fetch data when admin user is available
   useEffect(() => {
@@ -255,7 +241,6 @@ export const useCRMData = () => {
 
   return {
     leads,
-    messages,
     stats,
     loading,
     error,

@@ -197,6 +197,7 @@ export type Database = {
           email: string
           etat_projet: string | null
           form_step: number | null
+          form_type: string
           id: string
           nom: string
           numero_pdl: string | null
@@ -231,6 +232,7 @@ export type Database = {
           email: string
           etat_projet?: string | null
           form_step?: number | null
+          form_type?: string
           id?: string
           nom: string
           numero_pdl?: string | null
@@ -265,6 +267,7 @@ export type Database = {
           email?: string
           etat_projet?: string | null
           form_step?: number | null
+          form_type?: string
           id?: string
           nom?: string
           numero_pdl?: string | null
