@@ -425,11 +425,47 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limits: {
+        Row: {
+          action: string
+          count: number
+          created_at: string
+          id: string
+          identifier: string
+          window_start: string
+        }
+        Insert: {
+          action: string
+          count?: number
+          created_at?: string
+          id?: string
+          identifier: string
+          window_start?: string
+        }
+        Update: {
+          action?: string
+          count?: number
+          created_at?: string
+          id?: string
+          identifier?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      check_rate_limit: {
+        Args: {
+          p_identifier: string
+          p_action: string
+          p_max_requests?: number
+          p_window_minutes?: number
+        }
+        Returns: boolean
+      }
       get_security_headers: {
         Args: Record<PropertyKey, never>
         Returns: Json
@@ -439,6 +475,10 @@ export type Database = {
         Returns: boolean
       }
       is_current_user_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      is_session_valid: {
         Args: Record<PropertyKey, never>
         Returns: boolean
       }
