@@ -9,8 +9,8 @@ const HeroSection = () => {
     if (formElement) {
       formElement.scrollIntoView({ behavior: 'smooth' });
     } else {
-      // If no form on current page, navigate to home page with form
-      navigate('/#form');
+      // If no form on current page, navigate to form page
+      navigate('/raccordement-enedis');
     }
   };
 

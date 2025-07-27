@@ -14,8 +14,8 @@ const Navigation = () => {
     if (formElement) {
       formElement.scrollIntoView({ behavior: 'smooth' });
     } else {
-      // If no form on current page, navigate to home page with form
-      navigate('/#form');
+      // If no form on current page, navigate to form page
+      navigate('/raccordement-enedis');
     }
   };
   return <nav className="bg-gradient-to-r from-primary to-primary/90 text-white sticky top-0 z-[60] shadow-lg backdrop-blur-md bg-opacity-95">

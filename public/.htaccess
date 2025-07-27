@@ -2,8 +2,8 @@ Options -MultiViews
 RewriteEngine On
 
 # SEO-friendly 301 redirects for route consolidation
-RewriteRule ^raccordement-enedis/?$ /commencer [R=301,L]
-RewriteRule ^enedis-raccordement/?$ /commencer [R=301,L]
+RewriteRule ^commencer/?$ /raccordement-enedis [R=301,L]
+RewriteRule ^enedis-raccordement/?$ /raccordement-enedis [R=301,L]
 
 # SPA fallback
 RewriteCond %{REQUEST_FILENAME} !-f

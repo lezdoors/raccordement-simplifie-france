@@ -36,6 +36,8 @@ import PaymentSuccessOptimized from "./pages/PaymentSuccessOptimized";
 import PaymentCancel from "./pages/PaymentCancel";
 import Protected from "./pages/Protected";
 import AuthTest from "./pages/AuthTest";
+import Blog from "./pages/Blog";
+import FAQ from "./pages/FAQ";
 import { MobileOptimizations } from "./components/mobile/MobileOptimizations";
 import { MobilePerformanceProvider } from "./components/mobile/MobilePerformanceProvider";
 
@@ -55,9 +57,9 @@ const AppContent = () => {
       <div className="mobile-safe-bottom">
         <Routes>
         <Route path="/" element={<OptimizedHomePage />} />
-        <Route path="/commencer" element={<Commencer />} />
-        <Route path="/raccordement-enedis" element={<Navigate to="/commencer" replace />} />
-        <Route path="/enedis-raccordement" element={<Navigate to="/commencer" replace />} />
+        <Route path="/raccordement-enedis" element={<Commencer />} />
+        <Route path="/commencer" element={<Navigate to="/raccordement-enedis" replace />} />
+        <Route path="/enedis-raccordement" element={<Navigate to="/raccordement-enedis" replace />} />
         <Route path="/merci" element={<Merci />} />
         <Route path="/a-propos" element={<APropos />} />
         <Route path="/contact" element={<Contact />} />
@@ -86,6 +88,8 @@ const AppContent = () => {
         } />
         <Route path="/protected" element={<Protected />} />
         <Route path="/auth-test" element={<AuthTest />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/faq" element={<FAQ />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       </div>

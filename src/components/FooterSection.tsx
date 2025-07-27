@@ -106,7 +106,7 @@ const FooterSection = () => {
                 </a>
               </li>
               <li>
-                <a href="/commencer" className="text-gray-300 hover:text-blue-400 hover:underline transition-colors duration-200">
+                <a href="/raccordement-enedis" className="text-gray-300 hover:text-blue-400 hover:underline transition-colors duration-200">
                   Raccordement Enedis
                 </a>
               </li>
