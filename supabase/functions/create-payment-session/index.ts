@@ -31,7 +31,7 @@ serve(async (req) => {
 
     console.log("✅ Stripe initialized");
 
-    // Create checkout session
+    // Create checkout session with enhanced configuration
     const session = await stripe.checkout.sessions.create({
       line_items: [
         {
@@ -39,7 +39,8 @@ serve(async (req) => {
             currency: "eur",
             product_data: {
               name: "Service de raccordement électrique Enedis",
-              description: `Dossier pour ${formData?.firstName} ${formData?.lastName}`,
+              description: `Dossier personnalisé pour ${formData?.firstName} ${formData?.lastName} - ${formData?.connectionType?.replace('_', ' ')} - ${formData?.projectType?.replace('_', ' ')}`,
+              images: ["https://raccordement-elec.fr/logo-payment.png"], // Optional: Add your logo
             },
             unit_amount: amount, // Amount in cents
           },
@@ -50,10 +51,29 @@ serve(async (req) => {
       success_url: `${req.headers.get("origin")}/merci?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.get("origin")}/commencer?canceled=true`,
       customer_email: formData?.email,
+      payment_method_types: ["card"],
+      billing_address_collection: "required",
+      shipping_address_collection: {
+        allowed_countries: ["FR"],
+      },
+      phone_number_collection: {
+        enabled: true,
+      },
+      custom_text: {
+        submit: {
+          message: "Votre dossier sera traité immédiatement après le paiement."
+        }
+      },
       metadata: {
         customer_name: `${formData?.firstName} ${formData?.lastName}`,
         customer_email: formData?.email,
-        form_data: JSON.stringify(formData),
+        connection_type: formData?.connectionType || '',
+        project_type: formData?.projectType || '',
+        power_type: formData?.powerType || '',
+        work_address: formData?.workStreet || '',
+        postal_code: formData?.postalCode || '',
+        city: formData?.city || '',
+        form_submission_id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       },
     });
 

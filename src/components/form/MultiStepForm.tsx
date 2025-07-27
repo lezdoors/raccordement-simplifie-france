@@ -331,6 +331,9 @@ export const MultiStepForm = () => {
       // First save the data to Supabase
       await autoSaveToSupabase();
       
+      // Show initial loading message
+      toast.loading("Préparation du paiement...", { id: "payment-loading" });
+      
       console.log("📤 Creating payment session...");
       
       // Track Google Ads "Form Submit" conversion before Stripe redirect
@@ -346,11 +349,17 @@ export const MultiStepForm = () => {
 
       if (error) {
         console.error("❌ Payment session error:", error);
-        throw new Error(`Erreur de paiement: ${error.message || 'Problème de connexion'}`);
+        toast.dismiss("payment-loading");
+        toast.error(`Erreur de paiement: ${error.message || 'Problème de connexion'}`);
+        setIsSubmitting(false);
+        return;
       }
       
       if (!paymentData?.url) {
-        throw new Error("URL de paiement non reçue");
+        toast.dismiss("payment-loading");
+        toast.error("URL de paiement non reçue");
+        setIsSubmitting(false);
+        return;
       }
 
       console.log("✅ Payment session created, redirecting to Stripe...");
@@ -365,13 +374,37 @@ export const MultiStepForm = () => {
       // Clear the form data from localStorage since we're redirecting
       localStorage.removeItem('raccordement-form-data');
       
-      // Show success message briefly before redirect
-      toast.success("Redirection vers le paiement...");
+      // Update loading message
+      toast.dismiss("payment-loading");
+      toast.success("Redirection vers Stripe...", { duration: 2000 });
       
-      // Small delay to ensure data is saved
-      setTimeout(() => {
-        window.location.href = paymentData.url;
-      }, 500);
+      // Immediate redirect with fallback
+      try {
+        window.location.assign(paymentData.url);
+        
+        // Fallback in case assign doesn't work (shouldn't happen but safety first)
+        setTimeout(() => {
+          if (window.location.href.includes('/commencer')) {
+            window.open(paymentData.url, '_blank');
+            toast.info("Le paiement s'ouvre dans un nouvel onglet", { duration: 5000 });
+          }
+        }, 1000);
+      } catch (redirectError) {
+        console.error("❌ Redirect error:", redirectError);
+        toast.error("Erreur de redirection. Veuillez cliquer sur le lien ci-dessous.");
+        // Create a clickable link as fallback
+        const linkElement = document.createElement('a');
+        linkElement.href = paymentData.url;
+        linkElement.target = '_blank';
+        linkElement.textContent = 'Ouvrir le paiement Stripe';
+        linkElement.style.display = 'block';
+        linkElement.style.color = '#3b82f6';
+        linkElement.style.textDecoration = 'underline';
+        linkElement.style.margin = '10px auto';
+        linkElement.style.textAlign = 'center';
+        document.body.appendChild(linkElement);
+        setIsSubmitting(false);
+      }
       
     } catch (error) {
       console.error("❌ Form submission error:", error);
