@@ -8,7 +8,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Premium McKinsey-level design system with Royal Blue & Gold palette */
+/* Premium professional design system with Royal Blue & Gold palette */
 
 @layer base {
   :root {
@@ -58,6 +58,10 @@
     --gold: 43 100% 73%;  /* #FFD77A */
     --gold-light: 43 100% 78%;
     --gold-dark: 42 82% 56%;  /* #F2B736 */
+    
+    /* High visibility CTA button - #FFD000 */
+    --cta-yellow: 51 100% 50%;  /* #FFD000 */
+    --cta-text: 0 0% 4%;       /* #0A0A0A */
     
     /* Legacy gold tokens for compatibility */
     --luxury-gold: 43 100% 73%;
@@ -355,29 +359,40 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* CTA Button Styles (Professional Gold Only) */
-  .btn-cta {
-    background: hsl(var(--luxury-gold));
-    color: hsl(var(--royal-blue));
+  /* High Visibility CTA Button */
+  .btn-cta-primary {
+    background: hsl(var(--cta-yellow));
+    color: hsl(var(--cta-text));
     border: none;
-    border-radius: 0.75rem;
+    border-radius: 12px;
     font-weight: 600;
-    padding: 1rem 2rem;
+    font-size: 16px;
+    padding: 14px 24px;
+    margin-top: 16px;
+    box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     cursor: pointer;
     position: relative;
     overflow: hidden;
+    min-height: 48px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  .btn-cta:hover {
-    background: hsl(var(--luxury-gold-light));
+  .btn-cta-primary:hover {
+    background: hsl(51 100% 55%);
     transform: translateY(-1px);
-    box-shadow: 0 10px 25px hsl(var(--luxury-gold) / 0.4);
+    box-shadow: 0 0 1.2rem rgba(0, 0, 0, 0.15);
   }
 
-  .btn-cta:active {
-    transform: translateY(0);
-    background: hsl(var(--luxury-gold-dark));
+  .btn-cta-primary:active {
+    transform: translateY(0) scale(0.98);
+    background: hsl(51 100% 45%);
+  }
+
+  /* Fade-in animation for CTA */
+  .btn-cta-animated {
+    animation: ctaFadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   }
 
   /* Selection Visual State */
@@ -444,12 +459,23 @@
     opacity: 1;
     transform: translateX(0);
   }
-  
-  /* Mobile Navigation Safe Area */
-  .mobile-nav-safe {
-    padding-top: var(--mobile-safe-area-inset-top);
-    padding-bottom: calc(var(--mobile-safe-area-inset-bottom) + 1rem);
+}
+
+@keyframes ctaFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Mobile Navigation Safe Area */
+.mobile-nav-safe {
+  padding-top: var(--mobile-safe-area-inset-top);
+  padding-bottom: calc(var(--mobile-safe-area-inset-bottom) + 1rem);
 }
 
 /* Mobile-First Responsive Design */

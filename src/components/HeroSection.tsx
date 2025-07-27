@@ -34,7 +34,7 @@ const HeroSection = () => {
       </div>
       
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-full">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-screen py-20">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-screen py-16 lg:py-20">
           
           {/* Left Column - Main Content */}
           <div className="space-y-8">
@@ -45,30 +45,27 @@ const HeroSection = () => {
               </div>
               
               <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight text-center lg:text-left">
-                Raccordement <span className="text-slate-100">électrique</span> Enedis
+                Raccordement Électrique Enedis
               </h1>
               
               <p className="text-lg sm:text-xl md:text-2xl text-white/90 font-light leading-relaxed text-center lg:text-left">
-                Service administratif professionnel
+                Votre expert national pour toutes vos démarches Enedis.
               </p>
               
               <p className="text-lg text-white/80 leading-relaxed max-w-xl font-body">
-                Service expert en raccordement électrique Enedis pour toute la France. Nous gérons vos 
-                démarches administratives : maison neuve, photovoltaïque, modification de branchement. 
-                Processus simplifié, suivi personnalisé et conformité garantie.
+                Maison neuve, panneaux solaires, modification de branchement : nous simplifions le processus 
+                avec un accompagnement personnalisé.
               </p>
             </div>
 
-            {/* Premium CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
-            <Button 
-              size="lg" 
-              className="font-bold px-4 py-2 rounded-lg text-[#1E1E1E] hover:opacity-90 hover:scale-105 transition-all duration-300 mobile-button touch-feedback mobile-optimized shadow-xl" 
+            {/* High Visibility CTA - Mobile optimized above the fold */}
+            <div className="flex flex-col sm:flex-row gap-4 mt-4">
+            <button 
+              className="btn-cta-primary btn-cta-animated w-full sm:w-auto" 
               onClick={scrollToForm}
-              style={{ background: 'linear-gradient(90deg, #FFD77A 0%, #F2B736 100%)' }}
             >
               Démarrer ma demande
-            </Button>
+            </button>
               
               <Button 
                 variant="outline" 

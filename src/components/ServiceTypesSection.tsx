@@ -60,7 +60,7 @@ const ServiceTypesSection = () => {
           
           <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed font-body">
             Particuliers et professionnels. Toutes vos demandes de raccordement électrique 
-            traitées avec le même formulaire simplifié et l'excellence McKinsey.
+            traitées avec le même processus simplifié et professionnel.
           </p>
         </div>
 
