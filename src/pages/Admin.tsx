@@ -19,6 +19,7 @@ import { AdminUserManagement } from "@/components/AdminUserManagement";
 import { AdvancedSearch } from "@/components/AdvancedSearch";
 import { useDataExport } from "@/hooks/use-data-export";
 import { supabase } from "@/integrations/supabase/client";
+import CRMDashboard from "@/components/enhanced/CRMDashboard";
 
 const Admin = () => {
   const navigate = useNavigate();
