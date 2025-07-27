@@ -15,6 +15,9 @@ import { useLeadNotifications } from "@/hooks/use-lead-notifications";
 import { useCRMData } from "@/hooks/use-crm-data";
 import { PhoneHeader } from "@/components/PhoneHeader";
 import { LeadPreviewModal } from "@/components/LeadPreviewModal";
+import { AdminUserManagement } from "@/components/AdminUserManagement";
+import { AdvancedSearch } from "@/components/AdvancedSearch";
+import { useDataExport } from "@/hooks/use-data-export";
 import { supabase } from "@/integrations/supabase/client";
 
 const Admin = () => {
@@ -29,8 +32,10 @@ const Admin = () => {
     error: crmError,
     updateLeadStatus,
     assignLead,
-    addNote
+    addNote,
+    refetch
   } = useCRMData();
+  const { exportLeads, exportMessages, exporting } = useDataExport();
   
   const [selectedLead, setSelectedLead] = useState<any>(null);
   const [previewLead, setPreviewLead] = useState<any>(null);
@@ -39,6 +44,7 @@ const Admin = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [assignedFilter, setAssignedFilter] = useState("all");
   const [newNote, setNewNote] = useState("");
+  const [advancedFilters, setAdvancedFilters] = useState<any>({});
 
   const isPendingValidation = user && !adminUser;
   const canSeeAllLeads = adminUser?.can_see_all_leads || adminUser?.role === 'superadmin' || adminUser?.role === 'manager';
@@ -132,20 +138,63 @@ L'équipe Raccordement Connect`;
     );
   };
 
+  // Enhanced filtering function with advanced filters
   const filteredLeads = leads.filter(lead => {
-    const matchesSearch = searchTerm === "" || 
-      lead.nom?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      lead.prenom?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      lead.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      lead.ville?.toLowerCase().includes(searchTerm.toLowerCase());
+    // Basic search
+    const matchesSearch = !advancedFilters.searchTerm || 
+      lead.nom?.toLowerCase().includes(advancedFilters.searchTerm.toLowerCase()) ||
+      lead.prenom?.toLowerCase().includes(advancedFilters.searchTerm.toLowerCase()) ||
+      lead.email?.toLowerCase().includes(advancedFilters.searchTerm.toLowerCase()) ||
+      lead.ville?.toLowerCase().includes(advancedFilters.searchTerm.toLowerCase()) ||
+      lead.telephone?.includes(advancedFilters.searchTerm);
     
-    const matchesStatus = statusFilter === "all" || lead.etat_projet === statusFilter;
-    const matchesAssigned = assignedFilter === "all" || 
-      (assignedFilter === "unassigned" && !lead.assigned_to_email) ||
-      (assignedFilter !== "unassigned" && lead.assigned_to_email === assignedFilter);
+    // Status filter
+    const matchesStatus = !advancedFilters.status || advancedFilters.status === 'all' || lead.etat_projet === advancedFilters.status;
     
-    return matchesSearch && matchesStatus && matchesAssigned;
+    // Assignment filter
+    const matchesAssigned = !advancedFilters.assignedTo || advancedFilters.assignedTo === 'all' || 
+      (advancedFilters.assignedTo === 'unassigned' && !lead.assigned_to_email) ||
+      (advancedFilters.assignedTo !== 'unassigned' && lead.assigned_to_email === advancedFilters.assignedTo);
+    
+    // Client type filter
+    const matchesClientType = !advancedFilters.clientType || advancedFilters.clientType === 'all' || lead.type_client === advancedFilters.clientType;
+    
+    // Connection type filter
+    const matchesConnectionType = !advancedFilters.connectionType || advancedFilters.connectionType === 'all' || lead.type_raccordement === advancedFilters.connectionType;
+    
+    // Project type filter
+    const matchesProjectType = !advancedFilters.projectType || advancedFilters.projectType === 'all' || lead.type_projet === advancedFilters.projectType;
+    
+    // Payment status filter
+    const matchesPaymentStatus = !advancedFilters.paymentStatus || advancedFilters.paymentStatus === 'all' || lead.payment_status === advancedFilters.paymentStatus;
+    
+    // City filter
+    const matchesCity = !advancedFilters.city || lead.ville?.toLowerCase().includes(advancedFilters.city.toLowerCase());
+    
+    // Postal code filter
+    const matchesPostalCode = !advancedFilters.postalCode || lead.code_postal?.includes(advancedFilters.postalCode);
+    
+    // Date range filter
+    const matchesDateRange = !advancedFilters.dateRange || !advancedFilters.dateRange.from || 
+      (new Date(lead.created_at) >= advancedFilters.dateRange.from && 
+       (!advancedFilters.dateRange.to || new Date(lead.created_at) <= advancedFilters.dateRange.to));
+    
+    return matchesSearch && matchesStatus && matchesAssigned && matchesClientType && 
+           matchesConnectionType && matchesProjectType && matchesPaymentStatus && 
+           matchesCity && matchesPostalCode && matchesDateRange;
   });
+
+  const handleExport = async () => {
+    await exportLeads({
+      format: 'csv',
+      filters: {
+        status: advancedFilters.status,
+        assignedTo: advancedFilters.assignedTo,
+        clientType: advancedFilters.clientType
+      },
+      dateRange: advancedFilters.dateRange
+    });
+  };
 
   // Show loading state
   if (authLoading || crmLoading) {
@@ -286,60 +335,31 @@ L'équipe Raccordement Connect`;
           </div>
 
           <Tabs defaultValue="leads" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsList className={`grid w-full ${adminUser?.can_manage_users ? 'grid-cols-3' : 'grid-cols-2'} mb-6`}>
               <TabsTrigger value="leads" className="text-sm sm:text-base">Dossiers ({stats.totalLeads})</TabsTrigger>
               <TabsTrigger value="messages" className="text-sm sm:text-base">Messages ({stats.totalMessages})</TabsTrigger>
+              {adminUser?.can_manage_users && (
+                <TabsTrigger value="users" className="text-sm sm:text-base">Utilisateurs</TabsTrigger>
+              )}
             </TabsList>
 
             <TabsContent value="leads" className="space-y-6">
+              {/* Advanced Search */}
+              <AdvancedSearch
+                onFiltersChange={setAdvancedFilters}
+                onExport={handleExport}
+                onRefresh={refetch}
+                canExport={adminUser?.role === 'superadmin' || adminUser?.role === 'manager'}
+                loading={crmLoading || exporting}
+                totalResults={filteredLeads.length}
+              />
+
               <Card>
                 <CardHeader>
-                  <div className="flex flex-col space-y-4 lg:flex-row lg:justify-between lg:items-center lg:space-y-0">
-                    <CardTitle className="text-lg">Gestion des Leads</CardTitle>
-                    
-                    {/* Mobile-optimized filters */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:items-center gap-3 lg:space-x-2">
-                      {/* Status Filter */}
-                      <Select value={statusFilter} onValueChange={setStatusFilter}>
-                        <SelectTrigger className="w-full lg:w-40">
-                          <SelectValue placeholder="Statut" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">Tous les statuts</SelectItem>
-                          <SelectItem value="nouveau">Nouveau</SelectItem>
-                          <SelectItem value="en_cours">En cours</SelectItem>
-                          <SelectItem value="attente_enedis">Attente Enedis</SelectItem>
-                          <SelectItem value="termine">Terminé</SelectItem>
-                        </SelectContent>
-                      </Select>
-
-                      {/* Assignment Filter */}
-                      <Select value={assignedFilter} onValueChange={setAssignedFilter}>
-                        <SelectTrigger className="w-full lg:w-40">
-                          <SelectValue placeholder="Assigné à" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">Tous</SelectItem>
-                          <SelectItem value="unassigned">Non assigné</SelectItem>
-                          <SelectItem value="hossam@raccordement.net">Hossam</SelectItem>
-                          <SelectItem value="oussama@raccordement.net">Oussama</SelectItem>
-                          <SelectItem value="farah@raccordement.net">Farah</SelectItem>
-                          <SelectItem value="rania@raccordement.net">Rania</SelectItem>
-                        </SelectContent>
-                      </Select>
-
-                      {/* Search */}
-                      <div className="relative col-span-full sm:col-span-2 lg:col-span-1">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                        <Input
-                          placeholder="Rechercher..."
-                          value={searchTerm}
-                          onChange={(e) => setSearchTerm(e.target.value)}
-                          className="pl-10 w-full lg:w-60"
-                        />
-                      </div>
-                    </div>
-                  </div>
+                  <CardTitle className="flex items-center gap-2">
+                    <FileText className="w-5 h-5" />
+                    Dossiers de raccordement ({filteredLeads.length})
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   {isPendingValidation ? (
@@ -641,6 +661,13 @@ L'équipe Raccordement Connect`;
                 </CardContent>
               </Card>
             </TabsContent>
+
+            {/* User Management Tab - Only for superadmins and managers */}
+            {adminUser?.can_manage_users && (
+              <TabsContent value="users" className="space-y-6">
+                <AdminUserManagement />
+              </TabsContent>
+            )}
           </Tabs>
         </div>
       </div>

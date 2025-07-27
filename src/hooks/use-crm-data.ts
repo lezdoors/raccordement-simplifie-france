@@ -22,6 +22,8 @@ interface Lead {
   delai_souhaite: string;
   commentaires: string;
   assigned_to_email: string;
+  payment_status: string;
+  amount: number;
   created_at: string;
   updated_at: string;
   status: string;
