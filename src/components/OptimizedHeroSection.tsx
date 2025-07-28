@@ -69,9 +69,11 @@ const OptimizedHeroSection = () => {
           {/* Left Column - Main Content */}
           <div className="space-y-8 mx-[60px] px-[60px] my-0 py-0">
             <div className="space-y-6">
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-sm font-medium">
-                <Award className="w-4 h-4 mr-2" />
-                Partenaire N°1 en France
+              <div className="flex justify-center">
+                <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-sm font-medium">
+                  <Award className="w-4 h-4 mr-2" />
+                  Partenaire N°1 en France
+                </div>
               </div>
               
               <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight text-center">
