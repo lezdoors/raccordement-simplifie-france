@@ -74,22 +74,22 @@ const OptimizedHeroSection = () => {
                 Partenaire N°1 en France
               </div>
               
-              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight text-center lg:text-left">
+              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight text-center">
                 Raccordement Électrique Enedis
               </h1>
               
-              <p className="text-lg sm:text-xl md:text-2xl text-white/90 font-light leading-relaxed text-center lg:text-left">
+              <p className="text-lg sm:text-xl md:text-2xl text-white/90 font-light leading-relaxed text-center">
                 Votre expert national pour toutes vos démarches Enedis.
               </p>
               
-              <p className="text-lg text-white/80 leading-relaxed max-w-xl font-body">
+              <p className="text-lg text-white/80 leading-relaxed max-w-xl font-body text-center mx-auto">
                 Maison neuve, panneaux solaires, modification de branchement : nous simplifions le processus 
                 avec un accompagnement personnalisé.
               </p>
             </div>
 
             {/* Single CTA - Centered and clean */}
-            <div className="flex justify-center lg:justify-start">
+            <div className="flex justify-center">
               <button className="btn-cta-primary btn-cta-animated w-full sm:w-auto sm:min-w-[280px] h-14 px-8 py-4 text-lg font-semibold flex items-center justify-center" onClick={scrollToForm}>
                 Démarrer ma demande
               </button>
@@ -118,7 +118,7 @@ const OptimizedHeroSection = () => {
             </div>
 
             {/* Trust indicators */}
-            <div className="flex flex-wrap justify-center lg:justify-start gap-6 pt-4">
+            <div className="flex flex-wrap justify-center gap-6 pt-4">
               <div className="flex items-center text-white/80 text-sm">
                 <CheckCircle className="w-4 h-4 mr-2 text-accent" />
                 100% sécurisé
