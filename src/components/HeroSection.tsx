@@ -59,17 +59,17 @@ const HeroSection = () => {
             </div>
 
             {/* High Visibility CTA - Mobile optimized above the fold */}
-            <div className="flex flex-col sm:flex-row gap-4 items-center justify-center lg:justify-start">
+            <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
               <button 
-                className="btn-cta-primary btn-cta-animated w-full sm:w-auto sm:min-w-[220px] h-14 px-8 py-4 flex items-center justify-center text-lg font-semibold" 
+                className="h-14 px-8 py-4 text-lg font-semibold flex items-center justify-center btn-cta-animated w-full sm:w-auto sm:min-w-[220px] bg-accent text-white border-2 border-accent hover:bg-accent/90 transition-all duration-300 rounded-lg touch-feedback"
                 onClick={scrollToForm}
               >
                 Démarrer ma demande
               </button>
                 
               <button 
+                className="h-14 px-8 py-4 text-lg font-semibold flex items-center justify-center btn-cta-animated w-full sm:w-auto sm:min-w-[220px] bg-white text-primary border-2 border-primary hover:bg-white/90 transition-all duration-300 rounded-lg touch-feedback"
                 onClick={handleContactExpert}
-                className="btn-cta-animated bg-white text-primary border-2 border-primary hover:bg-white/90 transition-all duration-300 font-semibold px-8 py-4 text-lg h-14 w-full sm:w-auto sm:min-w-[220px] flex items-center justify-center rounded-lg touch-feedback"
               >
                 <Headphones className="mr-2 h-5 w-5" />
                 Contacter un expert
