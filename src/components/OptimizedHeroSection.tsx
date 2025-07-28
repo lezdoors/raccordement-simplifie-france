@@ -2,21 +2,20 @@ import { Button } from "@/components/ui/button";
 import { Headphones, Phone, Mail, Star, CheckCircle, Award } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-
 const OptimizedHeroSection = () => {
   const navigate = useNavigate();
   const [mounted, setMounted] = useState(false);
-
   const scrollToForm = () => {
     const formElement = document.getElementById('form');
     if (formElement) {
-      formElement.scrollIntoView({ behavior: 'smooth' });
+      formElement.scrollIntoView({
+        behavior: 'smooth'
+      });
     } else {
       // If no form on current page, navigate to form page
       navigate('/raccordement-enedis');
     }
   };
-
   const handleContactExpert = () => {
     // On mobile, call the number; on desktop, scroll to form
     if (window.innerWidth < 768) {
@@ -32,14 +31,11 @@ const OptimizedHeroSection = () => {
     satisfaction: 98,
     projects: 25000
   };
-
   useEffect(() => {
     setMounted(true);
   }, []);
-
   if (!mounted) {
-    return (
-      <section className="relative min-h-[85vh] bg-gradient-hero overflow-hidden w-full">
+    return <section className="relative min-h-[85vh] bg-gradient-hero overflow-hidden w-full">
         <div className="relative w-full px-4 sm:px-6 lg:px-8 h-full">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-[85vh] py-12 lg:py-16">
             <div className="space-y-8">
@@ -60,12 +56,9 @@ const OptimizedHeroSection = () => {
             </div>
           </div>
         </div>
-      </section>
-    );
+      </section>;
   }
-
-  return (
-    <section className="relative min-h-[85vh] bg-gradient-hero overflow-hidden w-full">
+  return <section className="relative min-h-[85vh] bg-gradient-hero overflow-hidden w-full">
       <div className="absolute inset-0 opacity-30">
         <div className="absolute inset-0 bg-gradient-to-br from-royal/10 to-transparent"></div>
       </div>
@@ -74,7 +67,7 @@ const OptimizedHeroSection = () => {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-[85vh] py-12 lg:py-16">
           
           {/* Left Column - Main Content */}
-          <div className="space-y-8">
+          <div className="space-y-8 mx-[60px] px-[60px] my-0 py-0">
             <div className="space-y-6">
               <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-sm font-medium">
                 <Award className="w-4 h-4 mr-2" />
@@ -97,10 +90,7 @@ const OptimizedHeroSection = () => {
 
             {/* Single CTA - Centered and clean */}
             <div className="flex justify-center lg:justify-start">
-              <button 
-                className="btn-cta-primary btn-cta-animated w-full sm:w-auto sm:min-w-[280px] h-14 px-8 py-4 text-lg font-semibold flex items-center justify-center"
-                onClick={scrollToForm}
-              >
+              <button className="btn-cta-primary btn-cta-animated w-full sm:w-auto sm:min-w-[280px] h-14 px-8 py-4 text-lg font-semibold flex items-center justify-center" onClick={scrollToForm}>
                 Démarrer ma demande
               </button>
             </div>
@@ -191,8 +181,6 @@ const OptimizedHeroSection = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default OptimizedHeroSection;
