@@ -39,9 +39,9 @@ const OptimizedHeroSection = () => {
 
   if (!mounted) {
     return (
-      <section className="relative min-h-screen bg-gradient-hero overflow-hidden">
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-full">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-screen py-16 lg:py-20">
+      <section className="relative min-h-[85vh] bg-gradient-hero overflow-hidden w-full">
+        <div className="relative w-full px-4 sm:px-6 lg:px-8 h-full">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-[85vh] py-12 lg:py-16">
             <div className="space-y-8">
               <div className="space-y-6">
                 <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-sm font-medium">
@@ -65,13 +65,13 @@ const OptimizedHeroSection = () => {
   }
 
   return (
-    <section className="relative min-h-screen bg-gradient-hero overflow-hidden">
+    <section className="relative min-h-[85vh] bg-gradient-hero overflow-hidden w-full">
       <div className="absolute inset-0 opacity-30">
         <div className="absolute inset-0 bg-gradient-to-br from-royal/10 to-transparent"></div>
       </div>
       
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-full">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-screen py-16 lg:py-20">
+      <div className="relative w-full px-4 sm:px-6 lg:px-8 h-full">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-[85vh] py-12 lg:py-16">
           
           {/* Left Column - Main Content */}
           <div className="space-y-8">
@@ -95,24 +95,14 @@ const OptimizedHeroSection = () => {
               </p>
             </div>
 
-            {/* High Visibility CTA - Mobile optimized above the fold */}
-            <div className="flex flex-col sm:flex-row gap-4 mt-4">
+            {/* Single CTA - Centered and clean */}
+            <div className="flex justify-center lg:justify-start">
               <button 
-                className="btn-cta-primary btn-cta-animated w-full sm:w-auto" 
+                className="btn-cta-primary btn-cta-animated w-full sm:w-auto sm:min-w-[280px] h-14 px-8 py-4 text-lg font-semibold flex items-center justify-center"
                 onClick={scrollToForm}
               >
                 Démarrer ma demande
               </button>
-              
-              <Button 
-                variant="outline" 
-                size="lg" 
-                onClick={handleContactExpert}
-                className="mobile-button bg-white text-primary border-primary hover:bg-white/90 font-semibold px-8 py-6 text-lg min-h-[44px] h-auto touch-feedback"
-              >
-                <Headphones className="mr-2 h-5 w-5" />
-                Contacter un expert
-              </Button>
             </div>
 
             {/* Static Statistics - No animation for better performance */}
