@@ -27,14 +27,14 @@ const HeroSection = () => {
     satisfaction: 98,
     projects: 25000
   };
-  return <section className="relative min-h-screen bg-gradient-hero overflow-hidden">
+  return <section className="relative min-h-[85vh] bg-gradient-hero overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 opacity-30">
         <div className="absolute inset-0 bg-gradient-to-br from-royal/10 to-transparent"></div>
       </div>
       
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-full">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-screen py-16 lg:py-20">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-[85vh] py-12 lg:py-16">
           
           {/* Left Column - Main Content */}
           <div className="space-y-8">
@@ -58,21 +58,13 @@ const HeroSection = () => {
               </p>
             </div>
 
-            {/* High Visibility CTA - Mobile optimized above the fold */}
-            <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
+            {/* Single CTA - Centered and clean */}
+            <div className="flex justify-center lg:justify-start">
               <button 
-                className="h-14 px-8 py-4 text-lg font-semibold flex items-center justify-center btn-cta-animated w-full sm:w-auto sm:min-w-[220px] bg-accent text-white border-2 border-accent hover:bg-accent/90 transition-all duration-300 rounded-lg touch-feedback"
+                className="h-14 px-8 py-4 text-lg font-semibold flex items-center justify-center btn-cta-animated w-full sm:w-auto sm:min-w-[280px] bg-accent text-white border-2 border-accent hover:bg-accent/90 transition-all duration-300 rounded-lg touch-feedback"
                 onClick={scrollToForm}
               >
                 Démarrer ma demande
-              </button>
-                
-              <button 
-                className="h-14 px-8 py-4 text-lg font-semibold flex items-center justify-center btn-cta-animated w-full sm:w-auto sm:min-w-[220px] bg-white text-primary border-2 border-primary hover:bg-white/90 transition-all duration-300 rounded-lg touch-feedback"
-                onClick={handleContactExpert}
-              >
-                <Headphones className="mr-2 h-5 w-5" />
-                Contacter un expert
               </button>
             </div>
 
