@@ -17,4 +17,4 @@ Disallow: /admin
 Disallow: /login
 
 # Sitemap
-Sitemap: https://racco-service.com/sitemap.xml
+Sitemap: https://raccordement-connect.com/sitemap.xml
