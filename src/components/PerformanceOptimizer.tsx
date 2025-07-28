@@ -42,7 +42,10 @@ interface ImageOptimizerProps extends React.ImgHTMLAttributes<HTMLImageElement> 
   fallback?: string;
 }
 
-export const OptimizedImage: React.FC<ImageOptimizerProps> = ({
+export { EnhancedOptimizedImage as OptimizedImage } from './EnhancedImageOptimizer';
+
+// Legacy component for backward compatibility
+export const LegacyOptimizedImage: React.FC<ImageOptimizerProps> = ({
   src,
   alt,
   className,

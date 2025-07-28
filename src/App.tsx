@@ -40,6 +40,9 @@ import Blog from "./pages/Blog";
 import FAQ from "./pages/FAQ";
 import { MobileOptimizations } from "./components/mobile/MobileOptimizations";
 import { MobilePerformanceProvider } from "./components/mobile/MobilePerformanceProvider";
+import { SEOBreadcrumb } from "./components/SEOBreadcrumb";
+import { SEOEnhancer } from "./components/SEOEnhancer";
+import { initWebVitals } from "./utils/webVitals";
 
 // Simple loading component without animation
 const PageLoader = () => (
@@ -51,9 +54,14 @@ const PageLoader = () => (
 const queryClient = new QueryClient();
 
 const AppContent = () => {
+  React.useEffect(() => {
+    initWebVitals();
+  }, []);
 
   return (
     <BrowserRouter>
+      <SEOEnhancer />
+      <SEOBreadcrumb />
       <div className="mobile-safe-bottom">
         <Routes>
         <Route path="/" element={<OptimizedHomePage />} />
