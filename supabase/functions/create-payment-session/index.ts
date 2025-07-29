@@ -40,16 +40,14 @@ serve(async (req) => {
             product_data: {
               name: "Service de raccordement électrique Enedis",
               description: `Dossier personnalisé pour ${formData?.firstName} ${formData?.lastName} - ${formData?.connectionType?.replace('_', ' ')} - ${formData?.projectType?.replace('_', ' ')}`,
-              images: ["/lovable-uploads/55f86fce-e7c0-4a55-95e2-4c1c19dcbc0f.png"],
+              images: ["https://raccordement-elec.fr/logo-payment.png"], // Optional: Add your logo
             },
-            statement_descriptor: "RACCORDEMENT ENEDIS",
             unit_amount: amount, // Amount in cents
           },
           quantity: 1,
         },
       ],
       mode: "payment",
-      locale: "fr",
       success_url: `${req.headers.get("origin")}/merci?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.get("origin")}/commencer?canceled=true`,
       customer_email: formData?.email,

@@ -25,12 +25,9 @@ const Navigation = () => {
           <div className="flex items-center cursor-pointer justify-center md:justify-start" onClick={() => navigate("/")}>
             <div className="h-12 md:h-20 w-auto mr-3 md:mr-4 flex items-center justify-center">
               <img 
-                src="/lovable-uploads/55f86fce-e7c0-4a55-95e2-4c1c19dcbc0f.png"
+                src="https://kstugxtmghinprrpkrud.supabase.co/storage/v1/object/public/logo//Votre%20Partenaire%20(Logo)-3.png" 
                 alt="Raccordement Connect - Votre Partenaire Raccordement Électrique" 
                 className="w-[120px] md:w-[180px] h-auto transition-transform hover:scale-105"
-                onError={(e) => {
-                  e.currentTarget.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjgwIiB2aWV3Qm94PSIwIDAgMTgwIDgwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxODAiIGhlaWdodD0iODAiIGZpbGw9IiMxQTJDODAiLz48dGV4dCB4PSI5MCIgeT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2Ij5SQUNDLVNFUlZJQ0U8L3RleHQ+PC9zdmc+"
-                }}
               />
             </div>
           </div>

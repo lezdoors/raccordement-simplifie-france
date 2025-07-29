@@ -111,59 +111,43 @@ const HeroSection = () => {
             </div>
           </div>
 
-          {/* Right Column - Hero Illustration */}
+          {/* Right Column - Floating Contact Card */}
           <div className="lg:flex justify-center items-center hidden">
-            <div className="relative">
-              <img 
-                src="/lovable-uploads/07de93d6-9367-486b-8b5d-f050c8703a3e.png"
-                alt="Raccordement électrique - illustration"
-                className="w-full max-w-md h-auto rounded-lg shadow-2xl"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                  const fallbackCard = e.currentTarget.parentElement?.querySelector('.fallback-card');
-                  if (fallbackCard) {
-                    (fallbackCard as HTMLElement).style.display = 'block';
-                  }
-                }}
-              />
-              
-              {/* Fallback Contact Card */}
-              <div className="fallback-card floating-card glass-card p-8 rounded-2xl w-full max-w-md" style={{ display: 'none' }}>
-                <div className="text-center mb-6">
-                  <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <Phone className="w-8 h-8 text-white" />
+            <div className="floating-card glass-card p-8 rounded-2xl w-full max-w-md">
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Phone className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="font-display text-2xl font-semibold text-white mb-2">
+                  Contact Premium
+                </h3>
+                <p className="text-white/80 text-sm">
+                  Assistance dédiée pour votre projet
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center p-4 rounded-xl bg-white/5 border border-white/10">
+                  <Phone className="w-5 h-5 text-accent mr-3" />
+                  <div>
+                    <div className="text-white font-medium">01 89 70 12 00</div>
+                    <div className="text-white/60 text-xs">Lun-Ven 9h-18h</div>
                   </div>
-                  <h3 className="font-display text-2xl font-semibold text-white mb-2">
-                    Contact Premium
-                  </h3>
-                  <p className="text-white/80 text-sm">
-                    Assistance dédiée pour votre projet
-                  </p>
+                </div>
+                
+                <div className="flex items-center p-4 rounded-xl bg-white/5 border border-white/10">
+                  <Mail className="w-5 h-5 text-accent mr-3" />
+                  <div>
+                    <div className="text-white font-medium">Expert dédié</div>
+                    <div className="text-white/60 text-xs">Réponse sous 2h</div>
+                  </div>
                 </div>
 
-                <div className="space-y-4">
-                  <div className="flex items-center p-4 rounded-xl bg-white/5 border border-white/10">
-                    <Phone className="w-5 h-5 text-accent mr-3" />
-                    <div>
-                      <div className="text-white font-medium">01 89 70 12 00</div>
-                      <div className="text-white/60 text-xs">Lun-Ven 9h-18h</div>
-                    </div>
+                <div className="flex items-center justify-center pt-4">
+                  <div className="flex">
+                    {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 text-accent fill-current" />)}
                   </div>
-                  
-                  <div className="flex items-center p-4 rounded-xl bg-white/5 border border-white/10">
-                    <Mail className="w-5 h-5 text-accent mr-3" />
-                    <div>
-                      <div className="text-white font-medium">Expert dédié</div>
-                      <div className="text-white/60 text-xs">Réponse sous 2h</div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-center pt-4">
-                    <div className="flex">
-                      {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 text-accent fill-current" />)}
-                    </div>
-                    <span className="text-white/80 text-sm ml-2">4.9/5 (2,847 avis)</span>
-                  </div>
+                  <span className="text-white/80 text-sm ml-2">4.9/5 (2,847 avis)</span>
                 </div>
               </div>
             </div>
