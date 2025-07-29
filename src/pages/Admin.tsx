@@ -336,12 +336,32 @@ L'équipe Raccordement Connect`;
           </div>
 
           <Tabs defaultValue="leads" className="space-y-6">
-            <TabsList className={`grid w-full ${adminUser?.can_manage_users ? 'grid-cols-4' : 'grid-cols-3'} mb-6`}>
-              <TabsTrigger value="leads" className="text-sm sm:text-base">Leads ({stats.totalLeads})</TabsTrigger>
-              <TabsTrigger value="messages" className="text-sm sm:text-base">Messages ({stats.totalMessages})</TabsTrigger>
-              <TabsTrigger value="summary" className="text-sm sm:text-base">Résumé par Type</TabsTrigger>
+            <TabsList className="inline-flex h-12 items-center justify-start rounded-none bg-transparent p-0 gap-8 border-b border-border mb-6 w-full">
+              <TabsTrigger 
+                value="leads" 
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-none px-0 py-3 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-muted-foreground hover:text-foreground border-b-2 border-transparent"
+              >
+                Leads ({stats.totalLeads})
+              </TabsTrigger>
+              <TabsTrigger 
+                value="messages" 
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-none px-0 py-3 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-muted-foreground hover:text-foreground border-b-2 border-transparent"
+              >
+                Messages ({stats.totalMessages})
+              </TabsTrigger>
+              <TabsTrigger 
+                value="summary" 
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-none px-0 py-3 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-muted-foreground hover:text-foreground border-b-2 border-transparent"
+              >
+                Résumé par Type
+              </TabsTrigger>
               {adminUser?.can_manage_users && (
-                <TabsTrigger value="users" className="text-sm sm:text-base">Utilisateurs</TabsTrigger>
+                <TabsTrigger 
+                  value="users" 
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-none px-0 py-3 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-muted-foreground hover:text-foreground border-b-2 border-transparent"
+                >
+                  Utilisateurs
+                </TabsTrigger>
               )}
             </TabsList>
 
