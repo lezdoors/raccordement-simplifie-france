@@ -49,6 +49,7 @@ serve(async (req) => {
         },
       ],
       mode: "payment",
+      locale: "fr",
       success_url: `${req.headers.get("origin")}/merci?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.get("origin")}/commencer?canceled=true`,
       customer_email: formData?.email,
