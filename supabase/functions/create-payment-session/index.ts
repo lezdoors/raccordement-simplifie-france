@@ -40,6 +40,7 @@ serve(async (req) => {
             product_data: {
               name: "Service de raccordement électrique Enedis",
               description: `Dossier personnalisé pour ${formData?.firstName} ${formData?.lastName} - ${formData?.connectionType?.replace('_', ' ')} - ${formData?.projectType?.replace('_', ' ')}`,
+              images: ["/lovable-uploads/55f86fce-e7c0-4a55-95e2-4c1c19dcbc0f.png"],
             },
             statement_descriptor: "RACCORDEMENT ENEDIS",
             unit_amount: amount, // Amount in cents
