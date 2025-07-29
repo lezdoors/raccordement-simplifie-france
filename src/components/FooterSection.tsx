@@ -94,9 +94,12 @@ const FooterSection = () => {
         <div className="flex flex-col md:flex-row items-center justify-center mb-8 md:mb-12">
           <div className="h-20 md:h-24 w-auto mr-0 md:mr-4 mb-2 md:mb-0 flex items-center justify-center">
             <img 
-              src="https://kstugxtmghinprrpkrud.supabase.co/storage/v1/object/public/logo//Votre%20Partenaire%20(Logo)-3.png" 
+              src="/lovable-uploads/55f86fce-e7c0-4a55-95e2-4c1c19dcbc0f.png"
               alt="Raccordement Connect - Votre Partenaire Raccordement Électrique" 
               className="w-[150px] md:w-[200px] h-auto filter brightness-110"
+              onError={(e) => {
+                e.currentTarget.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjgwIiB2aWV3Qm94PSIwIDAgMjAwIDgwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iODAiIGZpbGw9IiMxQTJDODAiLz48dGV4dCB4PSIxMDAiIHk9IjQwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNiI+UkFDQy1TRVJWSUNFPC90ZXh0Pjwvc3ZnPg=="
+              }}
             />
           </div>
         </div>
