@@ -32,8 +32,19 @@ interface Lead {
 
 // Message interface removed - all data now unified in Lead interface
 
+interface Message {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  request_type: 'contact' | 'callback';
+  created_at: string;
+}
+
 interface CRMStats {
   totalLeads: number;
+  totalMessages: number;
   totalQuickContacts: number;
   totalCallbackRequests: number;
   totalPartialSubmissions: number;
@@ -45,8 +56,10 @@ interface CRMStats {
 export const useCRMData = () => {
   const { user, adminUser } = useAdmin();
   const [leads, setLeads] = useState<Lead[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [stats, setStats] = useState<CRMStats>({
     totalLeads: 0,
+    totalMessages: 0,
     totalQuickContacts: 0,
     totalCallbackRequests: 0,
     totalPartialSubmissions: 0,
@@ -94,9 +107,35 @@ export const useCRMData = () => {
     }
   };
 
-  // No longer needed - all messages/contacts are now leads in the unified table
+  const fetchMessages = async () => {
+    if (!adminUser || !user) {
+      console.log('⚠️ No admin user or auth user, skipping messages fetch');
+      return;
+    }
 
-  const calculateStats = (leadsData: Lead[]) => {
+    try {
+      console.log('🔍 Fetching contact messages for admin user:', adminUser);
+      
+      const { data, error } = await supabase
+        .from('messages')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) {
+        console.error('❌ Error fetching messages:', error);
+        setError(`Erreur lors du chargement des messages: ${error.message}`);
+        return;
+      }
+
+      console.log('✅ Messages fetched successfully:', data?.length || 0);
+      setMessages(data || []);
+    } catch (err) {
+      console.error('❌ Unexpected error fetching messages:', err);
+      setError('Erreur inattendue lors du chargement des messages');
+    }
+  };
+
+  const calculateStats = (leadsData: Lead[], messagesData: Message[]) => {
     const now = new Date();
     const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
     const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
@@ -115,10 +154,15 @@ export const useCRMData = () => {
     const partialSubmissions = leadsData.filter(l => l.form_type === 'step1').length;
     const fullSubmissions = leadsData.filter(l => l.form_type === 'full').length;
 
+    // Calculate message stats
+    const contactMessages = messagesData.filter(m => m.request_type === 'contact').length;
+    const callbackMessages = messagesData.filter(m => m.request_type === 'callback').length;
+
     setStats({
       totalLeads: leadsData.length,
-      totalQuickContacts: quickContacts,
-      totalCallbackRequests: callbackRequests,
+      totalMessages: messagesData.length,
+      totalQuickContacts: quickContacts + contactMessages,
+      totalCallbackRequests: callbackRequests + callbackMessages,
       totalPartialSubmissions: partialSubmissions,
       totalFullSubmissions: fullSubmissions,
       weeklyLeads,
@@ -142,6 +186,7 @@ export const useCRMData = () => {
       });
 
       await fetchLeads();
+      await fetchMessages();
     } catch (err) {
       console.error('💥 Critical error fetching CRM data:', err);
       setError('Erreur lors du chargement des données du CRM');
@@ -233,8 +278,8 @@ export const useCRMData = () => {
 
   // Calculate stats when data changes
   useEffect(() => {
-    calculateStats(leads);
-  }, [leads]);
+    calculateStats(leads, messages);
+  }, [leads, messages]);
 
   // Fetch data when admin user is available
   useEffect(() => {
@@ -245,6 +290,7 @@ export const useCRMData = () => {
 
   return {
     leads,
+    messages,
     stats,
     loading,
     error,

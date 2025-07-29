@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { BarChart3, Users, MessageSquare, FileText, LogOut, Search, AlertCircle, Bell, Eye, Phone } from "lucide-react";
+import { BarChart3, Users, MessageSquare, FileText, LogOut, Search, AlertCircle, Bell, Eye, Phone, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAdmin } from "@/contexts/AdminContext";
 import { useLeadNotifications } from "@/hooks/use-lead-notifications";
@@ -27,6 +27,7 @@ const Admin = () => {
   const { newLeadsCount, clearNotifications } = useLeadNotifications();
   const { 
     leads, 
+    messages,
     stats, 
     loading: crmLoading, 
     error: crmError,
@@ -325,18 +326,19 @@ L'équipe Raccordement Connect`;
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Contacts rapides</CardTitle>
+                <CardTitle className="text-sm font-medium">Messages de contact</CardTitle>
                 <MessageSquare className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{stats.totalQuickContacts}</div>
+                <div className="text-2xl font-bold">{stats.totalMessages}</div>
               </CardContent>
             </Card>
           </div>
 
           <Tabs defaultValue="leads" className="space-y-6">
-            <TabsList className={`grid w-full ${adminUser?.can_manage_users ? 'grid-cols-3' : 'grid-cols-2'} mb-6`}>
-              <TabsTrigger value="leads" className="text-sm sm:text-base">Tous les Leads ({stats.totalLeads})</TabsTrigger>
+            <TabsList className={`grid w-full ${adminUser?.can_manage_users ? 'grid-cols-4' : 'grid-cols-3'} mb-6`}>
+              <TabsTrigger value="leads" className="text-sm sm:text-base">Leads ({stats.totalLeads})</TabsTrigger>
+              <TabsTrigger value="messages" className="text-sm sm:text-base">Messages ({stats.totalMessages})</TabsTrigger>
               <TabsTrigger value="summary" className="text-sm sm:text-base">Résumé par Type</TabsTrigger>
               {adminUser?.can_manage_users && (
                 <TabsTrigger value="users" className="text-sm sm:text-base">Utilisateurs</TabsTrigger>
@@ -605,6 +607,97 @@ L'équipe Raccordement Connect`;
                                </Dialog>
                               </div>
                              </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="messages" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <MessageSquare className="w-5 h-5" />
+                    Messages de contact ({messages.length})
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {isPendingValidation ? (
+                    <div className="text-center py-8">
+                      <AlertCircle className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+                      <p className="text-muted-foreground">
+                        Votre accès est en attente de validation par un administrateur.
+                      </p>
+                    </div>
+                  ) : messages.length === 0 ? (
+                    <div className="text-center py-8">
+                      <MessageSquare className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+                      <p className="text-muted-foreground">Aucun message pour le moment.</p>
+                    </div>
+                  ) : (
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Nom</TableHead>
+                          <TableHead>Contact</TableHead>
+                          <TableHead>Type</TableHead>
+                          <TableHead>Message</TableHead>
+                          <TableHead>Date</TableHead>
+                          <TableHead>Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {messages.map((message) => (
+                          <TableRow key={message.id}>
+                            <TableCell>
+                              <div className="font-medium">{message.name}</div>
+                            </TableCell>
+                            <TableCell>
+                              <div>
+                                <div className="text-sm">{message.email}</div>
+                                <div className="text-sm text-muted-foreground">{message.phone}</div>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant={message.request_type === 'contact' ? 'default' : 'secondary'}>
+                                {message.request_type === 'contact' ? 'Contact' : 'Rappel'}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <div className="max-w-xs">
+                                <p className="text-sm text-muted-foreground truncate">
+                                  {message.message}
+                                </p>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div className="text-sm">{formatDate(message.created_at)}</div>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex space-x-2">
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  onClick={() => window.open(`mailto:${message.email}`, '_blank')}
+                                >
+                                  <Mail className="w-4 h-4 mr-1" />
+                                  Email
+                                </Button>
+                                {message.phone && (
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    onClick={() => window.open(`tel:${message.phone}`, '_blank')}
+                                  >
+                                    <Phone className="w-4 h-4 mr-1" />
+                                    Appel
+                                  </Button>
+                                )}
+                              </div>
+                            </TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
