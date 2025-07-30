@@ -88,8 +88,8 @@ const FooterSection = () => {
   };
 
   return (
-    <footer className="bg-slate-800 text-white mobile-safe-bottom">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+    <footer className="bg-slate-800 text-white overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 pb-8">
         {/* Logo Section - Enhanced */}
         <div className="flex flex-col md:flex-row items-center justify-center mb-8 md:mb-12">
           <div className="h-20 md:h-24 w-auto mr-0 md:mr-4 mb-2 md:mb-0 flex items-center justify-center">
@@ -232,7 +232,7 @@ const FooterSection = () => {
         </div>
 
         {/* Bottom Section - Mobile optimized */}
-        <div className="border-t border-slate-700 mt-8 md:mt-12 pt-6 md:pt-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+        <div className="border-t border-slate-700 mt-8 md:mt-12 pt-6 md:pt-8 pb-0 mb-0 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <p className="text-sm md:text-base text-gray-400 text-center md:text-left leading-relaxed">
             <a 
               href="/login" 

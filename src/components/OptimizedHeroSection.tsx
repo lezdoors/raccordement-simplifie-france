@@ -35,8 +35,8 @@ const OptimizedHeroSection = () => {
     setMounted(true);
   }, []);
   if (!mounted) {
-    return <section className="relative min-h-[85vh] bg-gradient-hero overflow-hidden w-full">
-        <div className="relative w-full px-4 sm:px-6 lg:px-8 h-full">
+    return <section className="relative min-h-[85vh] bg-gradient-hero overflow-hidden w-full max-w-none">
+        <div className="relative w-full px-0 sm:px-6 lg:px-8 h-full">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-[85vh] py-12 lg:py-16">
             <div className="space-y-8">
               <div className="space-y-6">
@@ -58,16 +58,16 @@ const OptimizedHeroSection = () => {
         </div>
       </section>;
   }
-  return <section className="relative min-h-[85vh] bg-gradient-hero overflow-hidden w-full">
+  return <section className="relative min-h-[85vh] bg-gradient-hero overflow-hidden w-full max-w-none">
       <div className="absolute inset-0 opacity-30">
         <div className="absolute inset-0 bg-gradient-to-br from-royal/10 to-transparent"></div>
       </div>
       
-      <div className="relative w-full px-4 sm:px-6 lg:px-8 h-full">
+      <div className="relative w-full px-0 sm:px-6 lg:px-8 h-full">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-[85vh] py-12 lg:py-16">
           
           {/* Left Column - Main Content */}
-          <div className="space-y-8 mx-[60px] px-[60px] my-0 py-0">
+          <div className="space-y-8 px-0 sm:px-4 md:px-8 lg:px-12">
             <div className="space-y-6">
               <div className="flex justify-center">
                 <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-sm font-medium">
