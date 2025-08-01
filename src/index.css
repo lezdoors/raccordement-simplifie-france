@@ -189,6 +189,22 @@
     height: auto;
     min-height: 100vh;
   }
+
+  /* Performance optimizations */
+  .reduce-motion * {
+    animation-duration: 0s !important;
+    transition-duration: 0s !important;
+  }
+
+  .fonts-loaded {
+    font-display: swap;
+  }
+
+  /* Optimize images */
+  img {
+    content-visibility: auto;
+    contain-intrinsic-size: 200px;
+  }
   
   /* Ensure html allows scroll */
   html {

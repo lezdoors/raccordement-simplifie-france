@@ -27,6 +27,8 @@ export default defineConfig(({ mode }) => ({
           ui: ['@radix-ui/react-accordion', '@radix-ui/react-dialog', '@radix-ui/react-select'],
           icons: ['lucide-react'],
           router: ['react-router-dom'],
+          animations: ['framer-motion'],
+          query: ['@tanstack/react-query'],
         },
       },
     },
@@ -36,8 +38,13 @@ export default defineConfig(({ mode }) => ({
       compress: {
         drop_console: true,
         drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info'],
+      },
+      mangle: {
+        safari10: true,
       },
     },
+    target: ['es2020', 'edge88', 'firefox78', 'chrome87', 'safari14'],
   },
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom', 'lucide-react'],

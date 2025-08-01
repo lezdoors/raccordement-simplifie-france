@@ -38,7 +38,7 @@ import Protected from "./pages/Protected";
 import AuthTest from "./pages/AuthTest";
 import Blog from "./pages/Blog";
 import FAQ from "./pages/FAQ";
-import { MobileOptimizations } from "./components/mobile/MobileOptimizations";
+import { PerformanceManager } from "./components/PerformanceManager";
 import { MobilePerformanceProvider } from "./components/mobile/MobilePerformanceProvider";
 import { SEOBreadcrumb } from "./components/SEOBreadcrumb";
 import { SEOEnhancer } from "./components/SEOEnhancer";
@@ -115,7 +115,7 @@ const App = () => (
         <MobilePerformanceProvider>
           <AdminProvider>
             <ServiceWorker />
-            <MobileOptimizations />
+            <PerformanceManager />
             <Toaster />
             <Sonner />
             <ErrorBoundary>
