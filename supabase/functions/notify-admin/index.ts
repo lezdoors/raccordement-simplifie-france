@@ -1,7 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { Resend } from "npm:resend@2.0.0";
-
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+import { SmtpClient } from "https://deno.land/x/smtp@v0.7.0/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -13,6 +11,68 @@ interface NotificationRequest {
   isPartial?: boolean;
 }
 
+interface EmailConfig {
+  recipients: string[];
+  ccRecipients?: string[];
+  bccRecipients?: string[];
+}
+
+// Future-proof email configuration
+const getEmailConfig = (): EmailConfig => {
+  return {
+    recipients: ["bonjour@raccordement-connect.com"],
+    // Future expansion ready
+    ccRecipients: [],
+    bccRecipients: []
+  };
+};
+
+const sendEmailWithRetry = async (emailData: any, maxRetries = 3): Promise<any> => {
+  const smtpConfig = {
+    hostname: "s1097.can1.mysecurecloudhost.com",
+    port: 465,
+    username: "bonjour@raccordement-connect.com",
+    password: Deno.env.get("SMTP_PASSWORD")!,
+    secure: true, // SSL
+  };
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      console.log(`📧 Email sending attempt ${attempt}/${maxRetries}`);
+      
+      const client = new SmtpClient();
+      await client.connectTLS(smtpConfig);
+      
+      await client.send({
+        from: "bonjour@raccordement-connect.com",
+        to: emailData.to,
+        cc: emailData.cc,
+        bcc: emailData.bcc,
+        subject: emailData.subject,
+        content: emailData.html,
+        html: emailData.html,
+      });
+      
+      await client.close();
+      
+      console.log(`✅ Email sent successfully on attempt ${attempt}`);
+      return { success: true, attempt };
+      
+    } catch (error) {
+      console.error(`❌ Email sending failed on attempt ${attempt}:`, error);
+      
+      if (attempt === maxRetries) {
+        throw new Error(`Failed to send email after ${maxRetries} attempts: ${error.message}`);
+      }
+      
+      // Exponential backoff
+      const delayMs = Math.pow(2, attempt - 1) * 1000;
+      console.log(`⏱️ Retrying in ${delayMs}ms...`);
+      await new Promise(resolve => setTimeout(resolve, delayMs));
+    }
+  }
+};
+
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
@@ -21,8 +81,9 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     const { formData, isPartial = false }: NotificationRequest = await req.json();
+    const emailConfig = getEmailConfig();
 
-    console.log("Sending notification for form data:", { email: formData.email, isPartial });
+    console.log("📨 Processing email notification for:", { email: formData.email, isPartial });
 
     const subject = isPartial 
       ? `🔄 Demande de raccordement partielle - ${formData.firstName} ${formData.lastName}`
@@ -56,6 +117,15 @@ const handler = async (req: Request): Promise<Response> => {
       je_ne_sais_pas: "Je ne sais pas"
     }[formData.powerType] || formData.powerType;
 
+    const submissionTime = new Date().toLocaleString('fr-FR', {
+      timeZone: 'Europe/Paris',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
     const htmlContent = `
       <h1>${subject}</h1>
       
@@ -66,6 +136,7 @@ const handler = async (req: Request): Promise<Response> => {
         <p><strong>Email:</strong> ${formData.email}</p>
         <p><strong>Téléphone:</strong> ${formData.phone}</p>
         <p><strong>Adresse:</strong> ${formData.postalCode} ${formData.city}</p>
+        <p><strong>Soumission:</strong> ${submissionTime}</p>
         
         ${formData.companyName ? `<p><strong>Entreprise:</strong> ${formData.companyName} (${formData.siret})</p>` : ''}
         ${formData.collectivityName ? `<p><strong>Collectivité:</strong> ${formData.collectivityName} (${formData.collectivitySiren})</p>` : ''}
@@ -90,6 +161,13 @@ const handler = async (req: Request): Promise<Response> => {
         
         <p><strong>État du projet:</strong> ${formData.projectStatus}</p>
         <p><strong>Délai souhaité:</strong> ${formData.desiredTimeline}</p>
+        
+        ${formData.additionalInfo ? `
+        <div style="background: #f0f9ff; padding: 15px; border-radius: 5px; margin-top: 10px;">
+          <h3>💬 Message complémentaire</h3>
+          <p>${formData.additionalInfo}</p>
+        </div>
+        ` : ''}
       </div>
       ` : `
       <div style="background: #fff3cd; padding: 20px; border-radius: 8px; margin: 20px 0;">
@@ -109,26 +187,34 @@ const handler = async (req: Request): Promise<Response> => {
 
       <div style="background: #e9ecef; padding: 20px; border-radius: 8px; margin: 20px 0;">
         <h2>🔗 Actions</h2>
-        <p><a href="https://raccordement-elec.fr/admin" style="background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Voir dans le CRM</a></p>
+        <p><a href="https://raccordement-connect.com/admin" style="background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Voir dans le CRM</a></p>
       </div>
 
       <hr style="margin: 30px 0;">
       <p style="color: #666; font-size: 14px;">
         Cette notification a été envoyée automatiquement par le système de demandes de raccordement.<br>
-        Email du client: ${formData.email}
+        Email du client: ${formData.email}<br>
+        Horodatage: ${submissionTime}
       </p>
     `;
 
-    const emailResponse = await resend.emails.send({
-      from: "Raccordement Connect <noreply@raccordement-connect.com>",
-      to: ["bonjour@raccordement-connect.com"],
+    const emailData = {
+      to: emailConfig.recipients,
+      cc: emailConfig.ccRecipients,
+      bcc: emailConfig.bccRecipients,
       subject: subject,
       html: htmlContent,
-    });
+    };
 
-    console.log("Email sent successfully:", emailResponse);
+    const result = await sendEmailWithRetry(emailData);
 
-    return new Response(JSON.stringify({ success: true, emailId: emailResponse.data?.id }), {
+    console.log("📧 Email sent successfully:", result);
+
+    return new Response(JSON.stringify({ 
+      success: true, 
+      attempt: result.attempt,
+      timestamp: submissionTime 
+    }), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
@@ -136,7 +222,7 @@ const handler = async (req: Request): Promise<Response> => {
       },
     });
   } catch (error: any) {
-    console.error("Error sending notification:", error);
+    console.error("💥 Error sending notification:", error);
     return new Response(
       JSON.stringify({ error: error.message }),
       {

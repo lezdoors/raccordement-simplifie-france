@@ -1,8 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
-import { Resend } from "npm:resend@2.0.0";
-
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+import { SmtpClient } from "https://deno.land/x/smtp@v0.7.0/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -17,6 +14,68 @@ interface MessageNotificationRequest {
   request_type: string;
 }
 
+interface EmailConfig {
+  recipients: string[];
+  ccRecipients?: string[];
+  bccRecipients?: string[];
+}
+
+// Future-proof email configuration
+const getEmailConfig = (): EmailConfig => {
+  return {
+    recipients: ["bonjour@raccordement-connect.com"],
+    // Future expansion ready
+    ccRecipients: [],
+    bccRecipients: []
+  };
+};
+
+const sendEmailWithRetry = async (emailData: any, maxRetries = 3): Promise<any> => {
+  const smtpConfig = {
+    hostname: "s1097.can1.mysecurecloudhost.com",
+    port: 465,
+    username: "bonjour@raccordement-connect.com",
+    password: Deno.env.get("SMTP_PASSWORD")!,
+    secure: true, // SSL
+  };
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      console.log(`📧 Contact email sending attempt ${attempt}/${maxRetries}`);
+      
+      const client = new SmtpClient();
+      await client.connectTLS(smtpConfig);
+      
+      await client.send({
+        from: "bonjour@raccordement-connect.com",
+        to: emailData.to,
+        cc: emailData.cc,
+        bcc: emailData.bcc,
+        subject: emailData.subject,
+        content: emailData.html,
+        html: emailData.html,
+      });
+      
+      await client.close();
+      
+      console.log(`✅ Contact email sent successfully on attempt ${attempt}`);
+      return { success: true, attempt };
+      
+    } catch (error) {
+      console.error(`❌ Contact email sending failed on attempt ${attempt}:`, error);
+      
+      if (attempt === maxRetries) {
+        throw new Error(`Failed to send contact email after ${maxRetries} attempts: ${error.message}`);
+      }
+      
+      // Exponential backoff
+      const delayMs = Math.pow(2, attempt - 1) * 1000;
+      console.log(`⏱️ Retrying contact email in ${delayMs}ms...`);
+      await new Promise(resolve => setTimeout(resolve, delayMs));
+    }
+  }
+};
+
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
@@ -25,11 +84,23 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     const { name, email, phone, message, request_type }: MessageNotificationRequest = await req.json();
+    const emailConfig = getEmailConfig();
 
-    // Send notification email to the team
-    const emailResponse = await resend.emails.send({
-      from: "Raccordement Connect <noreply@raccordement-connect.com>",
-      to: ["bonjour@raccordement-connect.com"],
+    console.log("📨 Processing contact notification for:", { name, email, request_type });
+
+    const submissionTime = new Date().toLocaleString('fr-FR', {
+      timeZone: 'Europe/Paris',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
+    const emailData = {
+      to: emailConfig.recipients,
+      cc: emailConfig.ccRecipients,
+      bcc: emailConfig.bccRecipients,
       subject: `🔔 Nouveau message - ${request_type === 'callback' ? 'Demande de rappel' : 'Contact'}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -50,6 +121,7 @@ const handler = async (req: Request): Promise<Response> => {
               <li style="margin-bottom: 10px;"><strong>👤 Nom:</strong> ${name}</li>
               <li style="margin-bottom: 10px;"><strong>📧 Email:</strong> <a href="mailto:${email}" style="color: #3b82f6;">${email}</a></li>
               ${phone ? `<li style="margin-bottom: 10px;"><strong>📱 Téléphone:</strong> <a href="tel:${phone}" style="color: #3b82f6;">${phone}</a></li>` : ''}
+              <li style="margin-bottom: 10px;"><strong>🕐 Soumission:</strong> ${submissionTime}</li>
             </ul>
           </div>
 
@@ -67,22 +139,30 @@ const handler = async (req: Request): Promise<Response> => {
           </div>
 
           <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
-            <a href="https://kstugxtmghinprrpkrud.supabase.co/project/kstugxtmghinprrpkrud" 
+            <a href="https://raccordement-connect.com/admin" 
                style="background-color: #3b82f6; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
               📊 Voir dans le CRM
             </a>
           </div>
 
+          <hr style="margin: 30px 0;">
           <p style="color: #6b7280; font-size: 12px; text-align: center; margin-top: 20px;">
-            Raccordement Connect - Notification automatique
+            Raccordement Connect - Notification automatique<br>
+            Horodatage: ${submissionTime}
           </p>
         </div>
       `,
-    });
+    };
 
-    console.log("Team notification email sent successfully:", emailResponse);
+    const result = await sendEmailWithRetry(emailData);
 
-    return new Response(JSON.stringify({ success: true, emailId: emailResponse.data?.id }), {
+    console.log("📧 Contact notification sent successfully:", result);
+
+    return new Response(JSON.stringify({ 
+      success: true, 
+      attempt: result.attempt,
+      timestamp: submissionTime 
+    }), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
@@ -90,7 +170,7 @@ const handler = async (req: Request): Promise<Response> => {
       },
     });
   } catch (error: any) {
-    console.error("Error in notify-team-message function:", error);
+    console.error("💥 Error in notify-team-message function:", error);
     return new Response(
       JSON.stringify({ error: error.message }),
       {
