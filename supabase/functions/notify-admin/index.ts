@@ -120,8 +120,8 @@ const handler = async (req: Request): Promise<Response> => {
     `;
 
     const emailResponse = await resend.emails.send({
-      from: "Raccordement Électrique <noreply@raccordement-elec.fr>",
-      to: ["bonjour@raccordement-elec.fr"],
+      from: "Raccordement Connect <noreply@raccordement-connect.com>",
+      to: ["bonjour@raccordement-connect.com"],
       subject: subject,
       html: htmlContent,
     });

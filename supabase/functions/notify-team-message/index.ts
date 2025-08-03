@@ -28,8 +28,8 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send notification email to the team
     const emailResponse = await resend.emails.send({
-      from: "RaccordementConnect <noreply@raccordement-elec.fr>",
-      to: ["bonjour@raccordement-elec.fr"],
+      from: "Raccordement Connect <noreply@raccordement-connect.com>",
+      to: ["bonjour@raccordement-connect.com"],
       subject: `🔔 Nouveau message - ${request_type === 'callback' ? 'Demande de rappel' : 'Contact'}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
