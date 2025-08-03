@@ -313,42 +313,42 @@ export const StepTechnicalDetails = ({ form }: StepTechnicalDetailsProps) => {
                   >
                     <div className="relative">
                       <RadioGroupItem value="maison_individuelle" id="maison_individuelle" className="peer sr-only" />
-                      <Label htmlFor="maison_individuelle" className={`border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "maison_individuelle" ? "selected" : ""}`}>
-                        <Home className="w-8 h-8 text-primary" />
-                        <div className="text-lg font-semibold">Maison individuelle</div>
-                        <div className="text-sm text-muted-foreground text-center">Maison unifamiliale avec jardin ou terrain privé</div>
+                      <Label htmlFor="maison_individuelle" className={`h-28 w-full md:w-[260px] border-2 rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "maison_individuelle" ? "bg-yellow-200 border-yellow-400" : "border-border"}`}>
+                        <Home className="w-6 h-6 text-primary" />
+                        <div className="text-base font-semibold">Maison individuelle</div>
+                        <div className="text-xs text-muted-foreground text-center">Maison unifamiliale avec jardin ou terrain privé</div>
                       </Label>
                     </div>
 
                     <div className="relative">
                       <RadioGroupItem value="immeuble_collectif" id="immeuble_collectif" className="peer sr-only" />
-                      <Label htmlFor="immeuble_collectif" className={`border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "immeuble_collectif" ? "selected" : ""}`}>
-                        <div className="text-lg font-semibold">Immeuble collectif</div>
-                        <div className="text-sm text-muted-foreground text-center">Appartement ou copropriété dans un bâtiment résidentiel</div>
+                      <Label htmlFor="immeuble_collectif" className={`h-28 w-full md:w-[260px] border-2 rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "immeuble_collectif" ? "bg-yellow-200 border-yellow-400" : "border-border"}`}>
+                        <div className="text-base font-semibold">Immeuble collectif</div>
+                        <div className="text-xs text-muted-foreground text-center">Appartement ou copropriété dans un bâtiment résidentiel</div>
                       </Label>
                     </div>
 
                     <div className="relative">
                       <RadioGroupItem value="local_commercial" id="local_commercial" className="peer sr-only" />
-                      <Label htmlFor="local_commercial" className={`border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "local_commercial" ? "selected" : ""}`}>
-                        <div className="text-lg font-semibold">Local commercial</div>
-                        <div className="text-sm text-muted-foreground text-center">Boutique, bureau, restaurant ou autre activité commerciale</div>
+                      <Label htmlFor="local_commercial" className={`h-28 w-full md:w-[260px] border-2 rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "local_commercial" ? "bg-yellow-200 border-yellow-400" : "border-border"}`}>
+                        <div className="text-base font-semibold">Local commercial</div>
+                        <div className="text-xs text-muted-foreground text-center">Boutique, bureau, restaurant ou autre activité commerciale</div>
                       </Label>
                     </div>
 
                     <div className="relative">
                       <RadioGroupItem value="batiment_industriel" id="batiment_industriel" className="peer sr-only" />
-                      <Label htmlFor="batiment_industriel" className={`border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "batiment_industriel" ? "selected" : ""}`}>
-                        <div className="text-lg font-semibold">Bâtiment industriel</div>
-                        <div className="text-sm text-muted-foreground text-center">Usine, entrepôt, atelier ou installation industrielle</div>
+                      <Label htmlFor="batiment_industriel" className={`h-28 w-full md:w-[260px] border-2 rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "batiment_industriel" ? "bg-yellow-200 border-yellow-400" : "border-border"}`}>
+                        <div className="text-base font-semibold">Bâtiment industriel</div>
+                        <div className="text-xs text-muted-foreground text-center">Usine, entrepôt, atelier ou installation industrielle</div>
                       </Label>
                     </div>
 
                     <div className="relative md:col-span-2">
                       <RadioGroupItem value="terrain_nu" id="terrain_nu" className="peer sr-only" />
-                      <Label htmlFor="terrain_nu" className={`border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "terrain_nu" ? "selected" : ""}`}>
-                        <div className="text-lg font-semibold">Terrain nu</div>
-                        <div className="text-sm text-muted-foreground text-center">Terrain vierge sans construction existante nécessitant un nouveau raccordement</div>
+                      <Label htmlFor="terrain_nu" className={`h-28 w-full md:w-[260px] md:col-span-2 border-2 rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "terrain_nu" ? "bg-yellow-200 border-yellow-400" : "border-border"}`}>
+                        <div className="text-base font-semibold">Terrain nu</div>
+                        <div className="text-xs text-muted-foreground text-center">Terrain vierge sans construction existante nécessitant un nouveau raccordement</div>
                       </Label>
                     </div>
                   </RadioGroup>
@@ -373,25 +373,25 @@ export const StepTechnicalDetails = ({ form }: StepTechnicalDetailsProps) => {
                   >
                     <div className="relative">
                       <RadioGroupItem value="monophase" id="monophase" className="peer sr-only" />
-                      <Label htmlFor="monophase" className={`border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "monophase" ? "selected" : ""}`}>
-                        <div className="text-lg font-semibold">Monophasé</div>
-                        <div className="text-sm text-muted-foreground text-center">Habitations standard (3-12 kVA)</div>
+                      <Label htmlFor="monophase" className={`h-28 w-full md:w-[260px] border-2 rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "monophase" ? "bg-yellow-200 border-yellow-400" : "border-border"}`}>
+                        <div className="text-base font-semibold">Monophasé</div>
+                        <div className="text-xs text-muted-foreground text-center">Habitations standard (3-12 kVA)</div>
                       </Label>
                     </div>
 
                     <div className="relative">
                       <RadioGroupItem value="triphase" id="triphase" className="peer sr-only" />
-                      <Label htmlFor="triphase" className={`border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "triphase" ? "selected" : ""}`}>
-                        <div className="text-lg font-semibold">Triphasé</div>
-                        <div className="text-sm text-muted-foreground text-center">Puissances élevées (12-36+ kVA)</div>
+                      <Label htmlFor="triphase" className={`h-28 w-full md:w-[260px] border-2 rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "triphase" ? "bg-yellow-200 border-yellow-400" : "border-border"}`}>
+                        <div className="text-base font-semibold">Triphasé</div>
+                        <div className="text-xs text-muted-foreground text-center">Puissances élevées (12-36+ kVA)</div>
                       </Label>
                     </div>
 
                     <div className="relative">
                       <RadioGroupItem value="je_ne_sais_pas" id="je_ne_sais_pas" className="peer sr-only" />
-                      <Label htmlFor="je_ne_sais_pas" className={`border-2 border-border rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "je_ne_sais_pas" ? "selected" : ""}`}>
-                        <div className="text-lg font-semibold">Je ne sais pas</div>
-                        <div className="text-sm text-muted-foreground text-center">Un expert vous conseillera</div>
+                      <Label htmlFor="je_ne_sais_pas" className={`h-28 w-full md:w-[260px] border-2 rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-all duration-200 flex flex-col items-center justify-center space-y-2 ${field.value === "je_ne_sais_pas" ? "bg-yellow-200 border-yellow-400" : "border-border"}`}>
+                        <div className="text-base font-semibold">Je ne sais pas</div>
+                        <div className="text-xs text-muted-foreground text-center">Un expert vous conseillera</div>
                       </Label>
                     </div>
                   </RadioGroup>
