@@ -288,6 +288,71 @@ export const useCRMData = () => {
     }
   }, [adminUser, user]);
 
+  // Set up realtime subscriptions
+  useEffect(() => {
+    if (!adminUser || !user) return;
+
+    console.log('🔔 Setting up realtime subscriptions for CRM');
+
+    // Subscribe to leads changes
+    const leadsChannel = supabase
+      .channel('leads-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'leads_raccordement'
+        },
+        (payload) => {
+          console.log('📡 Leads realtime update:', payload);
+          
+          if (payload.eventType === 'INSERT') {
+            const newLead = payload.new as Lead;
+            setLeads(prev => [newLead, ...prev]);
+            toast.success(`Nouveau lead: ${newLead.prenom} ${newLead.nom}`);
+          } else if (payload.eventType === 'UPDATE') {
+            const updatedLead = payload.new as Lead;
+            setLeads(prev => prev.map(lead => 
+              lead.id === updatedLead.id ? updatedLead : lead
+            ));
+          } else if (payload.eventType === 'DELETE') {
+            const deletedLead = payload.old as Lead;
+            setLeads(prev => prev.filter(lead => lead.id !== deletedLead.id));
+          }
+        }
+      )
+      .subscribe();
+
+    // Subscribe to messages changes
+    const messagesChannel = supabase
+      .channel('messages-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'messages'
+        },
+        (payload) => {
+          console.log('📡 Messages realtime update:', payload);
+          
+          if (payload.eventType === 'INSERT') {
+            const newMessage = payload.new as Message;
+            setMessages(prev => [newMessage, ...prev]);
+            toast.success(`Nouveau message de ${newMessage.name}`);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      console.log('🔕 Cleaning up realtime subscriptions');
+      supabase.removeChannel(leadsChannel);
+      supabase.removeChannel(messagesChannel);
+    };
+  }, [adminUser, user]);
+
   return {
     leads,
     messages,
