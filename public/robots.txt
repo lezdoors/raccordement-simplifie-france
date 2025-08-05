@@ -17,4 +17,4 @@ Disallow: /admin
 Disallow: /login
 
 # Sitemap
-Sitemap: https://raccordement-connect.com/sitemap.xml
+Sitemap: https://www.raccordement-connect.com/sitemap.xml

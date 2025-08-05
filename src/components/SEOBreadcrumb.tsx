@@ -98,7 +98,7 @@ export const SEOBreadcrumb: React.FC = () => {
       "@type": "ListItem",
       "position": index + 1,
       "name": item.label,
-      ...(item.href && { "item": `https://racco-service.com${item.href}` })
+      ...(item.href && { "item": `https://www.raccordement-connect.com${item.href}` })
     }))
   };
 

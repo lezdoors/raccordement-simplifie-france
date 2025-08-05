@@ -56,7 +56,7 @@ export const EnhancedOptimizedImage: React.FC<OptimizedImageProps> = ({
   // Generate optimized image URL with CDN parameters
   const getOptimizedSrc = (originalSrc: string) => {
     // If it's already a CDN URL or external URL, return as is
-    if (originalSrc.includes('://') && !originalSrc.includes('racco-service.com')) {
+    if (originalSrc.includes('://') && !originalSrc.includes('raccordement-connect.com')) {
       return originalSrc;
     }
 
