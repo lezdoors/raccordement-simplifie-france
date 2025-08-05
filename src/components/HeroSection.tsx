@@ -33,11 +33,12 @@ const HeroSection = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-royal/10 to-transparent"></div>
       </div>
       
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-full">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-[85vh] py-12 lg:py-16">
+      {/* Centered container with optimized layout */}
+      <div className="relative mx-auto max-w-6xl px-6 sm:px-8 lg:px-12 h-full">
+        <div className="flex lg:gap-8 xl:gap-12 items-center justify-center min-h-[85vh] py-12 lg:py-16">
           
-          {/* Left Column - Main Content */}
-          <div className="space-y-8">
+          {/* Main Content - Moved right on desktop, more padding on mobile */}
+          <div className="flex-1 lg:max-w-xl lg:ml-24 xl:ml-32 space-y-8">
             <div className="space-y-6">
               <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-sm font-medium">
                 <Award className="w-4 h-4 mr-2" />
@@ -58,10 +59,10 @@ const HeroSection = () => {
               </p>
             </div>
 
-            {/* Single CTA - Centered and clean */}
-            <div className="flex justify-center lg:justify-start">
+            {/* CTA with more breathing room on mobile */}
+            <div className="flex justify-center lg:justify-start px-2 sm:px-0">
               <button 
-                className="h-14 px-8 py-4 text-lg font-semibold flex items-center justify-center btn-cta-animated w-full sm:w-auto sm:min-w-[280px] bg-accent text-white border-2 border-accent hover:bg-accent/90 transition-all duration-300 rounded-lg touch-feedback"
+                className="h-14 px-8 py-4 mx-4 sm:mx-0 text-lg font-semibold flex items-center justify-center btn-cta-animated w-full sm:w-auto sm:min-w-[280px] bg-accent text-white border-2 border-accent hover:bg-accent/90 transition-all duration-300 rounded-lg touch-feedback"
                 onClick={scrollToForm}
               >
                 Démarrer ma demande
@@ -90,7 +91,7 @@ const HeroSection = () => {
               </div>
             </div>
 
-            {/* Trust indicators - Centered */}
+            {/* Trust indicators */}
             <div className="flex flex-wrap justify-center lg:justify-start gap-6 pt-4">
               <div className="flex items-center text-white/80 text-sm">
                 <CheckCircle className="w-4 h-4 mr-2 text-accent" />
@@ -111,9 +112,9 @@ const HeroSection = () => {
             </div>
           </div>
 
-          {/* Right Column - Floating Contact Card */}
-          <div className="lg:flex justify-center items-center hidden">
-            <div className="floating-card glass-card p-8 rounded-2xl w-full max-w-md">
+          {/* Contact Card - Reduced left margin to close gap */}
+          <div className="lg:flex items-center hidden lg:ml-4 xl:ml-6">
+            <div className="floating-card glass-card p-8 rounded-2xl w-full max-w-sm xl:max-w-md">
               <div className="text-center mb-6">
                 <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Phone className="w-8 h-8 text-white" />
