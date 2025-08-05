@@ -25,8 +25,8 @@ const Navigation = () => {
           <div className="flex items-center cursor-pointer justify-center md:justify-start" onClick={() => navigate("/")}>
             <div className="h-12 md:h-20 w-auto mr-3 md:mr-4 flex items-center justify-center">
               <img 
-                src="https://kstugxtmghinprrpkrud.supabase.co/storage/v1/object/public/logo//Votre%20Partenaire%20(Logo)-3.png" 
-                alt="Raccordement Connect - Votre Partenaire Raccordement Électrique" 
+                src="/lovable-uploads/657b7ce9-9ebb-4f72-afe9-d48c1d26e91a.png" 
+                alt="Portail Raccordement - Votre Partenaire Raccordement Électrique" 
                 className="w-[120px] md:w-[180px] h-auto transition-transform hover:scale-105"
               />
             </div>
