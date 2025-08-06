@@ -3,7 +3,6 @@ import { Menu, X, Phone } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
-import logoImage from "@/assets/portail-raccordement-logo.png";
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -22,16 +21,16 @@ const Navigation = () => {
   return <nav className="bg-gradient-to-r from-primary to-primary/90 text-white sticky top-0 z-[60] shadow-lg backdrop-blur-md bg-opacity-95">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 md:h-20">
-          {/* Logo Section - Mobile Optimized */}
-          <a href="/" className="flex items-center cursor-pointer justify-center md:justify-start">
-            <img 
-              src={logoImage} 
-              alt="Portail Raccordement" 
-              width="180" 
-              height="50" 
-              className="object-contain h-auto w-auto max-h-[50px] md:max-h-[60px] transition-transform hover:scale-105"
-            />
-          </a>
+          {/* Logo Section - Significantly enlarged */}
+          <div className="flex items-center cursor-pointer justify-center md:justify-start" onClick={() => navigate("/")}>
+            <div className="h-12 md:h-20 w-auto mr-3 md:mr-4 flex items-center justify-center">
+              <img 
+                src="https://kstugxtmghinprrpkrud.supabase.co/storage/v1/object/public/logo//Votre%20Partenaire%20(Logo)-3.png" 
+                alt="Raccordement Connect - Votre Partenaire Raccordement Électrique" 
+                className="w-[120px] md:w-[180px] h-auto transition-transform hover:scale-105"
+              />
+            </div>
+          </div>
           
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
