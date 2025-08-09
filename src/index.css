@@ -453,7 +453,33 @@
   .floating-cta:hover {
     background: hsl(var(--luxury-gold-light));
   }
+
+  /* Polished UI utilities */
+  .hover-scale {
+    @apply transition-transform duration-200 hover:scale-105;
+  }
+
+  .heading-1 {
+    @apply font-display text-4xl md:text-5xl font-semibold leading-tight tracking-tight;
+  }
+
+  .heading-2 {
+    @apply font-display text-3xl md:text-4xl font-semibold leading-snug;
+  }
+
+  .heading-3 {
+    @apply font-display text-2xl md:text-3xl font-semibold leading-snug;
+  }
+
+  .section-py {
+    @apply py-16 md:py-24;
+  }
+
+  .trust-logo {
+    @apply h-10 md:h-12 opacity-90 hover:opacity-100 transition-opacity;
+  }
 }
+
 
 @keyframes fadeUp {
   from {
