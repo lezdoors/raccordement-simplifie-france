@@ -246,6 +246,28 @@
   }
 }
 
+@layer base {
+  /* Consistent vertical rhythm and heading hierarchy */
+  section {
+    padding-block: clamp(2.5rem, 6vw, 5rem);
+  }
+  h1 {
+    @apply font-display font-extrabold tracking-tight;
+    line-height: 1.1;
+  }
+  h2 {
+    @apply font-display font-bold tracking-tight;
+    line-height: 1.15;
+  }
+  h3 {
+    @apply font-display font-semibold;
+    line-height: 1.2;
+  }
+  h1, h2, h3 {
+    margin-block: 0 1rem;
+  }
+}
+ 
 @layer components {
   /* Glass Morphism Effects */
   .glass-card {

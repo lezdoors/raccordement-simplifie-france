@@ -16,6 +16,7 @@ const mobileButtonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline min-h-auto p-0",
         premium: "bg-gradient-luxury text-white hover:opacity-90 shadow-xl",
         floating: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-2xl rounded-full",
+        cta: "bg-gradient-luxury text-primary-foreground hover:opacity-90 shadow-xl",
       },
       size: {
         default: "h-14 px-6 py-4",

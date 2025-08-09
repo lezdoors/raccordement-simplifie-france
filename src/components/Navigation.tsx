@@ -24,10 +24,12 @@ const Navigation = () => {
           {/* Logo Section - Significantly enlarged */}
           <div className="flex items-center cursor-pointer justify-center md:justify-start" onClick={() => navigate("/")}>
             <div className="h-12 md:h-20 w-auto mr-3 md:mr-4 flex items-center justify-center">
-              <img 
-                src="https://kstugxtmghinprrpkrud.supabase.co/storage/v1/object/public/logo//Votre%20Partenaire%20(Logo)-3.png" 
-                alt="Raccordement Connect - Votre Partenaire Raccordement Électrique" 
-                className="w-[120px] md:w-[180px] h-auto transition-transform hover:scale-105"
+              <img
+                src="/logo.png"
+                alt="Portail Raccordement"
+                width={180}
+                height={50}
+                className="object-contain h-auto w-auto max-h-[60px] transition-transform hover:scale-105"
               />
             </div>
           </div>
@@ -61,11 +63,10 @@ const Navigation = () => {
             <p className="text-xs text-white/80">Du lundi au vendredi de 9h à 19h</p>
           </div>
           
-          <Button 
-            size="lg" 
-            onClick={scrollToForm} 
-            className="font-bold px-4 py-2 rounded-lg text-[#1E1E1E] hover:opacity-90 transition-all duration-300"
-            style={{ background: 'linear-gradient(90deg, #FFD77A 0%, #F2B736 100%)' }}
+          <Button
+            variant="cta"
+            size="lg"
+            onClick={scrollToForm}
           >
             Démarrer ma demande
           </Button>
@@ -106,13 +107,14 @@ const Navigation = () => {
             </a>
               <p className="text-xs text-white/80 mt-1">Lun-Ven 9h-18h</p>
             </div>
-            <Button 
+            <Button
+              variant="cta"
+              size="lg"
               onClick={() => {
                 scrollToForm();
                 setIsMenuOpen(false);
-              }} 
-              className="w-full font-bold px-4 py-2 rounded-lg text-[#1E1E1E] hover:opacity-90 transition-all duration-300 mobile-button touch-feedback"
-              style={{ background: 'linear-gradient(90deg, #FFD77A 0%, #F2B736 100%)' }}
+              }}
+              className="w-full"
             >
               Démarrer ma demande
             </Button>
