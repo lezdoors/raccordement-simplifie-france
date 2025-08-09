@@ -3,6 +3,7 @@ import { Menu, X, Phone } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
+import logoImage from "@/assets/portail-raccordement-logo.png";
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -21,18 +22,16 @@ const Navigation = () => {
   return <nav className="bg-gradient-to-r from-primary to-primary/90 text-white sticky top-0 z-[60] shadow-lg backdrop-blur-md bg-opacity-95">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 md:h-20">
-          {/* Logo Section - Significantly enlarged */}
-          <div className="flex items-center cursor-pointer justify-center md:justify-start" onClick={() => navigate("/")}>
-            <div className="h-12 md:h-20 w-auto mr-3 md:mr-4 flex items-center justify-center">
-              <img
-                src="/logo.png"
-                alt="Portail Raccordement"
-                width={180}
-                height={50}
-                className="object-contain h-auto w-auto max-h-[60px] transition-transform hover:scale-105"
-              />
-            </div>
-          </div>
+          {/* Logo Section - Mobile Optimized */}
+          <a href="/" className="flex items-center cursor-pointer justify-center md:justify-start">
+            <img 
+              src={logoImage} 
+              alt="Portail Raccordement" 
+              width="180" 
+              height="50" 
+              className="object-contain h-auto w-auto max-h-[50px] md:max-h-[60px] transition-transform hover:scale-105"
+            />
+          </a>
           
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
@@ -63,10 +62,11 @@ const Navigation = () => {
             <p className="text-xs text-white/80">Du lundi au vendredi de 9h à 19h</p>
           </div>
           
-          <Button
-            variant="cta"
-            size="lg"
-            onClick={scrollToForm}
+          <Button 
+            size="lg" 
+            onClick={scrollToForm} 
+            className="font-bold px-4 py-2 rounded-lg text-[#1E1E1E] hover:opacity-90 transition-all duration-300"
+            style={{ background: 'linear-gradient(90deg, #FFD77A 0%, #F2B736 100%)' }}
           >
             Démarrer ma demande
           </Button>
@@ -107,14 +107,13 @@ const Navigation = () => {
             </a>
               <p className="text-xs text-white/80 mt-1">Lun-Ven 9h-18h</p>
             </div>
-            <Button
-              variant="cta"
-              size="lg"
+            <Button 
               onClick={() => {
                 scrollToForm();
                 setIsMenuOpen(false);
-              }}
-              className="w-full"
+              }} 
+              className="w-full font-bold px-4 py-2 rounded-lg text-[#1E1E1E] hover:opacity-90 transition-all duration-300 mobile-button touch-feedback"
+              style={{ background: 'linear-gradient(90deg, #FFD77A 0%, #F2B736 100%)' }}
             >
               Démarrer ma demande
             </Button>
