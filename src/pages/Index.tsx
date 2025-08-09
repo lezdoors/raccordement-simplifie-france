@@ -3,6 +3,7 @@ import HeroSection from "@/components/HeroSection";
 import ServicesSection from "@/components/ServicesSection";
 import ProcessSection from "@/components/ProcessSection";
 import FooterSection from "@/components/FooterSection";
+import { SmartStickyButton } from "@/components/SmartStickyButton";
 
 const Index = () => {
   return (
@@ -12,6 +13,7 @@ const Index = () => {
       <ServicesSection />
       <ProcessSection />
       <FooterSection />
+      <SmartStickyButton />
     </div>
   );
 };

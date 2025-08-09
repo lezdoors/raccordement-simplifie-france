@@ -114,7 +114,7 @@ const ConnectionTypesSection = () => {
             </p>
             <Button 
               size="lg" 
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
+              variant="cta"
               onClick={() => navigate('/raccordement-enedis')}
             >
               Accéder au formulaire →

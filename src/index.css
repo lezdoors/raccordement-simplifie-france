@@ -480,6 +480,33 @@
   }
 }
 
+  @layer components {
+    /* Animated hero background */
+    .hero-animated {
+      background-image: var(--gradient-hero);
+      background-size: 200% 200%;
+      animation: hero-shift 16s ease-in-out infinite;
+    }
+
+    /* Premium partner badge */
+    .badge-premium {
+      @apply inline-flex items-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 font-semibold shadow-premium;
+      padding: 0.5rem 1rem;
+      font-size: 0.95rem;
+    }
+
+    /* Interactive cards */
+    .card-interactive {
+      @apply transition-all duration-300 border border-border/50 hover:border-primary/20 hover:shadow-premium hover:-translate-y-0.5;
+      background: hsl(var(--card));
+    }
+
+    /* Icon subtle lift on hover (use with group) */
+    .interactive-icon {
+      @apply transition-transform duration-300 group-hover:scale-110;
+    }
+  }
+
 
 @keyframes fadeUp {
   from {
@@ -512,6 +539,12 @@
     opacity: 1;
     transform: translateY(0) scale(1);
   }
+}
+
+@keyframes hero-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* Mobile Navigation Safe Area */

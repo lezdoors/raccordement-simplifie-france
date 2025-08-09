@@ -229,7 +229,8 @@ const ContactFormSection = () => {
 
                   <Button 
                     type="submit" 
-                    className="w-full bg-primary hover:bg-primary/90"
+                    variant="cta"
+                    className="w-full"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? "Envoi en cours..." : "Envoyer le message"}
@@ -252,8 +253,9 @@ const ContactFormSection = () => {
                   Laissez-nous vos coordonnées et nous vous rappelons dans les plus brefs délais.
                 </p>
                 <Button 
-                  className="w-full bg-primary hover:bg-primary/90" 
+                  className="w-full" 
                   size="lg"
+                  variant="cta"
                   onClick={() => setShowCallbackModal(true)}
                 >
                   Demander un rappel

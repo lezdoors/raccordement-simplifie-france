@@ -28,7 +28,7 @@ const ServicesSection = () => {
   ];
 
   return (
-    <section className="py-20 bg-background">
+    <section className="section-py bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
@@ -42,10 +42,10 @@ const ServicesSection = () => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
-            <Card key={index} className="relative group hover:shadow-elegant transition-all duration-300 border-border/50 hover:border-primary/20">
+            <Card key={index} className="relative group card-interactive rounded-xl">
               <CardHeader className="pb-4">
-                <div className="w-12 h-12 bg-gradient-hero rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <service.icon className="w-6 h-6 text-white" />
+                <div className="w-14 h-14 bg-gradient-hero rounded-lg flex items-center justify-center mb-4 transition-transform duration-300">
+                  <service.icon className="w-7 h-7 text-white interactive-icon" />
                 </div>
                 <CardTitle className="text-xl font-bold text-foreground">
                   {service.title}
@@ -73,7 +73,7 @@ const ServicesSection = () => {
         </div>
 
         <div className="text-center mt-12">
-          <Button variant="hero" size="lg">
+          <Button variant="cta" size="lg">
             Voir tous nos services
           </Button>
         </div>

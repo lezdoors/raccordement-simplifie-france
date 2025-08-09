@@ -27,7 +27,7 @@ const HeroSection = () => {
     satisfaction: 98,
     projects: 25000
   };
-  return <section className="relative min-h-[85vh] bg-gradient-hero overflow-hidden">
+  return <section className="relative min-h-[85vh] bg-gradient-hero hero-animated overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 opacity-30">
         <div className="absolute inset-0 bg-gradient-to-br from-royal/10 to-transparent"></div>
@@ -40,8 +40,8 @@ const HeroSection = () => {
           {/* Main Content - Moved right on desktop, more padding on mobile */}
           <div className="flex-1 lg:max-w-xl lg:ml-24 xl:ml-32 space-y-8">
             <div className="space-y-6">
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-sm font-medium">
-                <Award className="w-4 h-4 mr-2" />
+              <div className="badge-premium text-base px-5 py-2.5">
+                <Award className="w-5 h-5 mr-2" />
                 Partenaire N°1 en France
               </div>
               
@@ -114,7 +114,7 @@ const HeroSection = () => {
 
           {/* Contact Card - Reduced left margin to close gap */}
           <div className="lg:flex items-center hidden lg:ml-4 xl:ml-6">
-            <div className="floating-card glass-card p-8 rounded-2xl w-full max-w-sm xl:max-w-md">
+            <div className="floating-card glass-card p-8 rounded-2xl w-full max-w-sm xl:max-w-md ring-1 ring-white/20 animate-fade-up">
               <div className="text-center mb-6">
                 <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Phone className="w-8 h-8 text-white" />

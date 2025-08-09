@@ -169,8 +169,8 @@ const TrustSection = () => {
               <div className="space-y-3">
                 <Button 
                   size="lg" 
-                  variant="secondary"
-                  className="w-full lg:w-auto bg-white text-primary hover:bg-white/90"
+                  variant="cta"
+                  className="w-full lg:w-auto"
                   onClick={() => navigate("/commencer")}
                 >
                   Commencer maintenant
