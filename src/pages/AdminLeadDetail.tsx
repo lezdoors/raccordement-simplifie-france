@@ -61,15 +61,16 @@ const AdminLeadDetail = () => {
         query = query.eq('assigned_to_email', user.email);
       }
       
-      const { data, error } = await query.single();
+      const { data, error } = await query.maybeSingle();
 
       if (error) {
-        if (error.code === 'PGRST116') {
-          toast.error('Lead non trouvé ou accès non autorisé');
-        navigate('/admin');
-          return;
-        }
         throw error;
+      }
+
+      if (!data) {
+        toast.error('Lead non trouvé ou accès non autorisé');
+        navigate('/admin');
+        return;
       }
 
       setLead(data);
