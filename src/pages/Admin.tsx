@@ -46,6 +46,8 @@ const Admin = () => {
   const [assignedFilter, setAssignedFilter] = useState("all");
   const [newNote, setNewNote] = useState("");
   const [advancedFilters, setAdvancedFilters] = useState<any>({});
+  const [page, setPage] = useState(1);
+  const pageSize = 25;
 
   const isPendingValidation = user && !adminUser;
   const canSeeAllLeads = adminUser?.can_see_all_leads || adminUser?.role === 'superadmin' || adminUser?.role === 'manager';
@@ -123,22 +125,42 @@ L'équipe Raccordement Connect`;
   };
 
   const getStatusBadge = (status: string) => {
-    const colors: Record<string, string> = {
-      'nouveau': 'bg-blue-100 text-blue-800',
-      'en_cours': 'bg-yellow-100 text-yellow-800',
-      'attente_enedis': 'bg-orange-100 text-orange-800',
-      'termine': 'bg-green-100 text-green-800',
+    const map: Record<string, { bg: string; text: string; label?: string }> = {
+      nouveau: { bg: 'bg-blue-100', text: 'text-blue-700' },
+      en_reflexion: { bg: 'bg-amber-100', text: 'text-amber-700', label: 'En réflexion' },
+      permis_depose: { bg: 'bg-violet-100', text: 'text-violet-700', label: 'Permis déposé' },
+      en_cours: { bg: 'bg-sky-100', text: 'text-sky-700', label: 'En cours' },
+      complet: { bg: 'bg-emerald-100', text: 'text-emerald-700', label: 'Complet' },
+      bloque: { bg: 'bg-rose-100', text: 'text-rose-700', label: 'Bloqué' },
+      // Backward compatibility with existing statuses
+      attente_enedis: { bg: 'bg-violet-100', text: 'text-violet-700', label: 'Attente Enedis' },
+      termine: { bg: 'bg-emerald-100', text: 'text-emerald-700', label: 'Terminé' },
     };
 
-    const colorClass = colors[status] || 'bg-gray-100 text-gray-800';
+    const cfg = map[status] || { bg: 'bg-gray-100', text: 'text-gray-700' };
+    const label = cfg.label || (status?.replace('_', ' ') || 'Non défini');
 
     return (
-      <Badge className={colorClass}>
-        {status?.replace('_', ' ') || 'Non défini'}
-      </Badge>
+      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${cfg.bg} ${cfg.text}`}>
+        {label}
+      </span>
     );
   };
 
+  const getPaymentBadge = (payment_status: string | null | undefined) => {
+    if (payment_status === 'paid') {
+      return (
+        <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-emerald-100 text-emerald-700">
+          Payé
+        </span>
+      );
+    }
+    return (
+      <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-gray-100 text-gray-700">
+        Non payé
+      </span>
+    );
+  };
   // Enhanced filtering function with advanced filters
   const filteredLeads = leads.filter(lead => {
     // Basic search
@@ -405,12 +427,13 @@ L'équipe Raccordement Connect`;
                     </div>
                   ) : (
                     <Table>
-                      <TableHeader>
+                      <TableHeader className="sticky top-0 z-10 bg-background shadow-[0_1px_0_0_rgba(0,0,0,0.04)]">
                         <TableRow>
                           <TableHead>Client</TableHead>
                           <TableHead>Contact</TableHead>
                           <TableHead>Projet</TableHead>
                           <TableHead>Statut</TableHead>
+                          <TableHead>Paiement</TableHead>
                           <TableHead>Assigné à</TableHead>
                           <TableHead>Date</TableHead>
                           <TableHead>Actions</TableHead>
@@ -443,6 +466,9 @@ L'équipe Raccordement Connect`;
                               {getStatusBadge(lead.etat_projet)}
                             </TableCell>
                             <TableCell>
+                              {getPaymentBadge(lead.payment_status)}
+                            </TableCell>
+                            <TableCell>
                               <div className="text-sm">
                                 {lead.assigned_to_email || 'Non assigné'}
                               </div>
@@ -455,6 +481,7 @@ L'équipe Raccordement Connect`;
                                  <Button 
                                    variant="ghost" 
                                    size="sm"
+                                   aria-label="Aperçu du lead"
                                    onClick={() => {
                                      setPreviewLead(lead);
                                      setShowPreview(true);
@@ -466,6 +493,7 @@ L'équipe Raccordement Connect`;
                                  <Button 
                                    variant="outline" 
                                    size="sm"
+                                   aria-label="Voir les détails du lead"
                                    onClick={() => navigate(`/admin/leads/${lead.id}`)}
                                  >
                                    Détails
@@ -475,6 +503,7 @@ L'équipe Raccordement Connect`;
                                     <Button 
                                       variant="ghost" 
                                       size="sm"
+                                      aria-label="Actions du lead"
                                       onClick={() => setSelectedLead(lead)}
                                     >
                                       Actions
