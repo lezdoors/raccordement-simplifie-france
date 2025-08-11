@@ -33,15 +33,15 @@ const HeroSection = () => {
       </div>
       
       {/* Centered container with optimized layout */}
-      <div className="relative mx-auto max-w-6xl px-6 sm:px-8 lg:px-12 h-full">
+      <div className="relative mx-auto max-w-7xl px-6 sm:px-8 lg:px-12 h-full">
         {/* Radial focus behind left column */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="hero-vignette" />
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-8 xl:gap-12 items-center min-h-[82vh] sm:min-h-[92vh] sm:max-h-[720px] py-10 lg:py-14">
+        <div className="grid grid-cols-1 lg:grid-cols-12 lg:gap-8 xl:gap-12 items-center min-h-[82vh] sm:min-h-[92vh] sm:max-h-[720px] py-10 lg:py-14">
           {/* Left column: text */}
-          <div className="space-y-8 lg:max-w-xl">
+          <div className="space-y-8 lg:col-span-7">
             <div className="space-y-6">
               <div className="badge-premium text-lg px-6 py-3">
                 <Award className="w-5 h-5 mr-2" />
@@ -55,6 +55,14 @@ const HeroSection = () => {
               <p className="text-lg sm:text-xl md:text-2xl text-white/90 font-light leading-relaxed">
                 Votre expert national pour toutes vos démarches : maison neuve, solaire, modification de branchement. Un accompagnement 100% conforme, rapide et clair.
               </p>
+
+              {/* Confidence strip under H1 */}
+              <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-white/80">
+                <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-accent" /> 100% sécurisé</li>
+                <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-accent" /> Traitement sous 48h</li>
+                <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-accent" /> Conformité réglementaire</li>
+                <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-accent" /> Accompagnement dédié</li>
+              </ul>
             </div>
 
             {/* Stats row */}
@@ -81,80 +89,58 @@ const HeroSection = () => {
 
             {/* CTA */}
             <div className="pt-2">
-              <button 
+              <button
                 className="btn-cta-primary btn-cta-animated hover-scale rounded-xl text-lg"
                 onClick={scrollToForm}
+                aria-label="Démarrer ma demande"
               >
                 Démarrer ma demande
               </button>
-              <a 
-                href="tel:0970709570" 
-                aria-label="Appeler le 09 70 70 95 70"
-                className="mt-3 block text-white/80 hover:text-white underline underline-offset-4"
-              >
-                Besoin d’aide ? Appelez le 09 70 70 95 70
-              </a>
             </div>
 
-            {/* Trust indicators */}
-            <div className="flex flex-wrap justify-start gap-6 pt-4">
-              <div className="flex items-center text-white/80 text-sm">
-                <CheckCircle className="w-4 h-4 mr-2 text-accent" />
-                100% sécurisé
-              </div>
-              <div className="flex items-center text-white/80 text-sm">
-                <CheckCircle className="w-4 h-4 mr-2 text-accent" />
-                Traitement sous 48h
-              </div>
-              <div className="flex items-center text-white/80 text-sm">
-                <CheckCircle className="w-4 h-4 mr-2 text-accent" />
-                Conformité réglementaire
-              </div>
-              <div className="flex items-center text-white/80 text-sm">
-                <CheckCircle className="w-4 h-4 mr-2 text-accent" />
-                Accompagnement dédié
-              </div>
-            </div>
+            {/* Confidence strip moved under the heading */}
           </div>
 
-          {/* Right column: Contact card */}
-          <div className="w-full">
-            <div className="floating-card glass-card p-8 rounded-2xl w-full max-w-sm xl:max-w-md ring-1 ring-white/20 mx-auto lg:mx-0">
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Phone className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="font-display text-2xl font-semibold text-white mb-2">
-                  Contact Premium
-                </h3>
-                <p className="text-white/80 text-sm">
-                  Assistance dédiée pour votre projet
-                </p>
-              </div>
+          {/* Right column: Mini form + Premium help */}
+          <div className="w-full lg:col-span-5">
+            <div className="floating-card glass-card p-6 rounded-2xl w-full max-w-sm xl:max-w-md ring-1 ring-white/20 mx-auto lg:mx-0">
+              <h3 className="text-lg font-semibold text-white">Estimation rapide</h3>
+              <form
+                onSubmit={(e) => { e.preventDefault(); navigate('/commencer'); }}
+                className="mt-4 grid grid-cols-1 gap-3"
+                aria-label="Formulaire d'estimation rapide"
+              >
+                <input
+                  className="h-11 rounded-lg bg-white/90 px-3 text-foreground"
+                  placeholder="Code postal"
+                  aria-label="Code postal"
+                />
+                <input
+                  className="h-11 rounded-lg bg-white/90 px-3 text-foreground"
+                  placeholder="Commune"
+                  aria-label="Commune"
+                />
+                <select
+                  className="h-11 rounded-lg bg-white/90 px-3 text-foreground"
+                  aria-label="Type de demande"
+                  defaultValue=""
+                >
+                  <option value="" disabled>Type de demande</option>
+                  <option>Raccordement provisoire</option>
+                  <option>Raccordement définitif</option>
+                  <option>Augmentation de puissance</option>
+                  <option>Raccordement collectif</option>
+                </select>
+                <button type="submit" className="h-11 rounded-lg btn-cta-primary font-medium">
+                  Commencer
+                </button>
+              </form>
 
-              <div className="space-y-4">
-                <div className="flex items-center p-4 rounded-xl bg-white/5 border border-white/10">
-                  <Phone className="w-5 h-5 text-accent mr-3" />
-                  <div>
-                    <a href="tel:0970709570" className="text-white font-medium hover:underline" aria-label="Appeler le 09 70 70 95 70">09 70 70 95 70</a>
-                    <div className="text-white/60 text-xs">Lun–Ven 8h–18h</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center p-4 rounded-xl bg-white/5 border border-white/10">
-                  <Mail className="w-5 h-5 text-accent mr-3" />
-                  <div>
-                    <div className="text-white font-medium">Expert dédié</div>
-                    <div className="text-white/60 text-xs">Réponse sous 2h</div>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-center pt-4">
-                  <div className="flex">
-                    {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 text-accent fill-current" />)}
-                  </div>
-                  <span className="text-white/80 text-sm ml-2">4,9/5 (2 847 avis)</span>
-                </div>
+              {/* Premium help */}
+              <div className="mt-4 rounded-xl bg-white/5 p-4">
+                <div className="text-sm text-white/80">Contact Premium (Lun–Ven 8h–18h)</div>
+                <a href="tel:0970709570" className="mt-1 block text-xl font-semibold text-white hover:underline" aria-label="Appeler le 09 70 70 95 70">09 70 70 95 70</a>
+                <div className="mt-1 text-xs text-white/70">Réponse sous 2h • 4,9/5 (2 847 avis)</div>
               </div>
             </div>
           </div>
