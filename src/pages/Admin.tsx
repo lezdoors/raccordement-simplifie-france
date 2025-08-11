@@ -366,6 +366,13 @@ L'équipe Raccordement Connect`;
             </TabsList>
 
             <TabsContent value="leads" className="space-y-6">
+              {/* Quick Payment Status Filters */}
+              <div className="flex flex-wrap items-center gap-2">
+                <Button variant={(!advancedFilters.paymentStatus || advancedFilters.paymentStatus === 'all') ? 'default' : 'outline'} size="sm" onClick={() => setAdvancedFilters((p: any) => ({ ...p, paymentStatus: 'all' }))}>Tous</Button>
+                <Button variant={advancedFilters.paymentStatus === 'unpaid' ? 'default' : 'outline'} size="sm" onClick={() => setAdvancedFilters((p: any) => ({ ...p, paymentStatus: 'unpaid' }))}>Non payés</Button>
+                <Button variant={advancedFilters.paymentStatus === 'paid' ? 'default' : 'outline'} size="sm" onClick={() => setAdvancedFilters((p: any) => ({ ...p, paymentStatus: 'paid' }))}>Payés</Button>
+              </div>
+
               {/* Advanced Search */}
               <AdvancedSearch
                 onFiltersChange={setAdvancedFilters}

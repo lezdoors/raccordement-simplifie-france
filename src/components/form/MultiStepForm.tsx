@@ -107,6 +107,7 @@ export const MultiStepForm = () => {
   const [savedData, setSavedData] = useState<Partial<FormData> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [hasTrackedFormStart, setHasTrackedFormStart] = useState(false);
+  const [leadId, setLeadId] = useState<string | null>(null);
   const isMobile = useIsMobile();
   const { trackFormStart, trackFormSubmit } = useAnalytics();
   
@@ -201,6 +202,7 @@ export const MultiStepForm = () => {
         consent_accepted: data.consent || false,
         form_step: currentStep,
         form_type: currentStep === 1 ? 'step1' : 'full',
+        status: currentStep === 1 ? 'draft' : (currentStep === STEPS.length ? 'ready_for_payment' : 'in_progress'),
         amount: 12980, // €129.80 in cents - CORRECTED PRICE
         payment_status: "pending",
         updated_at: new Date().toISOString()
@@ -216,6 +218,7 @@ export const MultiStepForm = () => {
         if (updateError) {
           console.error("Update error:", updateError);
         } else {
+          setLeadId(existingRecord.id);
           console.log("Successfully updated existing lead");
         }
       } else {
@@ -229,6 +232,7 @@ export const MultiStepForm = () => {
         if (insertError) {
           console.error("Insert error:", insertError);
         } else {
+          setLeadId(insertResult.id);
           console.log("Successfully created new lead:", insertResult.id);
         }
       }
@@ -339,11 +343,24 @@ export const MultiStepForm = () => {
       // Track Google Ads "Form Submit" conversion before Stripe redirect
       trackFormSubmit();
       
+      // Ensure we have a leadId to attach to Stripe metadata
+      let ensuredLeadId = leadId;
+      if (!ensuredLeadId) {
+        const { data: existingRecord } = await supabase
+          .from('leads_raccordement')
+          .select('id')
+          .eq('email', data.email)
+          .maybeSingle();
+        ensuredLeadId = existingRecord?.id || null;
+        if (ensuredLeadId) setLeadId(ensuredLeadId);
+      }
+      
       // Create payment session and redirect directly to Stripe
-      const { data: paymentData, error } = await supabase.functions.invoke('create-payment-session', {
+      const { data: paymentData, error } = await supabase.functions.invoke('create-checkout-session', {
         body: { 
-          amount: 12980, // €129.80 in cents - CORRECTED PRICE
-          formData: data
+          lead_id: ensuredLeadId,
+          customer_email: data.email
+          // price_id: 'price_xxx' // Optional: set your LIVE price ID in Stripe and pass it here
         }
       });
 

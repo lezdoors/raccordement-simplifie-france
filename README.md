@@ -1,73 +1,69 @@
-# Welcome to your Lovable project
+# Raccordement Connect – Admin, Leads & Stripe
 
-## Project info
+This project runs on Vite + React + Tailwind, with Supabase (Auth, DB, Edge Functions) and Stripe.
 
-**URL**: https://lovable.dev/projects/593732b9-9065-4f1b-82b5-9e1fc8382b74
+Environment and secrets are managed via Supabase Edge Functions (recommended) and your hosting (Vercel) for public URLs.
 
-## How can I edit this code?
+Required environment (Vercel) for client URLs
+- SITE_URL = https://www.raccordement-connect.com (used by functions when Origin not present)
 
-There are several ways of editing your application.
+Supabase Edge Function secrets (set in Supabase → Project → Settings → Functions → Secrets)
+- SUPABASE_URL
+- SUPABASE_ANON_KEY
+- SUPABASE_SERVICE_ROLE_KEY
+- STRIPE_SECRET_KEY (LIVE)
+- STRIPE_WEBHOOK_SECRET (LIVE)
+- RESEND_API_KEY (if you use email)
 
-**Use Lovable**
+Notes about .env
+- This project does not use Vite env variables directly. Secrets are read inside Edge Functions.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/593732b9-9065-4f1b-82b5-9e1fc8382b74) and start prompting.
+Implemented flow
+1) Auth
+- Session initialized with supabase.auth.getSession() and onAuthStateChange in AdminProvider.
+- ProtectedRoute guards /admin and shows a 3s timeout fallback instead of infinite spinner.
 
-Changes made via Lovable will be committed automatically to this repo.
+2) Leads
+- Step 1 upserts a lead with status='draft'.
+- On subsequent steps, auto-saves. At final step, status becomes 'ready_for_payment'.
+- We keep the same wording/structure in the UI.
 
-**Use your preferred IDE**
+3) Stripe Checkout
+- Edge function create-checkout-session accepts body { lead_id, customer_email, price_id? }.
+- If price_id is provided, it’s used. Otherwise it charges the fixed amount (12980 cents).
+- success_url = /merci?lead_id=...; cancel_url = /annule?lead_id=...
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+4) Stripe Webhook
+- Edge function stripe-webhook verifies signature and on checkout.session.completed:
+  - updates lead payment_status='paid', status='submitted'
+  - inserts a row in payments with amount (EUR), payment_intent, session id
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Admin dashboard
+- Added quick filters: Tous / Non payés / Payés
 
-Follow these steps:
+Manual tests to verify
+1. Auth
+- Open /admin in incognito → redirected to /login
+- Login → /admin loads within 3s; logout and login again
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+2. Lead draft
+- Complete Step 1 only → a row in leads_raccordement with status='draft' exists
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+3. Full lead + payment
+- Complete all steps → redirected to Stripe Checkout
+- Pay with a LIVE card → redirected to /merci?lead_id=...
+- In Supabase, the same lead has payment_status='paid' and status='submitted' (webhook)
 
-# Step 3: Install the necessary dependencies.
-npm i
+4. Cancel flow
+- On Stripe, click cancel → returns to /annule?lead_id=... and lead remains 'ready_for_payment'
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+5. Admin view
+- Lead appears under Payés tab with correct amounts and intent id
 
-**Edit a file directly in GitHub**
+Troubleshooting
+- Check Edge Function logs in Supabase if anything fails.
+- Ensure STRIPE_* secrets are set. Price IDs are optional; using fixed amount fallback.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/593732b9-9065-4f1b-82b5-9e1fc8382b74) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Links
+- Supabase Edge Functions: Project Dashboard → Functions
+- Stripe Dashboard: Webhooks & API Keys
