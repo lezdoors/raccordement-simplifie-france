@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Menu, X, Phone } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import logoImage from "@/assets/portail-raccordement-logo.png";
@@ -11,26 +11,25 @@ const Navigation = () => {
   const isMobile = useIsMobile();
 
   const scrollToForm = () => {
-    const formElement = document.getElementById('form');
-    if (formElement) {
-      formElement.scrollIntoView({ behavior: 'smooth' });
+    const start = document.getElementById('demarrer') || document.getElementById('form');
+    if (start) {
+      start.scrollIntoView({ behavior: 'smooth' });
     } else {
-      // If no form on current page, navigate to form page
-      navigate('/raccordement-enedis');
+      navigate('/commencer');
     }
   };
-  return <nav className="bg-gradient-to-r from-primary to-primary/90 text-white sticky top-0 z-[60] shadow-lg backdrop-blur-md bg-opacity-95">
+  return <nav className={`sticky top-0 z-[60] text-white transition-colors duration-300 ${isScrolled ? 'bg-primary/95 shadow-lg backdrop-blur-md' : 'bg-gradient-to-r from-primary to-primary/90'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16 md:h-20">
-          {/* Logo Section - Mobile Optimized */}
-          <a href="/" className="flex items-center cursor-pointer justify-center md:justify-start">
+        <div className="flex justify-between items-center h-16 md:h-[72px]">
+          <a href="/" className="flex items-center cursor-pointer justify-center md:justify-start px-3">
             <img 
               src={logoImage} 
               alt="Portail Raccordement" 
-              width="180" 
-              height="50" 
-              className="object-contain h-auto w-auto max-h-[50px] md:max-h-[60px] transition-transform hover:scale-105"
+              width="200" 
+              height="56" 
+              className="object-contain h-auto w-auto max-h-[56px] md:max-h-[72px] transition-transform hover:scale-105"
             />
+            <span className="ml-3 font-display text-white font-semibold tracking-wide text-base sm:text-lg md:text-xl whitespace-nowrap">PORTAIL RACCORDEMENT</span>
           </a>
           
           {/* Desktop Navigation */}
@@ -49,27 +48,25 @@ const Navigation = () => {
             </a>
           </div>
 
-          {/* Contact Info & CTA - Desktop */}
-          <div className="hidden md:flex items-center space-x-6">
-          <div className="text-center">
-            <a 
-              href="tel:0970709570" 
-              className="text-lg font-bold text-white hover:text-white/90 transition-colors touch-feedback"
-              aria-label="Appeler le 09 70 70 95 70"
+          <div className="hidden sm:flex items-center space-x-6">
+            <div className="text-right">
+              <a 
+                href="tel:0970709570" 
+                className="inline-flex items-center gap-2 text-base md:text-lg font-bold text-white hover:text-white/90 transition-colors touch-feedback"
+                aria-label="Appeler le 09 70 70 95 70"
+              >
+                <Phone className="h-5 w-5" />
+                09 70 70 95 70
+              </a>
+              <p className="text-xs text-white/80">Lun–Ven 8h–18h</p>
+            </div>
+            <Button 
+              size="lg" 
+              onClick={scrollToForm} 
+              className={`btn-cta-primary hover-scale ${isMobile ? 'w-auto' : ''}`}
             >
-              📞 09 70 70 95 70
-            </a>
-            <p className="text-xs text-white/80">Du lundi au vendredi de 9h à 19h</p>
-          </div>
-          
-          <Button 
-            size="lg" 
-            onClick={scrollToForm} 
-            className="font-bold px-4 py-2 rounded-lg text-[#1E1E1E] hover:opacity-90 transition-all duration-300"
-            style={{ background: 'linear-gradient(90deg, #FFD77A 0%, #F2B736 100%)' }}
-          >
-            Démarrer ma demande
-          </Button>
+              Démarrer ma demande
+            </Button>
           </div>
 
           {/* Mobile menu button */}
@@ -98,22 +95,22 @@ const Navigation = () => {
             </a>
             <div className="px-4 py-6 border-t border-white/20 mt-4">
             <div className="text-center mb-4">
-            <a 
-              href="tel:0970709570" 
-              className="text-lg font-bold text-white hover:text-white/90 transition-colors touch-target touch-feedback"
-              aria-label="Appeler le 09 70 70 95 70"
-            >
-              📞 09 70 70 95 70
-            </a>
-              <p className="text-xs text-white/80 mt-1">Lun-Ven 9h-18h</p>
+              <a 
+                href="tel:0970709570" 
+                className="inline-flex items-center justify-center gap-2 text-lg font-bold text-white hover:text-white/90 transition-colors touch-target touch-feedback"
+                aria-label="Appeler le 09 70 70 95 70"
+              >
+                <Phone className="h-5 w-5" />
+                09 70 70 95 70
+              </a>
+              <p className="text-xs text-white/80 mt-1">Lun–Ven 8h–18h</p>
             </div>
             <Button 
               onClick={() => {
                 scrollToForm();
                 setIsMenuOpen(false);
               }} 
-              className="w-full font-bold px-4 py-2 rounded-lg text-[#1E1E1E] hover:opacity-90 transition-all duration-300 mobile-button touch-feedback"
-              style={{ background: 'linear-gradient(90deg, #FFD77A 0%, #F2B736 100%)' }}
+              className="w-full btn-cta-primary mobile-button touch-feedback"
             >
               Démarrer ma demande
             </Button>

@@ -505,6 +505,25 @@
     .interactive-icon {
       @apply transition-transform duration-300 group-hover:scale-110;
     }
+
+    /* Subtle radial vignette behind hero left column */
+    .hero-vignette {
+      position: absolute;
+      left: 0;
+      top: 10%;
+      width: 720px;
+      height: 720px;
+      max-width: 70vw;
+      border-radius: 9999px;
+      background: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.18), rgba(255,255,255,0.08) 40%, rgba(255,255,255,0) 70%);
+      filter: blur(20px);
+      pointer-events: none;
+    }
+
+    /* Header shadow on scroll */
+    .nav-scrolled {
+      @apply bg-primary/95 shadow-lg backdrop-blur-md;
+    }
   }
 
 
