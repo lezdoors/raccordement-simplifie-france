@@ -27,9 +27,9 @@ const Navigation = () => {
               alt="Portail Raccordement" 
               width="200" 
               height="56" 
-              className="object-contain h-auto w-auto max-h-[56px] md:max-h-[72px] transition-transform hover:scale-105"
+              className="object-contain h-auto w-auto max-h-9 md:max-h-12 transition-transform hover:scale-105"
             />
-            <span className="ml-3 font-display text-white font-semibold tracking-wide text-base sm:text-lg md:text-xl whitespace-nowrap">PORTAIL RACCORDEMENT</span>
+            
           </a>
           
           {/* Desktop Navigation */}
