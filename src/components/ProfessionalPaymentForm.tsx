@@ -14,6 +14,7 @@ import { Shield, CheckCircle2, ArrowRight } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
+// Stripe publishable key - safe to expose in frontend
 const stripePromise = loadStripe('pk_test_51Q8JZhHsGYOPKJnlBUF7xGf6M9zNJvFo7V2p3nUoOq1e5gfOx1cGnZcyf2nEzJaOPwQ3v7nEzJaOPwQ3v7nEzJaOPwQ3v7nEzJaOPwQ3v7nEzJaOPwQ3v');
 
 interface PaymentFormProps {
