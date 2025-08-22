@@ -1,104 +1,69 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Users, 
-  MessageSquare, 
-  CreditCard, 
-  Clock, 
-  TrendingUp, 
-  AlertCircle,
-  Phone,
-  CheckCircle2
+import {
+  Users,
+  UserPlus,
+  MessageSquare,
+  UserCheck,
 } from 'lucide-react';
 
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useMessageStats } from '@/hooks/use-message-stats';
+
 interface CRMStatsCardsProps {
-  stats: any;
   leads: any[];
+  loading: boolean;
 }
 
-export const CRMStatsCards = ({ stats, leads }: CRMStatsCardsProps) => {
-  // Calculate additional metrics
-  const paidLeads = leads.filter(l => l.payment_status === 'paid').length;
-  const urgentLeads = leads.filter(l => l.form_type === 'callback' || l.etat_projet === 'nouveau').length;
-  const completionRate = leads.length > 0 ? ((leads.filter(l => l.form_type === 'full').length / leads.length) * 100).toFixed(1) : '0';
-  const todayLeads = leads.filter(l => {
-    const today = new Date().toDateString();
-    const leadDate = new Date(l.created_at).toDateString();
-    return today === leadDate;
-  }).length;
+export const CRMStatsCards = ({ leads, loading }: CRMStatsCardsProps) => {
+  const { inboundMessageCount } = useMessageStats();
 
-  const statsCards = [
+  const totalLeads = leads?.length || 0;
+  const newLeads = leads?.filter(
+    (lead) =>
+      new Date(lead.created_at).getTime() >
+      new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).getTime()
+  )?.length || 0;
+  const assignedLeads = leads?.filter((lead) => lead.assigned_to)?.length || 0;
+
+  const stats = [
     {
-      title: "Total Leads",
-      value: stats.totalLeads,
-      change: `+${stats.weeklyLeads} cette semaine`,
+      title: "Total des leads",
+      value: totalLeads.toString(),
       icon: Users,
-      color: "text-blue-600"
+      description: "Tous les leads du système"
     },
     {
-      title: "Leads payés",
-      value: paidLeads,
-      change: `${((paidLeads / (stats.totalLeads || 1)) * 100).toFixed(1)}% du total`,
-      icon: CreditCard,
-      color: "text-green-600"
+      title: "Leads nouveaux",
+      value: newLeads.toString(),
+      icon: UserPlus,
+      description: "Créés cette semaine"
     },
     {
-      title: "À traiter (urgent)",
-      value: urgentLeads,
-      change: "Demandes de rappel + nouveaux",
-      icon: AlertCircle,
-      color: "text-red-600"
-    },
-    {
-      title: "Aujourd'hui",
-      value: todayLeads,
-      change: "Nouveaux leads aujourd'hui",
-      icon: TrendingUp,
-      color: "text-purple-600"
-    },
-    {
-      title: "Contacts rapides",
-      value: stats.totalQuickContacts,
-      change: "Formulaire de contact",
+      title: "Messages de contact",
+      value: inboundMessageCount.toString(),
       icon: MessageSquare,
-      color: "text-orange-600"
+      description: "Messages entrants reçus"
     },
     {
-      title: "Rappels demandés",
-      value: stats.totalCallbackRequests,
-      change: "Nécessitent un contact",
-      icon: Phone,
-      color: "text-pink-600"
-    },
-    {
-      title: "Taux de completion",
-      value: `${completionRate}%`,
-      change: "Formulaires complets",
-      icon: CheckCircle2,
-      color: "text-indigo-600"
-    },
-    {
-      title: "Ce mois",
-      value: stats.monthlyLeads,
-      change: "Leads ce mois-ci",
-      icon: Clock,
-      color: "text-teal-600"
+      title: "Leads assignés",
+      value: assignedLeads.toString(),
+      icon: UserCheck,
+      description: "Leads avec un traiteur assigné"
     }
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-      {statsCards.map((stat, index) => (
-        <Card key={index} className="hover:shadow-md transition-shadow">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {stats.map((stat, index) => (
+        <Card key={index}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              {stat.title}
-            </CardTitle>
-            <stat.icon className={`h-4 w-4 ${stat.color}`} />
+            <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
+            {React.createElement(stat.icon, { className: "h-4 w-4 text-muted-foreground" })}
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold mb-1">{stat.value}</div>
-            <p className="text-xs text-muted-foreground">{stat.change}</p>
+            <div className="text-2xl font-bold">{stat.value}</div>
+            <p className="text-xs text-muted-foreground">
+              {stat.description}
+            </p>
           </CardContent>
         </Card>
       ))}

@@ -1,29 +1,25 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useAdmin } from '@/contexts/AdminContext';
 import { toast } from 'sonner';
 
-export interface LeadNote {
+interface LeadNote {
   id: string;
   lead_id: string;
-  admin_email: string;
   note: string;
-  note_type: string;
   created_at: string;
-  // Map database fields to expected interface
-  body: string;
-  is_pinned: boolean;
-  updated_at: string;
+  admin_email: string;
+  note_type: string;
 }
 
 export const useLeadNotes = (leadId: string) => {
+  const { user } = useAdmin();
   const [notes, setNotes] = useState<LeadNote[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
 
   const fetchNotes = async () => {
     try {
-      setLoading(true);
       const { data, error } = await supabase
         .from('lead_notes')
         .select('*')
@@ -31,111 +27,76 @@ export const useLeadNotes = (leadId: string) => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      
-      // Map database fields to expected interface
-      const mappedNotes = (data || []).map(note => ({
-        ...note,
-        body: note.note, // Map 'note' field to 'body'
-        is_pinned: note.note_type === 'pinned', // Use note_type to determine if pinned
-        updated_at: note.created_at // Use created_at as updated_at since there's no updated_at field
-      }));
-      
-      setNotes(mappedNotes);
-    } catch (err: any) {
-      console.error('Error fetching notes:', err);
-      setError('Erreur lors du chargement des notes');
-    } finally {
-      setLoading(false);
+      setNotes(data || []);
+    } catch (error) {
+      console.error('Error fetching lead notes:', error);
+      toast.error('Erreur lors du chargement des notes');
     }
   };
 
-  const addNote = async (body: string, isPinned: boolean = false) => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('User not authenticated');
+  const addNote = async (title: string, content: string) => {
+    if (!user) {
+      toast.error('Utilisateur non authentifié');
+      return false;
+    }
 
-      const { data, error } = await supabase
+    setSaving(true);
+    try {
+      const { error } = await supabase
         .from('lead_notes')
         .insert({
           lead_id: leadId,
-          admin_email: user.email,
-          note: body,
-          note_type: isPinned ? 'pinned' : 'note'
-        })
-        .select()
-        .single();
+          note: content,
+          note_type: title,
+          admin_email: user.email
+        });
 
       if (error) throw error;
 
-      const mappedNote = {
-        ...data,
-        body: data.note,
-        is_pinned: data.note_type === 'pinned',
-        updated_at: data.created_at
-      };
+      // Log the event
+      await supabase.rpc('log_lead_event', {
+        p_lead_id: leadId,
+        p_type: 'note_added',
+        p_actor_id: user.id,
+        p_payload: { title, content_length: content.length }
+      });
 
-      setNotes(prev => [mappedNote, ...prev]);
       toast.success('Note ajoutée avec succès');
-      return mappedNote;
-    } catch (err: any) {
-      console.error('Error adding note:', err);
+      await fetchNotes();
+      return true;
+    } catch (error: any) {
+      console.error('Error adding note:', error);
       toast.error('Erreur lors de l\'ajout de la note');
-      throw err;
+      return false;
+    } finally {
+      setSaving(false);
     }
   };
 
-  const updateNote = async (noteId: string, body: string) => {
+  const updateNote = async (noteId: string, newNote: string) => {
+    setSaving(true);
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('lead_notes')
-        .update({ note: body })
-        .eq('id', noteId)
-        .select()
-        .single();
+        .update({ note: newNote })
+        .eq('id', noteId);
 
       if (error) throw error;
 
-      setNotes(prev => prev.map(note => 
-        note.id === noteId ? { 
-          ...note, 
-          body: data.note,
-          note: data.note,
-          updated_at: data.created_at 
-        } : note
-      ));
-      toast.success('Note modifiée avec succès');
-    } catch (err: any) {
-      console.error('Error updating note:', err);
-      toast.error('Erreur lors de la modification de la note');
-    }
-  };
-
-  const togglePin = async (noteId: string, isPinned: boolean) => {
-    try {
-      const { data, error } = await supabase
-        .from('lead_notes')
-        .update({ note_type: isPinned ? 'pinned' : 'note' })
-        .eq('id', noteId)
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      setNotes(prev => prev.map(note => 
-        note.id === noteId ? { 
-          ...note, 
-          is_pinned: isPinned,
-          note_type: data.note_type 
-        } : note
-      ));
-      toast.success(isPinned ? 'Note épinglée' : 'Note désépinglée');
-    } catch (err: any) {
-      console.error('Error toggling pin:', err);
-      toast.error('Erreur lors de l\'épinglage');
+      toast.success('Note mise à jour avec succès');
+      await fetchNotes();
+      return true;
+    } catch (error: any) {
+      console.error('Error updating note:', error);
+      toast.error('Erreur lors de la mise à jour de la note');
+      return false;
+    } finally {
+      setSaving(false);
     }
   };
 
   const deleteNote = async (noteId: string) => {
+    setSaving(true);
     try {
       const { error } = await supabase
         .from('lead_notes')
@@ -144,27 +105,30 @@ export const useLeadNotes = (leadId: string) => {
 
       if (error) throw error;
 
-      setNotes(prev => prev.filter(note => note.id !== noteId));
       toast.success('Note supprimée avec succès');
-    } catch (err: any) {
-      console.error('Error deleting note:', err);
+      await fetchNotes();
+      return true;
+    } catch (error: any) {
+      console.error('Error deleting note:', error);
       toast.error('Erreur lors de la suppression de la note');
+      return false;
+    } finally {
+      setSaving(false);
     }
   };
 
   useEffect(() => {
     if (leadId) {
-      fetchNotes();
+      fetchNotes().finally(() => setLoading(false));
     }
   }, [leadId]);
 
   return {
     notes,
     loading,
-    error,
+    saving,
     addNote,
     updateNote,
-    togglePin,
     deleteNote,
     refetch: fetchNotes
   };

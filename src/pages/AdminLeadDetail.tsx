@@ -28,6 +28,8 @@ import { NotesTab } from '@/components/lead/NotesTab';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { EmailsTab } from '@/components/lead/EmailsTab';
 import { FilesTab } from '@/components/lead/FilesTab';
+import { InternalMessagesTab } from '@/components/lead/InternalMessagesTab';
+import { TimelineTab } from '@/components/lead/TimelineTab';
 
 // Define Lead type locally since @/types doesn't exist
 interface Lead {
@@ -63,7 +65,7 @@ const AdminLeadDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [notes, setNotes] = useState<any[]>([]);
-  const [activeTab, setActiveTab] = useState<"details" | "notes" | "emails" | "files">("details");
+  const [activeTab, setActiveTab] = useState<"details" | "notes" | "messages" | "emails" | "files" | "timeline">("details");
 
   const fetchLead = async () => {
     if (!leadId) {
@@ -234,12 +236,14 @@ const AdminLeadDetail = () => {
             </Card>
 
             {/* Tabs */}
-            <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "details" | "notes" | "emails" | "files")} className="w-full">
-              <TabsList className="grid w-full grid-cols-4">
+            <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)} className="w-full">
+              <TabsList className="grid w-full grid-cols-6">
                 <TabsTrigger value="details">Détails</TabsTrigger>
                 <TabsTrigger value="notes">Notes ({notes.length})</TabsTrigger>
+                <TabsTrigger value="messages">Messages</TabsTrigger>
                 <TabsTrigger value="emails">Emails</TabsTrigger>
                 <TabsTrigger value="files">Fichiers</TabsTrigger>
+                <TabsTrigger value="timeline">Timeline</TabsTrigger>
               </TabsList>
 
               <TabsContent value="details" className="space-y-4">
@@ -279,6 +283,10 @@ const AdminLeadDetail = () => {
                 <NotesTab leadId={leadId} />
               </TabsContent>
 
+              <TabsContent value="messages">
+                <InternalMessagesTab leadId={leadId} />
+              </TabsContent>
+
               <TabsContent value="emails">
                 <EmailsTab 
                   leadId={leadId}
@@ -295,6 +303,10 @@ const AdminLeadDetail = () => {
 
               <TabsContent value="files">
                 <FilesTab leadId={leadId} />
+              </TabsContent>
+
+              <TabsContent value="timeline">
+                <TimelineTab leadId={leadId} />
               </TabsContent>
             </Tabs>
           </div>
