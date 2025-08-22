@@ -48,6 +48,10 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({
     }
   };
 
+  const handlePinChange = (checked: boolean | "indeterminate") => {
+    setIsPinned(checked === true);
+  };
+
   return (
     <div className="space-y-4">
       <Textarea
@@ -62,7 +66,7 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({
           <Checkbox
             id="pin-note"
             checked={isPinned}
-            onCheckedChange={setIsPinned}
+            onCheckedChange={handlePinChange}
           />
           <Label htmlFor="pin-note" className="text-sm">
             Épingler cette note
