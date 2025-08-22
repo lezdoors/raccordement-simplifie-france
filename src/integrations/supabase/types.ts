@@ -191,13 +191,6 @@ export type Database = {
             foreignKeyName: "lead_emails_lead_id_fkey"
             columns: ["lead_id"]
             isOneToOne: false
-            referencedRelation: "leads_for_traiteur"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "lead_emails_lead_id_fkey"
-            columns: ["lead_id"]
-            isOneToOne: false
             referencedRelation: "leads_raccordement"
             referencedColumns: ["id"]
           },
@@ -242,13 +235,6 @@ export type Database = {
             foreignKeyName: "lead_emails_internal_lead_id_fkey"
             columns: ["lead_id"]
             isOneToOne: false
-            referencedRelation: "leads_for_traiteur"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "lead_emails_internal_lead_id_fkey"
-            columns: ["lead_id"]
-            isOneToOne: false
             referencedRelation: "leads_raccordement"
             referencedColumns: ["id"]
           },
@@ -280,13 +266,6 @@ export type Database = {
           type?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "lead_events_lead_id_fkey"
-            columns: ["lead_id"]
-            isOneToOne: false
-            referencedRelation: "leads_for_traiteur"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "lead_events_lead_id_fkey"
             columns: ["lead_id"]
@@ -341,13 +320,6 @@ export type Database = {
             foreignKeyName: "lead_files_lead_id_fkey"
             columns: ["lead_id"]
             isOneToOne: false
-            referencedRelation: "leads_for_traiteur"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "lead_files_lead_id_fkey"
-            columns: ["lead_id"]
-            isOneToOne: false
             referencedRelation: "leads_raccordement"
             referencedColumns: ["id"]
           },
@@ -390,13 +362,6 @@ export type Database = {
             foreignKeyName: "lead_notes_lead_id_fkey"
             columns: ["lead_id"]
             isOneToOne: false
-            referencedRelation: "leads_for_traiteur"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "lead_notes_lead_id_fkey"
-            columns: ["lead_id"]
-            isOneToOne: false
             referencedRelation: "leads_raccordement"
             referencedColumns: ["id"]
           },
@@ -434,13 +399,6 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "admin_users"
             referencedColumns: ["email"]
-          },
-          {
-            foreignKeyName: "lead_status_history_lead_id_fkey"
-            columns: ["lead_id"]
-            isOneToOne: false
-            referencedRelation: "leads_for_traiteur"
-            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "lead_status_history_lead_id_fkey"
@@ -723,114 +681,7 @@ export type Database = {
       }
     }
     Views: {
-      leads_for_traiteur: {
-        Row: {
-          adresse_chantier: string | null
-          amount: number | null
-          assigned_to: string | null
-          assigned_to_email: string | null
-          civilite: string | null
-          code_postal: string | null
-          commentaires: string | null
-          consent_accepted: boolean | null
-          created_at: string | null
-          delai_souhaite: string | null
-          email: string | null
-          etat_projet: string | null
-          form_step: number | null
-          form_type: string | null
-          id: string | null
-          nom: string | null
-          numero_pdl: string | null
-          payment_status: string | null
-          prenom: string | null
-          priority: number | null
-          puissance: string | null
-          raison_sociale: string | null
-          siren: string | null
-          status: string | null
-          stripe_session_id: string | null
-          telephone: string | null
-          type_alimentation: string | null
-          type_client: string | null
-          type_facturation: string | null
-          type_projet: string | null
-          type_raccordement: string | null
-          updated_at: string | null
-          ville: string | null
-        }
-        Insert: {
-          adresse_chantier?: string | null
-          amount?: never
-          assigned_to?: string | null
-          assigned_to_email?: string | null
-          civilite?: string | null
-          code_postal?: string | null
-          commentaires?: string | null
-          consent_accepted?: boolean | null
-          created_at?: string | null
-          delai_souhaite?: string | null
-          email?: string | null
-          etat_projet?: string | null
-          form_step?: number | null
-          form_type?: string | null
-          id?: string | null
-          nom?: string | null
-          numero_pdl?: string | null
-          payment_status?: never
-          prenom?: string | null
-          priority?: number | null
-          puissance?: string | null
-          raison_sociale?: string | null
-          siren?: string | null
-          status?: string | null
-          stripe_session_id?: never
-          telephone?: string | null
-          type_alimentation?: string | null
-          type_client?: string | null
-          type_facturation?: string | null
-          type_projet?: string | null
-          type_raccordement?: string | null
-          updated_at?: string | null
-          ville?: string | null
-        }
-        Update: {
-          adresse_chantier?: string | null
-          amount?: never
-          assigned_to?: string | null
-          assigned_to_email?: string | null
-          civilite?: string | null
-          code_postal?: string | null
-          commentaires?: string | null
-          consent_accepted?: boolean | null
-          created_at?: string | null
-          delai_souhaite?: string | null
-          email?: string | null
-          etat_projet?: string | null
-          form_step?: number | null
-          form_type?: string | null
-          id?: string | null
-          nom?: string | null
-          numero_pdl?: string | null
-          payment_status?: never
-          prenom?: string | null
-          priority?: number | null
-          puissance?: string | null
-          raison_sociale?: string | null
-          siren?: string | null
-          status?: string | null
-          stripe_session_id?: never
-          telephone?: string | null
-          type_alimentation?: string | null
-          type_client?: string | null
-          type_facturation?: string | null
-          type_projet?: string | null
-          type_raccordement?: string | null
-          updated_at?: string | null
-          ville?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       check_rate_limit: {
@@ -841,6 +692,44 @@ export type Database = {
           p_window_minutes?: number
         }
         Returns: boolean
+      }
+      get_leads_for_traiteur: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          adresse_chantier: string
+          amount: number
+          assigned_to: string
+          assigned_to_email: string
+          civilite: string
+          code_postal: string
+          commentaires: string
+          consent_accepted: boolean
+          created_at: string
+          delai_souhaite: string
+          email: string
+          etat_projet: string
+          form_step: number
+          form_type: string
+          id: string
+          nom: string
+          numero_pdl: string
+          payment_status: string
+          prenom: string
+          priority: number
+          puissance: string
+          raison_sociale: string
+          siren: string
+          status: string
+          stripe_session_id: string
+          telephone: string
+          type_alimentation: string
+          type_client: string
+          type_facturation: string
+          type_projet: string
+          type_raccordement: string
+          updated_at: string
+          ville: string
+        }[]
       }
       get_security_headers: {
         Args: Record<PropertyKey, never>
