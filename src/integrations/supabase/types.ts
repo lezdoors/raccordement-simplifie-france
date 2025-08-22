@@ -98,6 +98,104 @@ export type Database = {
         }
         Relationships: []
       }
+      email_templates: {
+        Row: {
+          body_html: string
+          body_text: string | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          subject: string
+          updated_at: string | null
+          variables: Json | null
+        }
+        Insert: {
+          body_html: string
+          body_text?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          subject: string
+          updated_at?: string | null
+          variables?: Json | null
+        }
+        Update: {
+          body_html?: string
+          body_text?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          subject?: string
+          updated_at?: string | null
+          variables?: Json | null
+        }
+        Relationships: []
+      }
+      lead_emails: {
+        Row: {
+          bcc_emails: string[] | null
+          body_html: string | null
+          body_text: string | null
+          cc_emails: string[] | null
+          created_at: string | null
+          direction: string
+          from_email: string
+          id: string
+          lead_id: string
+          provider_message_id: string | null
+          sent_by: string | null
+          status: string
+          subject: string
+          to_email: string
+          updated_at: string | null
+        }
+        Insert: {
+          bcc_emails?: string[] | null
+          body_html?: string | null
+          body_text?: string | null
+          cc_emails?: string[] | null
+          created_at?: string | null
+          direction: string
+          from_email: string
+          id?: string
+          lead_id: string
+          provider_message_id?: string | null
+          sent_by?: string | null
+          status?: string
+          subject: string
+          to_email: string
+          updated_at?: string | null
+        }
+        Update: {
+          bcc_emails?: string[] | null
+          body_html?: string | null
+          body_text?: string | null
+          cc_emails?: string[] | null
+          created_at?: string | null
+          direction?: string
+          from_email?: string
+          id?: string
+          lead_id?: string
+          provider_message_id?: string | null
+          sent_by?: string | null
+          status?: string
+          subject?: string
+          to_email?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_emails_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads_raccordement"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lead_notes: {
         Row: {
           admin_email: string | null
