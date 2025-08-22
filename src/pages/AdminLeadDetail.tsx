@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -28,6 +27,7 @@ import { useAdmin } from '@/contexts/AdminContext';
 import { NotesTab } from '@/components/lead/NotesTab';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { EmailsTab } from '@/components/lead/EmailsTab';
+import { FilesTab } from '@/components/lead/FilesTab';
 
 // Define Lead type locally since @/types doesn't exist
 interface Lead {
@@ -294,11 +294,7 @@ const AdminLeadDetail = () => {
               </TabsContent>
 
               <TabsContent value="files">
-                <Card>
-                  <CardContent className="flex items-center justify-center h-32">
-                    <p className="text-muted-foreground">Gestion des fichiers - À implémenter</p>
-                  </CardContent>
-                </Card>
+                <FilesTab leadId={leadId} />
               </TabsContent>
             </Tabs>
           </div>
