@@ -1,118 +1,64 @@
 
+import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { MessageSquare, Pin } from 'lucide-react';
-import { useLeadNotes } from '@/hooks/use-lead-notes';
 import { NotesEditor } from './NotesEditor';
 import { NoteItem } from './NoteItem';
+import { useLeadNotes } from '@/hooks/use-lead-notes';
+import { Skeleton } from '@/components/ui/skeleton';
+import { StickyNote } from 'lucide-react';
 
 interface NotesTabProps {
   leadId: string;
 }
 
-export const NotesTab = ({ leadId }: NotesTabProps) => {
-  const { 
-    notes, 
-    loading, 
-    error, 
-    addNote, 
-    updateNote, 
-    togglePin, 
-    deleteNote 
-  } = useLeadNotes(leadId);
+export const NotesTab: React.FC<NotesTabProps> = ({ leadId }) => {
+  const { notes, loading, addNote, updateNote, togglePin, deleteNote } = useLeadNotes(leadId);
 
   if (loading) {
     return (
-      <Card>
-        <CardContent className="p-6">
-          <div className="flex items-center justify-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="space-y-4">
+        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-24 w-full" />
+        <Skeleton className="h-24 w-full" />
+      </div>
     );
   }
-
-  if (error) {
-    return (
-      <Card>
-        <CardContent className="p-6">
-          <div className="text-center py-8 text-muted-foreground">
-            {error}
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  const pinnedNotes = notes.filter(note => note.is_pinned);
-  const regularNotes = notes.filter(note => !note.is_pinned);
 
   return (
     <div className="space-y-6">
-      {/* Editor */}
+      {/* Add Note Card */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <MessageSquare className="w-5 h-5" />
-            <span>Ajouter une note</span>
+          <CardTitle className="flex items-center gap-2">
+            <StickyNote className="h-5 w-5" />
+            Ajouter une note
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <NotesEditor onSubmit={addNote} />
+          <NotesEditor onSave={addNote} />
         </CardContent>
       </Card>
 
-      {/* Pinned Notes */}
-      {pinnedNotes.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Pin className="w-5 h-5 text-yellow-600" />
-              <span>Notes épinglées</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {pinnedNotes.map(note => (
-              <NoteItem
-                key={note.id}
-                note={note}
-                onUpdate={updateNote}
-                onTogglePin={togglePin}
-                onDelete={deleteNote}
-              />
-            ))}
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Regular Notes */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <MessageSquare className="w-5 h-5" />
-            <span>Notes ({regularNotes.length})</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {regularNotes.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              Aucune note pour le moment
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {regularNotes.map(note => (
-                <NoteItem
-                  key={note.id}
-                  note={note}
-                  onUpdate={updateNote}
-                  onTogglePin={togglePin}
-                  onDelete={deleteNote}
-                />
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      {/* Notes List */}
+      <div className="space-y-4">
+        {notes.length === 0 ? (
+          <Card>
+            <CardContent className="flex items-center justify-center h-32">
+              <p className="text-muted-foreground">Aucune note pour ce lead</p>
+            </CardContent>
+          </Card>
+        ) : (
+          notes.map((note) => (
+            <NoteItem
+              key={note.id}
+              note={note}
+              onUpdate={updateNote}
+              onTogglePin={togglePin}
+              onDelete={deleteNote}
+            />
+          ))
+        )}
+      </div>
     </div>
   );
 };

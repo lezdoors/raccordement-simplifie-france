@@ -1,13 +1,24 @@
 
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Pin, Edit2, Trash2, Save, X } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
+import { NotesEditor } from './NotesEditor';
+import { LeadNote } from '@/hooks/use-lead-notes';
+import { Pin, Edit, Trash2, PinOff } from 'lucide-react';
+import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { useAdmin } from '@/contexts/AdminContext';
-import type { LeadNote } from '@/hooks/use-lead-notes';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 interface NoteItemProps {
   note: LeadNote;
@@ -16,36 +27,17 @@ interface NoteItemProps {
   onDelete: (noteId: string) => Promise<void>;
 }
 
-export const NoteItem = ({ note, onUpdate, onTogglePin, onDelete }: NoteItemProps) => {
-  const { adminUser } = useAdmin();
+export const NoteItem: React.FC<NoteItemProps> = ({
+  note,
+  onUpdate,
+  onTogglePin,
+  onDelete
+}) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [editBody, setEditBody] = useState(note.body);
-  const [loading, setLoading] = useState(false);
 
-  const canDelete = adminUser?.role === 'superadmin' || adminUser?.role === 'manager';
-  const canEdit = true; // All authenticated users can edit notes they have access to
-
-  const handleSave = async () => {
-    if (!editBody.trim() || editBody === note.body) {
-      setIsEditing(false);
-      setEditBody(note.body);
-      return;
-    }
-
-    try {
-      setLoading(true);
-      await onUpdate(note.id, editBody.trim());
-      setIsEditing(false);
-    } catch (error) {
-      setEditBody(note.body);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCancel = () => {
+  const handleUpdate = async (body: string) => {
+    await onUpdate(note.id, body);
     setIsEditing(false);
-    setEditBody(note.body);
   };
 
   const handleTogglePin = () => {
@@ -53,115 +45,97 @@ export const NoteItem = ({ note, onUpdate, onTogglePin, onDelete }: NoteItemProp
   };
 
   const handleDelete = () => {
-    if (window.confirm('Êtes-vous sûr de vouloir supprimer cette note ?')) {
-      onDelete(note.id);
-    }
-  };
-
-  const formatTime = (dateString: string) => {
-    return formatDistanceToNow(new Date(dateString), { 
-      addSuffix: true, 
-      locale: fr 
-    });
+    onDelete(note.id);
   };
 
   return (
-    <div className={`border rounded-lg p-4 space-y-3 ${note.is_pinned ? 'border-yellow-200 bg-yellow-50' : 'bg-background'}`}>
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-            <span className="text-xs font-medium text-primary">
-              {note.author_id.substring(0, 2).toUpperCase()}
-            </span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <span className="text-sm text-muted-foreground">
-              {formatTime(note.created_at)}
-            </span>
+    <Card className={`${note.is_pinned ? 'border-yellow-300 bg-yellow-50' : ''}`}>
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-2">
             {note.is_pinned && (
-              <Badge variant="secondary" className="flex items-center space-x-1">
-                <Pin className="w-3 h-3" />
-                <span>Épinglé</span>
+              <Badge variant="secondary" className="text-xs">
+                <Pin className="h-3 w-3 mr-1" />
+                Épinglée
               </Badge>
             )}
+            <span className="text-sm text-muted-foreground">
+              {format(new Date(note.created_at), "dd MMM yyyy 'à' HH:mm", { locale: fr })}
+            </span>
             {note.updated_at !== note.created_at && (
-              <span className="text-xs text-muted-foreground italic">
-                modifié
+              <span className="text-xs text-muted-foreground">
+                (modifiée)
               </span>
             )}
           </div>
-        </div>
-
-        <div className="flex items-center space-x-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleTogglePin}
-            className={`h-8 w-8 p-0 ${note.is_pinned ? 'text-yellow-600' : 'text-muted-foreground'}`}
-          >
-            <Pin className="w-4 h-4" />
-          </Button>
           
-          {canEdit && !isEditing && (
+          <div className="flex gap-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleTogglePin}
+              className="h-8 w-8 p-0"
+            >
+              {note.is_pinned ? (
+                <PinOff className="h-4 w-4" />
+              ) : (
+                <Pin className="h-4 w-4" />
+              )}
+            </Button>
+            
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setIsEditing(true)}
-              className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+              className="h-8 w-8 p-0"
             >
-              <Edit2 className="w-4 h-4" />
+              <Edit className="h-4 w-4" />
             </Button>
-          )}
-          
-          {canDelete && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleDelete}
-              className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
-            >
-              <Trash2 className="w-4 h-4" />
-            </Button>
-          )}
-        </div>
-      </div>
-
-      {/* Body */}
-      {isEditing ? (
-        <div className="space-y-3">
-          <Textarea
-            value={editBody}
-            onChange={(e) => setEditBody(e.target.value)}
-            disabled={loading}
-            className="min-h-[80px]"
-            autoFocus
-          />
-          <div className="flex justify-end space-x-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleCancel}
-              disabled={loading}
-            >
-              <X className="w-4 h-4 mr-1" />
-              Annuler
-            </Button>
-            <Button
-              size="sm"
-              onClick={handleSave}
-              disabled={loading || !editBody.trim()}
-            >
-              <Save className="w-4 h-4 mr-1" />
-              Enregistrer
-            </Button>
+            
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Supprimer la note</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Êtes-vous sûr de vouloir supprimer cette note ? Cette action est irréversible.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Annuler</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDelete} className="bg-destructive hover:bg-destructive/90">
+                    Supprimer
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
-      ) : (
-        <div className="text-sm whitespace-pre-wrap text-foreground">
-          {note.body}
-        </div>
-      )}
-    </div>
+      </CardHeader>
+      
+      <CardContent>
+        {isEditing ? (
+          <NotesEditor
+            initialValue={note.body}
+            initialPinned={note.is_pinned}
+            onSave={handleUpdate}
+            onCancel={() => setIsEditing(false)}
+            placeholder="Modifier la note..."
+          />
+        ) : (
+          <div className="whitespace-pre-wrap text-sm">
+            {note.body}
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 };

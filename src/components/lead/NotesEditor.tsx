@@ -1,51 +1,60 @@
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Pin, Send } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+import { Save, X } from 'lucide-react';
 
 interface NotesEditorProps {
-  onSubmit: (body: string, isPinned: boolean) => Promise<void>;
-  disabled?: boolean;
+  onSave: (body: string, isPinned?: boolean) => Promise<any>;
+  initialValue?: string;
+  initialPinned?: boolean;
+  onCancel?: () => void;
+  placeholder?: string;
 }
 
-export const NotesEditor = ({ onSubmit, disabled }: NotesEditorProps) => {
-  const [body, setBody] = useState('');
-  const [isPinned, setIsPinned] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+export const NotesEditor: React.FC<NotesEditorProps> = ({
+  onSave,
+  initialValue = '',
+  initialPinned = false,
+  onCancel,
+  placeholder = 'Saisissez votre note...'
+}) => {
+  const [body, setBody] = useState(initialValue);
+  const [isPinned, setIsPinned] = useState(initialPinned);
+  const [saving, setSaving] = useState(false);
 
-  const handleSubmit = async () => {
+  const handleSave = async () => {
     if (!body.trim()) return;
 
+    setSaving(true);
     try {
-      setSubmitting(true);
-      await onSubmit(body.trim(), isPinned);
+      await onSave(body.trim(), isPinned);
       setBody('');
       setIsPinned(false);
     } catch (error) {
-      // Error handled by parent
+      console.error('Error saving note:', error);
     } finally {
-      setSubmitting(false);
+      setSaving(false);
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-      e.preventDefault();
-      handleSubmit();
+  const handleCancel = () => {
+    setBody(initialValue);
+    setIsPinned(initialPinned);
+    if (onCancel) {
+      onCancel();
     }
   };
 
   return (
-    <div className="space-y-4 border rounded-lg p-4 bg-muted/5">
+    <div className="space-y-4">
       <Textarea
-        placeholder="Ajouter une note... (Ctrl+Entrée pour envoyer)"
         value={body}
         onChange={(e) => setBody(e.target.value)}
-        onKeyDown={handleKeyDown}
-        disabled={disabled || submitting}
-        className="min-h-[100px] resize-none"
+        placeholder={placeholder}
+        className="min-h-[100px]"
       />
       
       <div className="flex items-center justify-between">
@@ -53,27 +62,34 @@ export const NotesEditor = ({ onSubmit, disabled }: NotesEditorProps) => {
           <Checkbox
             id="pin-note"
             checked={isPinned}
-            onCheckedChange={(checked) => setIsPinned(!!checked)}
-            disabled={disabled || submitting}
+            onCheckedChange={setIsPinned}
           />
-          <label 
-            htmlFor="pin-note" 
-            className="text-sm font-medium cursor-pointer flex items-center space-x-1"
-          >
-            <Pin className="w-3 h-3" />
-            <span>Épingler cette note</span>
-          </label>
+          <Label htmlFor="pin-note" className="text-sm">
+            Épingler cette note
+          </Label>
         </div>
         
-        <Button
-          onClick={handleSubmit}
-          disabled={disabled || submitting || !body.trim()}
-          size="sm"
-          className="flex items-center space-x-2"
-        >
-          <Send className="w-4 h-4" />
-          <span>Ajouter</span>
-        </Button>
+        <div className="flex gap-2">
+          {onCancel && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleCancel}
+              disabled={saving}
+            >
+              <X className="h-4 w-4 mr-1" />
+              Annuler
+            </Button>
+          )}
+          <Button
+            size="sm"
+            onClick={handleSave}
+            disabled={!body.trim() || saving}
+          >
+            <Save className="h-4 w-4 mr-1" />
+            {saving ? 'Enregistrement...' : 'Enregistrer'}
+          </Button>
+        </div>
       </div>
     </div>
   );

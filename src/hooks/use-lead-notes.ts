@@ -6,10 +6,13 @@ import { toast } from 'sonner';
 export interface LeadNote {
   id: string;
   lead_id: string;
-  author_id: string;
+  admin_email: string;
+  note: string;
+  note_type: string;
+  created_at: string;
+  // Map database fields to expected interface
   body: string;
   is_pinned: boolean;
-  created_at: string;
   updated_at: string;
 }
 
@@ -25,11 +28,19 @@ export const useLeadNotes = (leadId: string) => {
         .from('lead_notes')
         .select('*')
         .eq('lead_id', leadId)
-        .order('is_pinned', { ascending: false })
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setNotes(data || []);
+      
+      // Map database fields to expected interface
+      const mappedNotes = (data || []).map(note => ({
+        ...note,
+        body: note.note, // Map 'note' field to 'body'
+        is_pinned: note.note_type === 'pinned', // Use note_type to determine if pinned
+        updated_at: note.created_at // Use created_at as updated_at since there's no updated_at field
+      }));
+      
+      setNotes(mappedNotes);
     } catch (err: any) {
       console.error('Error fetching notes:', err);
       setError('Erreur lors du chargement des notes');
@@ -47,18 +58,25 @@ export const useLeadNotes = (leadId: string) => {
         .from('lead_notes')
         .insert({
           lead_id: leadId,
-          author_id: user.id,
-          body,
-          is_pinned: isPinned
+          admin_email: user.email,
+          note: body,
+          note_type: isPinned ? 'pinned' : 'note'
         })
         .select()
         .single();
 
       if (error) throw error;
 
-      setNotes(prev => [data, ...prev]);
+      const mappedNote = {
+        ...data,
+        body: data.note,
+        is_pinned: data.note_type === 'pinned',
+        updated_at: data.created_at
+      };
+
+      setNotes(prev => [mappedNote, ...prev]);
       toast.success('Note ajoutée avec succès');
-      return data;
+      return mappedNote;
     } catch (err: any) {
       console.error('Error adding note:', err);
       toast.error('Erreur lors de l\'ajout de la note');
@@ -70,7 +88,7 @@ export const useLeadNotes = (leadId: string) => {
     try {
       const { data, error } = await supabase
         .from('lead_notes')
-        .update({ body })
+        .update({ note: body })
         .eq('id', noteId)
         .select()
         .single();
@@ -78,7 +96,12 @@ export const useLeadNotes = (leadId: string) => {
       if (error) throw error;
 
       setNotes(prev => prev.map(note => 
-        note.id === noteId ? { ...note, body, updated_at: data.updated_at } : note
+        note.id === noteId ? { 
+          ...note, 
+          body: data.note,
+          note: data.note,
+          updated_at: data.created_at 
+        } : note
       ));
       toast.success('Note modifiée avec succès');
     } catch (err: any) {
@@ -91,7 +114,7 @@ export const useLeadNotes = (leadId: string) => {
     try {
       const { data, error } = await supabase
         .from('lead_notes')
-        .update({ is_pinned: isPinned })
+        .update({ note_type: isPinned ? 'pinned' : 'note' })
         .eq('id', noteId)
         .select()
         .single();
@@ -99,7 +122,11 @@ export const useLeadNotes = (leadId: string) => {
       if (error) throw error;
 
       setNotes(prev => prev.map(note => 
-        note.id === noteId ? { ...note, is_pinned: isPinned } : note
+        note.id === noteId ? { 
+          ...note, 
+          is_pinned: isPinned,
+          note_type: data.note_type 
+        } : note
       ));
       toast.success(isPinned ? 'Note épinglée' : 'Note désépinglée');
     } catch (err: any) {
