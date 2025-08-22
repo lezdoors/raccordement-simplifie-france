@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Mail, Send, Template, X } from 'lucide-react';
+import { Mail, Send, FileText, X } from 'lucide-react';
 import { useLeadEmails } from '@/hooks/use-lead-emails';
 
 interface EmailComposerProps {
@@ -98,7 +98,7 @@ export const EmailComposer = ({
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-sm flex items-center gap-2">
-                <Template className="h-4 w-4" />
+                <FileText className="h-4 w-4" />
                 Utiliser un modèle
               </CardTitle>
             </CardHeader>

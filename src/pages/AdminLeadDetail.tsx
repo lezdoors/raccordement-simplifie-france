@@ -1,7 +1,7 @@
+
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { Lead } from '@/types';
 import { CRMLayout } from '@/components/CRMLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
@@ -28,6 +28,30 @@ import { useAdmin } from '@/contexts/AdminContext';
 import { NotesTab } from '@/components/lead/NotesTab';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { EmailsTab } from '@/components/lead/EmailsTab';
+
+// Define Lead type locally since @/types doesn't exist
+interface Lead {
+  id: string;
+  nom: string;
+  prenom: string;
+  email: string;
+  telephone: string;
+  type_client: string;
+  type_projet: string;
+  adresse_chantier?: string;
+  ville?: string;
+  code_postal?: string;
+  type_raccordement?: string;
+  type_alimentation?: string;
+  puissance?: string;
+  etat_projet?: string;
+  delai_souhaite?: string;
+  commentaires?: string;
+  status?: string;
+  assigned_to_email?: string;
+  created_at: string;
+  updated_at?: string;
+}
 
 const AdminLeadDetail = () => {
   const { leadId } = useParams<{ leadId: string }>();
@@ -210,7 +234,7 @@ const AdminLeadDetail = () => {
             </Card>
 
             {/* Tabs */}
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "details" | "notes" | "emails" | "files")} className="w-full">
               <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="details">Détails</TabsTrigger>
                 <TabsTrigger value="notes">Notes ({notes.length})</TabsTrigger>
