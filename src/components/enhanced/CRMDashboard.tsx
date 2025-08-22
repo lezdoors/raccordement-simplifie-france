@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -7,13 +8,15 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { BarChart3, Users, MessageSquare, FileText, Search, AlertCircle, Bell, Eye, Phone, Calendar, TrendingUp, Filter, Download, UserPlus, Clock } from "lucide-react";
+import { BarChart3, Users, MessageSquare, FileText, Search, AlertCircle, Bell, Eye, Phone, Calendar, TrendingUp, Filter, Download, UserPlus, Clock, DollarSign } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useCRMData } from "@/hooks/use-crm-data";
+import { useRoleBasedCRMData } from "@/hooks/use-role-based-crm-data";
+import { useAdmin } from "@/contexts/AdminContext";
 import { useDataExport } from "@/hooks/use-data-export";
 import { CRMStatsCards } from './CRMStatsCards';
 import { CRMLeadActions } from './CRMLeadActions';
-import { CRMFilters } from './CRMFilters';
+import { getTableColumnsForRole } from '@/utils/role-access';
+import { UserRole } from '@/utils/permissions';
 
 interface CRMDashboardProps {
   leads: any[];
@@ -25,13 +28,17 @@ interface CRMDashboardProps {
 
 const CRMDashboard = ({ leads, stats, onStatusUpdate, onAssignLead, onAddNote }: CRMDashboardProps) => {
   const navigate = useNavigate();
+  const { adminUser } = useAdmin();
   const { exportLeads, exporting } = useDataExport();
-  const { refetch } = useCRMData();
+  const { roleConfig } = useRoleBasedCRMData();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [formTypeFilter, setFormTypeFilter] = useState("all");
   const [assignedFilter, setAssignedFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
+
+  // Get role-appropriate table columns
+  const tableColumns = adminUser ? getTableColumnsForRole(adminUser.role as UserRole) : [];
 
   // Enhanced filtering logic
   const filteredLeads = leads.filter(lead => {
@@ -105,7 +112,7 @@ const CRMDashboard = ({ leads, stats, onStatusUpdate, onAssignLead, onAddNote }:
   const getPriorityIcon = (lead: any) => {
     if (lead.form_type === 'step1') return <AlertCircle className="w-4 h-4 text-orange-500" />;
     if (lead.form_type === 'callback') return <Phone className="w-4 h-4 text-purple-500" />;
-    if (lead.payment_status === 'paid') return <TrendingUp className="w-4 h-4 text-green-500" />;
+    if (roleConfig?.showPayments && lead.payment_status === 'paid') return <TrendingUp className="w-4 h-4 text-green-500" />;
     return null;
   };
 
@@ -209,18 +216,20 @@ const CRMDashboard = ({ leads, stats, onStatusUpdate, onAssignLead, onAddNote }:
               </Select>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Actions</label>
-              <Button
-                onClick={() => exportLeads({ format: 'csv' })}
-                disabled={exporting}
-                className="w-full"
-                variant="outline"
-              >
-                <Download className="w-4 h-4 mr-2" />
-                {exporting ? "Export..." : "Exporter"}
-              </Button>
-            </div>
+            {roleConfig?.canExportData && (
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Actions</label>
+                <Button
+                  onClick={() => exportLeads({ format: 'csv' })}
+                  disabled={exporting}
+                  className="w-full"
+                  variant="outline"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  {exporting ? "Export..." : "Exporter"}
+                </Button>
+              </div>
+            )}
           </div>
 
           <div className="text-sm text-muted-foreground">
@@ -242,14 +251,11 @@ const CRMDashboard = ({ leads, stats, onStatusUpdate, onAssignLead, onAddNote }:
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[100px]">Priorité</TableHead>
-                  <TableHead>Client</TableHead>
-                  <TableHead>Contact</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Statut</TableHead>
-                  <TableHead>Assigné à</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Actions</TableHead>
+                  {tableColumns.map((column) => (
+                    <TableHead key={column.key} className={column.key === 'actions' ? 'w-[100px]' : ''}>
+                      {column.label}
+                    </TableHead>
+                  ))}
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -293,6 +299,21 @@ const CRMDashboard = ({ leads, stats, onStatusUpdate, onAssignLead, onAddNote }:
                         )}
                       </div>
                     </TableCell>
+                    {roleConfig?.showPayments && (
+                      <>
+                        <TableCell>
+                          <Badge variant={lead.payment_status === 'paid' ? 'default' : 'secondary'}>
+                            {lead.payment_status === 'paid' ? 'Payé' : 'En attente'}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-1">
+                            <DollarSign className="w-3 h-3" />
+                            <span className="text-sm">{(lead.amount / 100).toFixed(2)}€</span>
+                          </div>
+                        </TableCell>
+                      </>
+                    )}
                     <TableCell>
                       <div className="text-sm">
                         {formatDate(lead.created_at)}
@@ -307,24 +328,26 @@ const CRMDashboard = ({ leads, stats, onStatusUpdate, onAssignLead, onAddNote }:
                         >
                           <Eye className="w-4 h-4" />
                         </Button>
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button variant="outline" size="sm">
-                              <UserPlus className="w-4 h-4" />
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
-                            <DialogHeader>
-                              <DialogTitle>Gestion du Lead</DialogTitle>
-                            </DialogHeader>
-                            <CRMLeadActions 
-                              lead={lead}
-                              onStatusUpdate={onStatusUpdate}
-                              onAssignLead={onAssignLead}
-                              onAddNote={onAddNote}
-                            />
-                          </DialogContent>
-                        </Dialog>
+                        {roleConfig?.canAssignLeads && (
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button variant="outline" size="sm">
+                                <UserPlus className="w-4 h-4" />
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                              <DialogHeader>
+                                <DialogTitle>Gestion du Lead</DialogTitle>
+                              </DialogHeader>
+                              <CRMLeadActions 
+                                lead={lead}
+                                onStatusUpdate={onStatusUpdate}
+                                onAssignLead={onAssignLead}
+                                onAddNote={onAddNote}
+                              />
+                            </DialogContent>
+                          </Dialog>
+                        )}
                       </div>
                     </TableCell>
                   </TableRow>

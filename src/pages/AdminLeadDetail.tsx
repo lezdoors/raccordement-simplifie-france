@@ -30,6 +30,8 @@ import { EmailsTab } from '@/components/lead/EmailsTab';
 import { FilesTab } from '@/components/lead/FilesTab';
 import { InternalMessagesTab } from '@/components/lead/InternalMessagesTab';
 import { TimelineTab } from '@/components/lead/TimelineTab';
+import { getRoleBasedConfig } from '@/utils/role-access';
+import { UserRole } from '@/utils/permissions';
 
 // Define Lead type locally since @/types doesn't exist
 interface Lead {
@@ -53,6 +55,10 @@ interface Lead {
   assigned_to_email?: string;
   created_at: string;
   updated_at?: string;
+  raison_sociale?: string;
+  siren?: string;
+  payment_status?: string;
+  amount?: number;
 }
 
 const AdminLeadDetail = () => {
@@ -66,6 +72,9 @@ const AdminLeadDetail = () => {
   const [error, setError] = useState<string | null>(null);
   const [notes, setNotes] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<"details" | "notes" | "messages" | "emails" | "files" | "timeline">("details");
+
+  // Add role-based config
+  const roleConfig = adminUser ? getRoleBasedConfig(adminUser.role as UserRole) : null;
 
   const fetchLead = async () => {
     if (!leadId) {
@@ -158,11 +167,15 @@ const AdminLeadDetail = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem onClick={() => navigate(`/crm/lead/${leadId}/edit`)}>
-                  <Edit className="mr-2 h-4 w-4" />
-                  Modifier
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
+                {roleConfig?.canModifySettings && (
+                  <>
+                    <DropdownMenuItem onClick={() => navigate(`/crm/lead/${leadId}/edit`)}>
+                      <Edit className="mr-2 h-4 w-4" />
+                      Modifier
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                  </>
+                )}
                 <DropdownMenuItem>
                   <User className="mr-2 h-4 w-4" />
                   Voir le profil
@@ -182,6 +195,7 @@ const AdminLeadDetail = () => {
                 <CardDescription>Détails personnels et informations de contact.</CardDescription>
               </CardHeader>
               <CardContent className="grid gap-4">
+                {/* Basic Info - Always visible */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label>Nom</Label>
@@ -212,6 +226,27 @@ const AdminLeadDetail = () => {
                     <Input type="text" value={lead.type_projet} readOnly />
                   </div>
                 </div>
+
+                {/* Sensitive company info - Only for superadmin/manager */}
+                {(adminUser?.role === 'superadmin' || adminUser?.role === 'manager') && (
+                  <>
+                    {lead.raison_sociale && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label>Raison Sociale</Label>
+                          <Input type="text" value={lead.raison_sociale} readOnly />
+                        </div>
+                        {lead.siren && (
+                          <div>
+                            <Label>SIREN</Label>
+                            <Input type="text" value={lead.siren} readOnly />
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </>
+                )}
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label>Adresse</Label>
@@ -271,6 +306,27 @@ const AdminLeadDetail = () => {
                       <Label>Délai Souhaité</Label>
                       <Input type="text" value={lead.delai_souhaite || 'N/A'} readOnly />
                     </div>
+
+                    {/* Payment info - Only visible to roles with payment permissions */}
+                    {roleConfig?.showPayments && (
+                      <>
+                        <Separator />
+                        <div className="space-y-4">
+                          <h4 className="text-lg font-medium">Informations de Paiement</h4>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                              <Label>Statut de Paiement</Label>
+                              <Input type="text" value={lead.payment_status || 'En attente'} readOnly />
+                            </div>
+                            <div>
+                              <Label>Montant</Label>
+                              <Input type="text" value={lead.amount ? `${(lead.amount / 100).toFixed(2)}€` : 'N/A'} readOnly />
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    )}
+
                     <div>
                       <Label>Commentaires</Label>
                       <Textarea value={lead.commentaires || 'Aucun commentaire'} readOnly className="min-h-[100px]" />
@@ -336,6 +392,16 @@ const AdminLeadDetail = () => {
                   <Label>Dernière mise à jour</Label>
                   <Input type="text" value={format(new Date(lead.updated_at || lead.created_at), "dd MMMM yyyy 'à' HH:mm", { locale: fr })} readOnly />
                 </div>
+
+                {/* Payment status - Only for users with payment permissions */}
+                {roleConfig?.showPayments && lead.payment_status && (
+                  <div className="space-y-2 mt-4">
+                    <Label>Statut de Paiement</Label>
+                    <Badge variant={lead.payment_status === 'paid' ? 'default' : 'secondary'} className="mt-1">
+                      {lead.payment_status === 'paid' ? 'Payé' : 'En attente'}
+                    </Badge>
+                  </div>
+                )}
               </CardContent>
             </Card>
 
