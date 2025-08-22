@@ -94,14 +94,14 @@ export const FilesTab: React.FC<FilesTabProps> = ({ leadId }) => {
               {files.map((file) => (
                 <div key={file.id} className="flex items-center gap-4 p-4 border rounded-lg hover:bg-muted/50 transition-colors">
                   <div className="flex-shrink-0">
-                    {getFileIcon(file.mime_type)}
+                    {getFileIcon(file.content_type)}
                   </div>
                   
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
                       <h4 className="font-medium text-sm truncate">{file.file_name}</h4>
                       <Badge variant="secondary" className="text-xs">
-                        {getFileTypeLabel(file.mime_type)}
+                        {getFileTypeLabel(file.content_type)}
                       </Badge>
                     </div>
                     
@@ -128,7 +128,7 @@ export const FilesTab: React.FC<FilesTabProps> = ({ leadId }) => {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => downloadFile(file.file_path, file.file_name)}
+                      onClick={() => downloadFile(file)}
                     >
                       <Download className="h-4 w-4" />
                     </Button>
@@ -150,7 +150,7 @@ export const FilesTab: React.FC<FilesTabProps> = ({ leadId }) => {
                         <AlertDialogFooter>
                           <AlertDialogCancel>Annuler</AlertDialogCancel>
                           <AlertDialogAction
-                            onClick={() => deleteFile(file.id, file.file_path)}
+                            onClick={() => deleteFile(file.id, file.file_name)}
                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                           >
                             Supprimer
