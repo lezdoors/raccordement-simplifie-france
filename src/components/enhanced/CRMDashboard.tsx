@@ -122,7 +122,7 @@ const CRMDashboard = ({ leads, stats, onStatusUpdate, onAssignLead, onAddNote }:
   return (
     <div className="space-y-6">
       {/* Enhanced Statistics Cards */}
-      <CRMStatsCards stats={stats} leads={leads} />
+      <CRMStatsCards leads={leads} loading={false} />
 
       {/* Enhanced Filters */}
       <Card>

@@ -14,6 +14,22 @@ interface NotesTabProps {
 export const NotesTab: React.FC<NotesTabProps> = ({ leadId }) => {
   const { notes, loading, addNote, updateNote, togglePin, deleteNote } = useLeadNotes(leadId);
 
+  const handleAddNote = async (body: string, isPinned?: boolean) => {
+    return await addNote(body, isPinned);
+  };
+
+  const handleUpdateNote = async (noteId: string, body: string) => {
+    await updateNote(noteId, body);
+  };
+
+  const handleTogglePin = async (noteId: string, isPinned: boolean) => {
+    await togglePin(noteId, isPinned);
+  };
+
+  const handleDeleteNote = async (noteId: string) => {
+    await deleteNote(noteId);
+  };
+
   if (loading) {
     return (
       <div className="space-y-4">
@@ -35,7 +51,7 @@ export const NotesTab: React.FC<NotesTabProps> = ({ leadId }) => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <NotesEditor onSave={addNote} />
+          <NotesEditor onSave={handleAddNote} />
         </CardContent>
       </Card>
 
@@ -52,9 +68,9 @@ export const NotesTab: React.FC<NotesTabProps> = ({ leadId }) => {
             <NoteItem
               key={note.id}
               note={note}
-              onUpdate={updateNote}
-              onTogglePin={togglePin}
-              onDelete={deleteNote}
+              onUpdate={handleUpdateNote}
+              onTogglePin={handleTogglePin}
+              onDelete={handleDeleteNote}
             />
           ))
         )}
