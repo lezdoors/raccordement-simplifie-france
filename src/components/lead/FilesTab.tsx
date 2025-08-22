@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useLeadFiles } from '@/hooks/use-lead-files';
 import { FileUpload } from './FileUpload';
@@ -18,7 +17,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/dialog";
+} from "@/components/ui/alert-dialog";
 
 interface FilesTabProps {
   leadId?: string;
