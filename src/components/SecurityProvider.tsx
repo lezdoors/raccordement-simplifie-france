@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
 
 interface SecurityContextType {
   sessionValid: boolean;
@@ -26,7 +25,6 @@ interface SecurityProviderProps {
 export const SecurityProvider: React.FC<SecurityProviderProps> = ({ children }) => {
   const [sessionValid, setSessionValid] = useState(true);
   const [isSecurityChecking, setIsSecurityChecking] = useState(false);
-  const { toast } = useToast();
 
   const validateSession = async (): Promise<boolean> => {
     try {
@@ -52,11 +50,6 @@ export const SecurityProvider: React.FC<SecurityProviderProps> = ({ children }) 
       if (expiresAt < now) {
         await supabase.auth.signOut();
         setSessionValid(false);
-        toast({
-          title: "Session Expired",
-          description: "Your session has expired. Please log in again.",
-          variant: "destructive",
-        });
         return false;
       }
 

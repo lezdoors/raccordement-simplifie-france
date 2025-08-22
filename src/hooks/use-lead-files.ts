@@ -1,30 +1,25 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useAdmin } from '@/contexts/AdminContext';
-import { useAutoEventLogger } from './use-auto-event-logger';
 import { toast } from 'sonner';
+import { useAutoEventLogger } from './use-auto-event-logger';
 
-interface LeadFile {
+export interface LeadFile {
   id: string;
-  lead_id: string;
   file_name: string;
-  file_path: string;
+  file_url: string;
   file_size: number;
-  mime_type: string;
-  description?: string;
-  uploaded_by: string | null;
-  is_deleted: boolean;
+  content_type: string;
+  uploaded_by: string;
   created_at: string;
-  updated_at: string;
+  description?: string;
 }
 
 export const useLeadFiles = (leadId: string) => {
-  const { user } = useAdmin();
-  const { logFileUploaded, logFileDeleted } = useAutoEventLogger(leadId);
   const [files, setFiles] = useState<LeadFile[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const { logEvent } = useAutoEventLogger(leadId);
 
   const fetchFiles = async () => {
     try {
@@ -32,35 +27,37 @@ export const useLeadFiles = (leadId: string) => {
         .from('lead_files')
         .select('*')
         .eq('lead_id', leadId)
-        .eq('is_deleted', false)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
       setFiles(data || []);
     } catch (error) {
-      console.error('Error fetching lead files:', error);
+      console.error('Error fetching files:', error);
       toast.error('Erreur lors du chargement des fichiers');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const uploadFile = async (file: File, description?: string) => {
-    if (!user) {
-      toast.error('Utilisateur non authentifié');
-      return false;
-    }
-
-    setUploading(true);
+  const uploadFile = async (file: File, description?: string): Promise<boolean> => {
     try {
-      const fileExtension = file.name.split('.').pop();
-      const fileName = `${Date.now()}_${file.name}`;
-      const filePath = `${leadId}/${fileName}`;
+      setUploading(true);
+      
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}.${fileExt}`;
+      const filePath = `leads/${leadId}/${fileName}`;
 
-      // Upload to storage
+      // Upload file to storage
       const { error: uploadError } = await supabase.storage
         .from('lead-files')
         .upload(filePath, file);
 
       if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('lead-files')
+        .getPublicUrl(filePath);
 
       // Save file record
       const { error: dbError } = await supabase
@@ -68,22 +65,21 @@ export const useLeadFiles = (leadId: string) => {
         .insert({
           lead_id: leadId,
           file_name: file.name,
-          file_path: filePath,
+          file_url: publicUrl,
           file_size: file.size,
-          mime_type: file.type,
-          description,
-          uploaded_by: user.id
+          content_type: file.type,
+          description: description
         });
 
       if (dbError) throw dbError;
 
-      // Log the event automatically
-      await logFileUploaded(file.name, file.size, file.type);
+      // Log the event
+      await logEvent('file_uploaded', `Fichier "${file.name}" ajouté`);
 
       toast.success('Fichier uploadé avec succès');
       await fetchFiles();
       return true;
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error uploading file:', error);
       toast.error('Erreur lors de l\'upload du fichier');
       return false;
@@ -92,31 +88,57 @@ export const useLeadFiles = (leadId: string) => {
     }
   };
 
-  const deleteFile = async (fileId: string, fileName: string) => {
+  const deleteFile = async (fileId: string, fileName: string): Promise<boolean> => {
     try {
       const { error } = await supabase
         .from('lead_files')
-        .update({ is_deleted: true })
+        .delete()
         .eq('id', fileId);
 
       if (error) throw error;
 
-      // Log the event automatically
-      await logFileDeleted(fileName);
+      // Log the event
+      await logEvent('file_deleted', `Fichier "${fileName}" supprimé`);
 
       toast.success('Fichier supprimé avec succès');
       await fetchFiles();
       return true;
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error deleting file:', error);
       toast.error('Erreur lors de la suppression du fichier');
       return false;
     }
   };
 
+  const downloadFile = async (file: LeadFile): Promise<void> => {
+    try {
+      // Create a download link
+      const link = document.createElement('a');
+      link.href = file.file_url;
+      link.download = file.file_name;
+      link.target = '_blank';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Log the event
+      await logEvent('file_downloaded', `Fichier "${file.file_name}" téléchargé`);
+
+      toast.success('Téléchargement démarré');
+    } catch (error) {
+      console.error('Error downloading file:', error);
+      toast.error('Erreur lors du téléchargement');
+    }
+  };
+
+  const refetch = async () => {
+    setLoading(true);
+    await fetchFiles();
+  };
+
   useEffect(() => {
     if (leadId) {
-      fetchFiles().finally(() => setLoading(false));
+      fetchFiles();
     }
   }, [leadId]);
 
@@ -126,6 +148,7 @@ export const useLeadFiles = (leadId: string) => {
     uploading,
     uploadFile,
     deleteFile,
-    refetch: fetchFiles
+    downloadFile,
+    refetch
   };
 };
