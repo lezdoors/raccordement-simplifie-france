@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdmin } from '@/contexts/AdminContext';
+import { useAutoEventLogger } from './use-auto-event-logger';
 import { UserRole } from '@/utils/permissions';
 import { getRoleBasedConfig, filterLeadDataByRole } from '@/utils/role-access';
 import { toast } from 'sonner';
@@ -93,6 +94,10 @@ export const useRoleBasedCRMData = () => {
 
   const updateLeadStatus = async (leadId: string, newStatus: string) => {
     try {
+      // Get old status for logging
+      const oldLead = leads.find(l => l.id === leadId);
+      const oldStatus = oldLead?.etat_projet;
+
       const { error } = await supabase
         .from('leads_raccordement')
         .update({ 
@@ -107,6 +112,20 @@ export const useRoleBasedCRMData = () => {
         l.id === leadId ? { ...l, etat_projet: newStatus } : l
       ));
 
+      // Log the status change event if we have old status
+      if (oldStatus && oldStatus !== newStatus) {
+        try {
+          await supabase.rpc('log_lead_event', {
+            p_lead_id: leadId,
+            p_type: 'status_changed',
+            p_actor_id: user?.id || null,
+            p_payload: { old_status: oldStatus, new_status: newStatus }
+          });
+        } catch (logError) {
+          console.error('Failed to log status change:', logError);
+        }
+      }
+
       toast.success('Statut mis à jour avec succès');
     } catch (error: any) {
       console.error('Error updating status:', error);
@@ -117,6 +136,10 @@ export const useRoleBasedCRMData = () => {
   const assignLead = async (leadId: string, email: string) => {
     try {
       const assignedEmail = email === "unassigned" ? null : email;
+      
+      // Get old assignment for logging
+      const oldLead = leads.find(l => l.id === leadId);
+      const oldAssignee = oldLead?.assigned_to_email;
       
       const { error } = await supabase
         .from('leads_raccordement')
@@ -131,6 +154,21 @@ export const useRoleBasedCRMData = () => {
       setLeads(prev => prev.map(l => 
         l.id === leadId ? { ...l, assigned_to_email: assignedEmail } : l
       ));
+
+      // Log the assignment change event
+      try {
+        await supabase.rpc('log_lead_event', {
+          p_lead_id: leadId,
+          p_type: 'assignment_changed',
+          p_actor_id: user?.id || null,
+          p_payload: { 
+            old_assignee: oldAssignee, 
+            new_assignee: assignedEmail 
+          }
+        });
+      } catch (logError) {
+        console.error('Failed to log assignment change:', logError);
+      }
 
       toast.success('Lead assigné avec succès');
     } catch (error: any) {

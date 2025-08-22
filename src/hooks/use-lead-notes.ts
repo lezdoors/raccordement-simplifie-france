@@ -1,7 +1,7 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdmin } from '@/contexts/AdminContext';
+import { useAutoEventLogger } from './use-auto-event-logger';
 import { toast } from 'sonner';
 
 export interface LeadNote {
@@ -18,6 +18,7 @@ export interface LeadNote {
 
 export const useLeadNotes = (leadId: string) => {
   const { user } = useAdmin();
+  const { logNoteAdded } = useAutoEventLogger(leadId);
   const [notes, setNotes] = useState<LeadNote[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -59,13 +60,8 @@ export const useLeadNotes = (leadId: string) => {
 
       if (error) throw error;
 
-      // Log the event
-      await supabase.rpc('log_lead_event', {
-        p_lead_id: leadId,
-        p_type: 'note_added',
-        p_actor_id: user.id,
-        p_payload: { content_length: body.length, is_pinned: isPinned }
-      });
+      // Log the event automatically
+      await logNoteAdded(body.length, isPinned);
 
       toast.success('Note ajoutée avec succès');
       await fetchNotes();
@@ -73,72 +69,6 @@ export const useLeadNotes = (leadId: string) => {
     } catch (error: any) {
       console.error('Error adding note:', error);
       toast.error('Erreur lors de l\'ajout de la note');
-      return false;
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const updateNote = async (noteId: string, body: string) => {
-    setSaving(true);
-    try {
-      const { error } = await supabase
-        .from('lead_notes')
-        .update({ note: body, body: body })
-        .eq('id', noteId);
-
-      if (error) throw error;
-
-      toast.success('Note mise à jour avec succès');
-      await fetchNotes();
-      return true;
-    } catch (error: any) {
-      console.error('Error updating note:', error);
-      toast.error('Erreur lors de la mise à jour de la note');
-      return false;
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const togglePin = async (noteId: string, isPinned: boolean) => {
-    setSaving(true);
-    try {
-      const { error } = await supabase
-        .from('lead_notes')
-        .update({ is_pinned: isPinned })
-        .eq('id', noteId);
-
-      if (error) throw error;
-
-      toast.success(isPinned ? 'Note épinglée' : 'Note désépinglée');
-      await fetchNotes();
-      return true;
-    } catch (error: any) {
-      console.error('Error toggling pin:', error);
-      toast.error('Erreur lors de la modification');
-      return false;
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const deleteNote = async (noteId: string) => {
-    setSaving(true);
-    try {
-      const { error } = await supabase
-        .from('lead_notes')
-        .delete()
-        .eq('id', noteId);
-
-      if (error) throw error;
-
-      toast.success('Note supprimée avec succès');
-      await fetchNotes();
-      return true;
-    } catch (error: any) {
-      console.error('Error deleting note:', error);
-      toast.error('Erreur lors de la suppression de la note');
       return false;
     } finally {
       setSaving(false);
@@ -156,9 +86,69 @@ export const useLeadNotes = (leadId: string) => {
     loading,
     saving,
     addNote,
-    updateNote,
-    togglePin,
-    deleteNote,
+    updateNote: async (noteId: string, body: string) => {
+      setSaving(true);
+      try {
+        const { error } = await supabase
+          .from('lead_notes')
+          .update({ note: body, body: body })
+          .eq('id', noteId);
+
+        if (error) throw error;
+
+        toast.success('Note mise à jour avec succès');
+        await fetchNotes();
+        return true;
+      } catch (error: any) {
+        console.error('Error updating note:', error);
+        toast.error('Erreur lors de la mise à jour de la note');
+        return false;
+      } finally {
+        setSaving(false);
+      }
+    },
+    togglePin: async (noteId: string, isPinned: boolean) => {
+      setSaving(true);
+      try {
+        const { error } = await supabase
+          .from('lead_notes')
+          .update({ is_pinned: isPinned })
+          .eq('id', noteId);
+
+        if (error) throw error;
+
+        toast.success(isPinned ? 'Note épinglée' : 'Note désépinglée');
+        await fetchNotes();
+        return true;
+      } catch (error: any) {
+        console.error('Error toggling pin:', error);
+        toast.error('Erreur lors de la modification');
+        return false;
+      } finally {
+        setSaving(false);
+      }
+    },
+    deleteNote: async (noteId: string) => {
+      setSaving(true);
+      try {
+        const { error } = await supabase
+          .from('lead_notes')
+          .delete()
+          .eq('id', noteId);
+
+        if (error) throw error;
+
+        toast.success('Note supprimée avec succès');
+        await fetchNotes();
+        return true;
+      } catch (error: any) {
+        console.error('Error deleting note:', error);
+        toast.error('Erreur lors de la suppression de la note');
+        return false;
+      } finally {
+        setSaving(false);
+      }
+    },
     refetch: fetchNotes
   };
 };

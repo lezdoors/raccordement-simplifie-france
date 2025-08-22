@@ -1,7 +1,9 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { useAdmin } from '@/contexts/AdminContext';
+import { useAutoEventLogger } from './use-auto-event-logger';
+import { toast } from 'sonner';
 
 interface LeadFile {
   id: string;
@@ -10,24 +12,22 @@ interface LeadFile {
   file_path: string;
   file_size: number;
   mime_type: string;
-  uploaded_by?: string;
   description?: string;
+  uploaded_by: string | null;
   is_deleted: boolean;
   created_at: string;
   updated_at: string;
 }
 
-export const useLeadFiles = (leadId?: string) => {
+export const useLeadFiles = (leadId: string) => {
+  const { user } = useAdmin();
+  const { logFileUploaded, logFileDeleted } = useAutoEventLogger(leadId);
   const [files, setFiles] = useState<LeadFile[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
-  const { toast } = useToast();
 
   const fetchFiles = async () => {
-    if (!leadId) return;
-
     try {
-      setLoading(true);
       const { data, error } = await supabase
         .from('lead_files')
         .select('*')
@@ -35,183 +35,89 @@ export const useLeadFiles = (leadId?: string) => {
         .eq('is_deleted', false)
         .order('created_at', { ascending: false });
 
-      if (error) {
-        console.error('Error fetching files:', error);
-        toast({
-          title: "Erreur",
-          description: "Impossible de charger les fichiers",
-          variant: "destructive",
-        });
-        return;
-      }
-
+      if (error) throw error;
       setFiles(data || []);
-    } catch (err) {
-      console.error('Unexpected error:', err);
-      toast({
-        title: "Erreur",
-        description: "Erreur inattendue lors du chargement des fichiers",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching lead files:', error);
+      toast.error('Erreur lors du chargement des fichiers');
     }
   };
 
   const uploadFile = async (file: File, description?: string) => {
-    if (!leadId) return null;
+    if (!user) {
+      toast.error('Utilisateur non authentifié');
+      return false;
+    }
 
+    setUploading(true);
     try {
-      setUploading(true);
-      
-      // Generate unique file path
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${leadId}/${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const fileExtension = file.name.split('.').pop();
+      const fileName = `${Date.now()}_${file.name}`;
+      const filePath = `${leadId}/${fileName}`;
 
-      // Upload to Supabase Storage
+      // Upload to storage
       const { error: uploadError } = await supabase.storage
         .from('lead-files')
-        .upload(fileName, file);
+        .upload(filePath, file);
 
-      if (uploadError) {
-        console.error('Upload error:', uploadError);
-        toast({
-          title: "Erreur d'upload",
-          description: "Impossible de télécharger le fichier",
-          variant: "destructive",
-        });
-        return null;
-      }
+      if (uploadError) throw uploadError;
 
-      // Save file metadata to database
-      const { data, error: dbError } = await supabase
+      // Save file record
+      const { error: dbError } = await supabase
         .from('lead_files')
         .insert({
           lead_id: leadId,
           file_name: file.name,
-          file_path: fileName,
+          file_path: filePath,
           file_size: file.size,
-          mime_type: file.type || 'application/octet-stream',
-          description: description || null,
-        })
-        .select()
-        .single();
-
-      if (dbError) {
-        console.error('Database error:', dbError);
-        // Clean up uploaded file
-        await supabase.storage.from('lead-files').remove([fileName]);
-        toast({
-          title: "Erreur",
-          description: "Impossible d'enregistrer les métadonnées du fichier",
-          variant: "destructive",
+          mime_type: file.type,
+          description,
+          uploaded_by: user.id
         });
-        return null;
-      }
 
-      toast({
-        title: "Succès",
-        description: "Fichier téléchargé avec succès",
-      });
+      if (dbError) throw dbError;
 
-      // Refresh files list
+      // Log the event automatically
+      await logFileUploaded(file.name, file.size, file.type);
+
+      toast.success('Fichier uploadé avec succès');
       await fetchFiles();
-      return data;
-    } catch (err) {
-      console.error('Unexpected upload error:', err);
-      toast({
-        title: "Erreur",
-        description: "Erreur inattendue lors du téléchargement",
-        variant: "destructive",
-      });
-      return null;
+      return true;
+    } catch (error: any) {
+      console.error('Error uploading file:', error);
+      toast.error('Erreur lors de l\'upload du fichier');
+      return false;
     } finally {
       setUploading(false);
     }
   };
 
-  const deleteFile = async (fileId: string, filePath: string) => {
+  const deleteFile = async (fileId: string, fileName: string) => {
     try {
-      // Mark as deleted in database
-      const { error: dbError } = await supabase
+      const { error } = await supabase
         .from('lead_files')
         .update({ is_deleted: true })
         .eq('id', fileId);
 
-      if (dbError) {
-        console.error('Database error:', dbError);
-        toast({
-          title: "Erreur",
-          description: "Impossible de supprimer le fichier",
-          variant: "destructive",
-        });
-        return;
-      }
+      if (error) throw error;
 
-      // Remove from storage
-      const { error: storageError } = await supabase.storage
-        .from('lead-files')
-        .remove([filePath]);
+      // Log the event automatically
+      await logFileDeleted(fileName);
 
-      if (storageError) {
-        console.error('Storage error:', storageError);
-        // File might already be deleted, so we'll just log the error
-      }
-
-      toast({
-        title: "Succès",
-        description: "Fichier supprimé avec succès",
-      });
-
-      // Refresh files list
+      toast.success('Fichier supprimé avec succès');
       await fetchFiles();
-    } catch (err) {
-      console.error('Unexpected delete error:', err);
-      toast({
-        title: "Erreur",
-        description: "Erreur inattendue lors de la suppression",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const downloadFile = async (filePath: string, fileName: string) => {
-    try {
-      const { data, error } = await supabase.storage
-        .from('lead-files')
-        .download(filePath);
-
-      if (error) {
-        console.error('Download error:', error);
-        toast({
-          title: "Erreur",
-          description: "Impossible de télécharger le fichier",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      // Create download link
-      const url = URL.createObjectURL(data);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = fileName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error('Unexpected download error:', err);
-      toast({
-        title: "Erreur",
-        description: "Erreur inattendue lors du téléchargement",
-        variant: "destructive",
-      });
+      return true;
+    } catch (error: any) {
+      console.error('Error deleting file:', error);
+      toast.error('Erreur lors de la suppression du fichier');
+      return false;
     }
   };
 
   useEffect(() => {
-    fetchFiles();
+    if (leadId) {
+      fetchFiles().finally(() => setLoading(false));
+    }
   }, [leadId]);
 
   return {
@@ -220,7 +126,6 @@ export const useLeadFiles = (leadId?: string) => {
     uploading,
     uploadFile,
     deleteFile,
-    downloadFile,
-    refetch: fetchFiles,
+    refetch: fetchFiles
   };
 };
