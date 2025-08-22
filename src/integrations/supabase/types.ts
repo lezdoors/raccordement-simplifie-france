@@ -854,6 +854,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: boolean
       }
+      is_manager_or_superadmin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
       is_session_valid: {
         Args: Record<PropertyKey, never>
         Returns: boolean
