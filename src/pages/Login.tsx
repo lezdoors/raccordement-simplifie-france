@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -6,17 +7,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Lock, Mail, Eye, EyeOff, AlertTriangle, Phone } from "lucide-react";
+import { Lock, Mail, Eye, EyeOff, AlertTriangle, Phone, RefreshCw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAdmin } from "@/contexts/AdminContext";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { user, adminUser, loading: authLoading } = useAdmin();
+  const { user, adminUser, loading: authLoading, error: adminError, refreshAdminUser } = useAdmin();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loginAttempts, setLoginAttempts] = useState(0);
+  const [isRetrying, setIsRetrying] = useState(false);
 
   // Redirect if already authenticated and authorized
   useEffect(() => {
@@ -29,6 +32,25 @@ const Login = () => {
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
+  };
+
+  const retryAdminCheck = async () => {
+    if (!user?.email) return;
+    
+    setIsRetrying(true);
+    try {
+      console.log('🔄 Retrying admin user check for:', user.email);
+      await refreshAdminUser();
+      
+      // Small delay to allow context to update
+      setTimeout(() => {
+        setIsRetrying(false);
+      }, 1000);
+    } catch (error) {
+      console.error('❌ Retry failed:', error);
+      setIsRetrying(false);
+      toast.error("Erreur lors de la vérification des autorisations");
+    }
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -45,20 +67,34 @@ const Login = () => {
     }
 
     setLoading(true);
+    setLoginAttempts(prev => prev + 1);
+    
     try {
-      console.log('🔐 Attempting login for:', email);
+      console.log('🔐 Attempting login for:', email, `(attempt #${loginAttempts + 1})`);
+      
+      // First, try to sign out any existing session
+      await supabase.auth.signOut();
+      
+      // Wait a moment for cleanup
+      await new Promise(resolve => setTimeout(resolve, 500));
       
       const { data, error } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
+        email: email.trim().toLowerCase(),
         password,
       });
 
       if (error) {
         console.error('❌ Login error:', error);
+        
+        // More specific error messages
         if (error.message.includes("Invalid login credentials")) {
-          toast.error("Email ou mot de passe incorrect");
+          toast.error("Email ou mot de passe incorrect. Vérifiez vos identifiants.");
         } else if (error.message.includes("Email not confirmed")) {
-          toast.error("Veuillez confirmer votre email avant de vous connecter");
+          toast.error("Veuillez confirmer votre email avant de vous connecter.");
+        } else if (error.message.includes("Too many requests")) {
+          toast.error("Trop de tentatives de connexion. Veuillez patienter quelques minutes.");
+        } else if (error.message.includes("User not found")) {
+          toast.error("Aucun compte trouvé avec cette adresse email.");
         } else {
           toast.error(`Erreur de connexion: ${error.message}`);
         }
@@ -67,16 +103,21 @@ const Login = () => {
 
       if (data.user) {
         console.log('✅ Login successful for:', data.user.email);
-        toast.success("Connexion réussie ! Redirection en cours...");
+        toast.success("Connexion réussie ! Vérification des autorisations...");
         
-        // Small delay for better UX - AdminContext will handle the rest
+        // Give AdminContext time to process the new user
         setTimeout(() => {
-          navigate('/admin');
-        }, 1000);
+          // Check if we have admin access after a delay
+          if (!adminUser && !adminError) {
+            console.log('⏳ Admin check still pending, will redirect after verification');
+          } else {
+            navigate('/admin');
+          }
+        }, 2000);
       }
     } catch (error: any) {
       console.error("💥 Unexpected login error:", error);
-      toast.error("Erreur inattendue lors de la connexion");
+      toast.error("Erreur inattendue lors de la connexion. Veuillez réessayer.");
     } finally {
       setLoading(false);
     }
@@ -104,7 +145,7 @@ const Login = () => {
         return;
       }
 
-      toast.success("Email de réinitialisation envoyé !");
+      toast.success("Email de réinitialisation envoyé ! Vérifiez votre boîte mail.");
     } catch (error: any) {
       console.error("Reset password error:", error);
       toast.error("Erreur lors de l'envoi de l'email");
@@ -124,6 +165,9 @@ const Login = () => {
       </div>
     );
   }
+
+  // Show retry option if user is logged in but not authorized
+  const showRetryOption = user && !adminUser && adminError;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -153,6 +197,39 @@ const Login = () => {
           </CardHeader>
           <CardContent className="space-y-6">
             
+            {/* Show retry option if logged in but not authorized */}
+            {showRetryOption && (
+              <Alert className="border-amber-200 bg-amber-50">
+                <AlertTriangle className="h-4 w-4 text-amber-600" />
+                <AlertDescription className="text-amber-800">
+                  <div className="space-y-2">
+                    <p><strong>Connexion établie mais accès non autorisé.</strong></p>
+                    <p className="text-sm">Utilisateur: {user.email}</p>
+                    <p className="text-sm">Erreur: {adminError}</p>
+                    <Button 
+                      onClick={retryAdminCheck} 
+                      disabled={isRetrying}
+                      size="sm" 
+                      variant="outline"
+                      className="mt-2"
+                    >
+                      {isRetrying ? (
+                        <>
+                          <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                          Vérification...
+                        </>
+                      ) : (
+                        <>
+                          <RefreshCw className="h-4 w-4 mr-2" />
+                          Réessayer la vérification
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </AlertDescription>
+              </Alert>
+            )}
+
             <Alert className="border-blue-200 bg-blue-50">
               <AlertTriangle className="h-4 w-4 text-blue-600" />
               <AlertDescription className="text-blue-800 text-sm">
@@ -174,7 +251,8 @@ const Login = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     className="pl-10 h-12"
                     required
-                    disabled={loading}
+                    disabled={loading || isRetrying}
+                    autoComplete="email"
                   />
                 </div>
               </div>
@@ -190,13 +268,14 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     className="pl-10 pr-10 h-12"
                     required
-                    disabled={loading}
+                    disabled={loading || isRetrying}
+                    autoComplete="current-password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
-                    disabled={loading}
+                    disabled={loading || isRetrying}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -208,7 +287,7 @@ const Login = () => {
                   type="button"
                   onClick={handleForgotPassword}
                   className="text-sm text-blue-600 hover:text-blue-700 hover:underline"
-                  disabled={loading}
+                  disabled={loading || isRetrying}
                 >
                   Mot de passe oublié ?
                 </button>
@@ -217,11 +296,18 @@ const Login = () => {
               <Button 
                 type="submit" 
                 className="w-full h-12 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800" 
-                disabled={loading}
+                disabled={loading || isRetrying}
               >
                 {loading ? "Connexion en cours..." : "Accéder au CRM"}
               </Button>
             </form>
+
+            {/* Show login attempt info for debugging */}
+            {loginAttempts > 0 && (
+              <div className="text-xs text-muted-foreground text-center">
+                Tentatives de connexion : {loginAttempts}
+              </div>
+            )}
 
             <div className="mt-6 pt-6 border-t text-center space-y-2">
               <p className="text-sm text-muted-foreground">

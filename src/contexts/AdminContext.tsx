@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
@@ -42,32 +43,48 @@ export const AdminProvider = ({ children }: AdminProviderProps) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchAdminUser = async (userEmail: string): Promise<AdminUser | null> => {
+  const fetchAdminUser = async (userEmail: string, retryCount = 0): Promise<AdminUser | null> => {
+    const maxRetries = 3;
+    const retryDelay = Math.pow(2, retryCount) * 1000; // Exponential backoff
+    
     try {
-      console.log('🔍 Fetching admin user for email:', userEmail);
+      console.log(`🔍 Fetching admin user for email: ${userEmail} (attempt ${retryCount + 1})`);
       
       const { data, error } = await supabase
         .from('admin_users')
         .select('email, role, can_see_payments, can_manage_users, can_see_all_leads, is_active')
-        .eq('email', userEmail)
+        .eq('email', userEmail.toLowerCase().trim())
         .eq('is_active', true)
         .single();
 
       if (error) {
         console.error('❌ Error fetching admin user:', error);
+        
+        // Retry on temporary errors
+        if ((error.code === 'PGRST301' || error.message.includes('timeout')) && retryCount < maxRetries) {
+          console.log(`⏳ Retrying in ${retryDelay}ms...`);
+          await new Promise(resolve => setTimeout(resolve, retryDelay));
+          return fetchAdminUser(userEmail, retryCount + 1);
+        }
+        
         if (error.code === 'PGRST116') {
           // No rows returned
-          setError(`Utilisateur non autorisé. Contactez l'administrateur pour obtenir l'accès.`);
+          const errorMessage = `Utilisateur "${userEmail}" non autorisé. Contactez l'administrateur pour obtenir l'accès.`;
+          setError(errorMessage);
           toast.error('Accès refusé: utilisateur non autorisé');
           return null;
         }
-        setError(`Erreur de base de données: ${error.message}`);
+        
+        const errorMessage = `Erreur de base de données: ${error.message}`;
+        setError(errorMessage);
+        toast.error('Erreur lors de la vérification des autorisations');
         return null;
       }
 
       if (!data) {
         console.warn('⚠️ No admin user data found for:', userEmail);
-        setError('Utilisateur non trouvé dans le système');
+        const errorMessage = `Utilisateur "${userEmail}" non trouvé dans le système`;
+        setError(errorMessage);
         return null;
       }
 
@@ -76,14 +93,26 @@ export const AdminProvider = ({ children }: AdminProviderProps) => {
       return data as AdminUser;
     } catch (error) {
       console.error('💥 Unexpected error fetching admin user:', error);
-      setError('Erreur inattendue lors de la vérification des autorisations');
+      
+      // Retry on network errors
+      if (retryCount < maxRetries) {
+        console.log(`⏳ Retrying in ${retryDelay}ms...`);
+        await new Promise(resolve => setTimeout(resolve, retryDelay));
+        return fetchAdminUser(userEmail, retryCount + 1);
+      }
+      
+      const errorMessage = 'Erreur inattendue lors de la vérification des autorisations';
+      setError(errorMessage);
+      toast.error(errorMessage);
       return null;
     }
   };
 
   const refreshAdminUser = async () => {
     if (user?.email) {
+      console.log('🔄 Refreshing admin user data for:', user.email);
       setLoading(true);
+      setError(null);
       const adminData = await fetchAdminUser(user.email);
       setAdminUser(adminData);
       setLoading(false);
@@ -105,6 +134,7 @@ export const AdminProvider = ({ children }: AdminProviderProps) => {
     const initializeAuth = async () => {
       try {
         console.log('🚀 Initializing admin authentication...');
+        setLoading(true);
         
         // Get initial session first
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
@@ -130,6 +160,9 @@ export const AdminProvider = ({ children }: AdminProviderProps) => {
             if (isMounted) {
               setAdminUser(adminData);
             }
+          } else {
+            setAdminUser(null);
+            setError(null);
           }
           setLoading(false);
           isInitialLoad = false;
@@ -144,10 +177,11 @@ export const AdminProvider = ({ children }: AdminProviderProps) => {
           setUser(newSession?.user ?? null);
           
           if (newSession?.user?.email) {
-            // Only fetch if user changed
-            if (newSession.user.email !== session?.user?.email) {
-              console.log('🔍 Fetching admin data for new user:', newSession.user.email);
+            // Only fetch if user changed or it's a new sign in
+            if (event === 'SIGNED_IN' || newSession.user.email !== session?.user?.email) {
+              console.log('🔍 Fetching admin data for auth change:', newSession.user.email);
               setLoading(true);
+              setError(null);
               const adminData = await fetchAdminUser(newSession.user.email);
               if (isMounted) {
                 setAdminUser(adminData);
