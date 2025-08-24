@@ -15,7 +15,7 @@ const Navigation = () => {
     if (start) {
       start.scrollIntoView({ behavior: 'smooth' });
     } else {
-      navigate('/commencer');
+      navigate('/raccordement-enedis');
     }
   };
   return <nav className={`sticky top-0 z-[60] text-white transition-colors duration-300 ${isScrolled ? 'bg-primary/95 shadow-lg backdrop-blur-md' : 'bg-gradient-to-r from-primary to-primary/90'}`}>

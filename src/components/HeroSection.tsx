@@ -9,7 +9,7 @@ const HeroSection = () => {
     if (start) {
       start.scrollIntoView({ behavior: 'smooth' });
     } else {
-      navigate('/commencer');
+      navigate('/raccordement-enedis');
     }
   };
 
@@ -106,7 +106,7 @@ const HeroSection = () => {
             <div className="floating-card glass-card p-6 rounded-2xl w-full max-w-sm xl:max-w-md ring-1 ring-white/20 mx-auto lg:mx-0">
               <h3 className="text-lg font-semibold text-white">Estimation rapide</h3>
               <form
-                onSubmit={(e) => { e.preventDefault(); navigate('/commencer'); }}
+                onSubmit={(e) => { e.preventDefault(); navigate('/raccordement-enedis'); }}
                 className="mt-4 grid grid-cols-1 gap-3"
                 aria-label="Formulaire d'estimation rapide"
               >

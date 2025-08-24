@@ -57,7 +57,7 @@ const APropos = () => {
             en France métropolitaine avec un service rapide, fiable et personnalisé.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" onClick={() => navigate('/commencer')}>
+            <Button size="lg" onClick={() => navigate('/raccordement-enedis')}>
               Commencer mon projet
             </Button>
             <Button variant="outline" size="lg" onClick={() => navigate('/contact')}>
@@ -166,7 +166,7 @@ const APropos = () => {
             de notre expertise pour votre raccordement électrique.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" onClick={() => navigate('/commencer')}>
+            <Button size="lg" onClick={() => navigate('/raccordement-enedis')}>
               Demander un devis gratuit
             </Button>
             <Button variant="outline" size="lg" onClick={() => navigate('/contact')}>
