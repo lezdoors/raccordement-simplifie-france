@@ -62,16 +62,17 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Premium Royal Blue & Gold Palette
-				royal: {
-					DEFAULT: 'hsl(var(--royal-blue))',
-					light: 'hsl(var(--royal-blue-light))',
-					dark: 'hsl(var(--royal-blue-dark))'
+				// Modern Light Palette
+				blue: {
+					soft: 'hsl(var(--blue-soft))',
+					light: 'hsl(var(--blue-light))',
+					lighter: 'hsl(var(--blue-lighter))',
+					subtle: 'hsl(var(--blue-subtle))'
 				},
-				gold: {
-					DEFAULT: 'hsl(var(--luxury-gold))',
-					light: 'hsl(var(--luxury-gold-light))',
-					dark: 'hsl(var(--luxury-gold-dark))'
+				warm: {
+					DEFAULT: 'hsl(var(--accent-warm))',
+					light: 'hsl(var(--accent-light))',
+					subtle: 'hsl(var(--accent-subtle))'
 				}
 			},
 			fontFamily: {
@@ -81,28 +82,30 @@ export default {
 				'serif': ['var(--font-display)']
 			},
 			backgroundImage: {
-				'gradient-royal': 'var(--gradient-royal)',
-				'gradient-luxury': 'var(--gradient-luxury)',
+				'gradient-soft': 'var(--gradient-soft)',
+				'gradient-light': 'var(--gradient-light)',
 				'gradient-hero': 'var(--gradient-hero)',
-				'gradient-glass': 'var(--gradient-glass)'
+				'gradient-glass': 'var(--gradient-glass)',
+				'gradient-accent': 'var(--gradient-accent)'
 			},
 			boxShadow: {
-				'luxury': 'var(--shadow-luxury)',
+				'soft': 'var(--shadow-soft)',
+				'medium': 'var(--shadow-medium)',
 				'floating': 'var(--shadow-floating)',
-				'glass': 'var(--shadow-glass)',
-				'premium': 'var(--shadow-premium)'
+				'strong': 'var(--shadow-strong)'
 			},
 			backdropBlur: {
 				'glass': '12px'
 			},
 			spacing: {
-				'luxury': 'var(--space-luxury)',
-				'premium': 'var(--space-premium)',
-				'elegant': 'var(--space-elegant)'
+				'xl': 'var(--space-xl)',
+				'lg': 'var(--space-lg)', 
+				'md': 'var(--space-md)',
+				'sm': 'var(--space-sm)'
 			},
 			transitionTimingFunction: {
-				'luxury': 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-				'elastic': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)'
+				'gentle': 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+				'smooth': 'cubic-bezier(0.4, 0, 0.2, 1)'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
