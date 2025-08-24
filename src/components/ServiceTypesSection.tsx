@@ -45,10 +45,10 @@ const ServiceTypesSection = () => {
   ];
 
   return (
-    <section className="py-luxury bg-gradient-to-br from-background via-muted/20 to-background">
+    <section className="py-20 md:py-32 bg-gradient-to-br from-background via-muted/20 to-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16 space-y-6">
-          <div className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-luxury text-white text-sm font-medium shadow-luxury">
+          <div className="inline-flex items-center px-6 py-3 rounded-full bg-warm text-white text-sm font-medium shadow-soft">
             <FileText className="w-4 h-4 mr-2" />
             Services Premium
           </div>

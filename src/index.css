@@ -500,9 +500,9 @@
       animation: hero-shift 16s ease-in-out infinite;
     }
 
-    /* Premium partner badge */
+    /* Modern partner badge */
     .badge-premium {
-      @apply inline-flex items-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 font-semibold shadow-premium;
+      @apply inline-flex items-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 font-semibold shadow-soft;
       padding: 0.5rem 1rem;
       font-size: 0.95rem;
     }
