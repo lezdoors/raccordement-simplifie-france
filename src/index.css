@@ -12,98 +12,96 @@
 
 @layer base {
   :root {
-    /* Light & Airy Modern Palette */
+    /* Royal Blue & Gold Premium Palette */
     --background: 0 0% 100%;
-    --foreground: 225 6% 13%;
+    --foreground: 220 26% 14%;
     
     /* Mobile viewport height for sticky elements */
     --mobile-safe-area-inset-top: env(safe-area-inset-top, 0px);
     --mobile-safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
 
     --card: 0 0% 100%;
-    --card-foreground: 225 6% 13%;
+    --card-foreground: 220 26% 14%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 225 6% 13%;
+    --popover-foreground: 220 26% 14%;
 
-    /* Softer Blue Primary - Lighter and more breathable */
-    --primary: 217 32% 17%;
+    /* Royal Blue Primary */
+    --primary: 220 91% 24%;
     --primary-foreground: 0 0% 100%;
 
-    /* Airy Secondary */
-    --secondary: 220 14% 97%;
-    --secondary-foreground: 225 6% 20%;
+    /* Sophisticated Secondary */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 26% 14%;
 
-    /* Light Muted */
-    --muted: 220 13% 98%;
-    --muted-foreground: 220 9% 55%;
+    /* Elegant Muted */
+    --muted: 220 14% 98%;
+    --muted-foreground: 220 9% 46%;
 
-    /* Subtle Accent - Warmer and softer */
-    --accent: 25 95% 53%;
-    --accent-foreground: 225 6% 13%;
+    /* Luxury Gold Accent - User's specific gold gradient (#FFD77A to #F2B736) */
+    --accent: 42 78% 60%;
+    --accent-foreground: 220 26% 14%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 220 13% 94%;
-    --input: 220 13% 96%;
-    --ring: 217 32% 17%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 220 91% 24%;
 
-    /* Modern Design Tokens - Lighter palette */
-    --blue-soft: 217 32% 17%;
-    --blue-light: 217 32% 45%;
-    --blue-lighter: 217 32% 65%;
-    --blue-subtle: 217 19% 85%;
+    /* Premium Design Tokens */
+    --royal-blue: 220 91% 24%;
+    --royal-blue-light: 220 91% 35%;
+    --royal-blue-dark: 220 91% 18%;
     
-    /* Refined accent colors */
-    --accent-warm: 25 95% 53%;
-    --accent-light: 25 95% 65%;
-    --accent-subtle: 25 80% 88%;
+    /* User's specific gold colors converted to HSL */
+    --gold: 43 100% 73%;  /* #FFD77A */
+    --gold-light: 43 100% 78%;
+    --gold-dark: 42 82% 56%;  /* #F2B736 */
     
-    /* High visibility CTA - Warmer and friendlier */
-    --cta-primary: 25 95% 53%;
-    --cta-text: 0 0% 100%;
+    /* High visibility CTA button - #FFD000 */
+    --cta-yellow: 51 100% 50%;  /* #FFD000 */
+    --cta-text: 0 0% 4%;       /* #0A0A0A */
     
-    /* Legacy compatibility */
-    --luxury-gold: 25 95% 53%;
-    --luxury-gold-light: 25 95% 65%;
-    --luxury-gold-dark: 25 85% 45%;
+    /* Legacy gold tokens for compatibility */
+    --luxury-gold: 43 100% 73%;
+    --luxury-gold-light: 43 100% 78%;
+    --luxury-gold-dark: 42 82% 56%;
     
-  /* Subtle Modern Gradients */
-  --gradient-soft: linear-gradient(135deg, hsl(217 32% 17%), hsl(217 32% 25%));
-  --gradient-light: linear-gradient(135deg, hsl(217 32% 45%), hsl(217 19% 65%));
-  --gradient-hero: linear-gradient(135deg, hsl(217 32% 15%) 0%, hsl(217 32% 20%) 50%, hsl(217 32% 30%) 100%);
-  --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  /* Premium Gradients */
+  --gradient-royal: linear-gradient(135deg, hsl(220 91% 24%), hsl(220 91% 35%));
+  --gradient-luxury: linear-gradient(135deg, hsl(220 91% 24%), hsl(42 78% 60%));
+  --gradient-hero: linear-gradient(135deg, hsl(220 91% 18%) 0%, hsl(220 91% 24%) 50%, hsl(220 91% 35%) 100%);
+  --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
   
-  /* Warm accent gradient */
-  --gradient-accent: linear-gradient(135deg, hsl(25 95% 53%) 0%, hsl(25 95% 65%) 100%);
-  --gradient-cta: linear-gradient(135deg, hsl(25 95% 53%) 0%, hsl(25 95% 65%) 100%);
+  /* User's specific gold gradient - #FFD77A to #F2B736 */
+  --gradient-gold: linear-gradient(90deg, hsl(43 100% 73%) 0%, hsl(42 82% 56%) 100%);
+  --gradient-cta: linear-gradient(90deg, hsl(43 100% 73%) 0%, hsl(42 82% 56%) 100%);
     
-    /* Subtle Shadows & Effects */
-    --shadow-soft: 0 2px 8px -2px hsl(217 32% 17% / 0.04);
-    --shadow-medium: 0 4px 16px -4px hsl(217 32% 17% / 0.06);
-    --shadow-floating: 0 8px 32px -8px hsl(217 32% 17% / 0.08);
-    --shadow-strong: 0 16px 48px -12px hsl(217 32% 17% / 0.10);
+    /* Premium Shadows & Effects */
+    --shadow-luxury: 0 20px 40px -10px hsl(220 91% 24% / 0.15);
+    --shadow-floating: 0 32px 64px -12px hsl(220 91% 24% / 0.20);
+    --shadow-glass: 0 8px 32px hsl(220 91% 24% / 0.12);
+    --shadow-premium: 0 4px 16px hsl(220 91% 24% / 0.08);
     
-    /* Minimal Glass Morphism */
-    --glass-bg: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --glass-blur: blur(8px);
+    /* Glass Morphism */
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-blur: blur(12px);
     
-    /* Smooth Transitions */
-    --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Premium Transitions */
+    --transition-luxury: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-gentle: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --transition-elastic: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     
     /* Typography Scale */
     --font-display: 'Playfair Display', serif;
     --font-body: 'Inter', sans-serif;
     
-    /* Generous Spacing for Airy Feel */
-    --space-xl: 8rem;
-    --space-lg: 5rem;
-    --space-md: 3rem;
-    --space-sm: 1.5rem;
+    /* Luxury Spacing */
+    --space-luxury: 6rem;
+    --space-premium: 4rem;
+    --space-elegant: 2.5rem;
     
     --radius: 1rem;
 
@@ -179,10 +177,6 @@
     @apply bg-background text-foreground font-body antialiased;
     font-feature-settings: 'cv11', 'ss01';
     font-variation-settings: 'opsz' 32;
-    /* Enhanced readability */
-    line-height: 1.7;
-    letter-spacing: 0.01em;
-    font-weight: 400;
     /* Critical: Ensure body can scroll on mobile */
     overflow-x: hidden;
     overflow-y: auto;
@@ -253,23 +247,23 @@
 }
 
 @layer components {
-  /* Subtle Glass Effects */
+  /* Glass Morphism Effects */
   .glass-card {
     background: var(--glass-bg);
     backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border);
-    box-shadow: var(--shadow-soft);
+    box-shadow: var(--shadow-glass);
   }
   
   .floating-card {
-    box-shadow: var(--shadow-medium);
+    box-shadow: var(--shadow-floating);
     transform: translateY(0px);
-    transition: var(--transition-smooth);
+    transition: var(--transition-luxury);
   }
   
   .floating-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-floating);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-floating), 0 0 0 1px hsl(var(--luxury-gold) / 0.1);
   }
   
   /* Premium Button Animations */
@@ -381,18 +375,18 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Modern CTA Button */
+  /* High Visibility CTA Button */
   .btn-cta-primary {
-    background: hsl(var(--cta-primary));
+    background: hsl(var(--cta-yellow));
     color: hsl(var(--cta-text));
     border: none;
-    border-radius: 16px;
-    font-weight: 500;
+    border-radius: 12px;
+    font-weight: 600;
     font-size: 16px;
-    padding: 16px 32px;
+    padding: 14px 24px;
     margin-top: 16px;
-    box-shadow: var(--shadow-soft);
-    transition: var(--transition-smooth);
+    box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
     cursor: pointer;
     position: relative;
     overflow: hidden;
@@ -402,14 +396,14 @@
   }
 
   .btn-cta-primary:hover {
-    background: hsl(var(--accent-light));
+    background: hsl(51 100% 55%);
     transform: translateY(-1px);
-    box-shadow: var(--shadow-medium);
+    box-shadow: 0 0 1.2rem rgba(0, 0, 0, 0.15);
   }
 
   .btn-cta-primary:active {
-    transform: translateY(0) scale(0.99);
-    background: hsl(var(--accent-warm));
+    transform: translateY(0) scale(0.98);
+    background: hsl(51 100% 45%);
   }
 
   /* Fade-in animation for CTA */
@@ -462,29 +456,23 @@
 
   /* Polished UI utilities */
   .hover-scale {
-    @apply transition-transform duration-300 hover:scale-[1.02];
+    @apply transition-transform duration-200 hover:scale-105;
   }
 
   .heading-1 {
-    @apply font-display text-4xl md:text-5xl lg:text-6xl font-medium leading-tight tracking-tight;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
+    @apply font-display text-4xl md:text-5xl font-semibold leading-tight tracking-tight;
   }
 
   .heading-2 {
-    @apply font-display text-3xl md:text-4xl lg:text-5xl font-medium leading-snug;
-    line-height: 1.2;
-    letter-spacing: -0.015em;
+    @apply font-display text-3xl md:text-4xl font-semibold leading-snug;
   }
 
   .heading-3 {
-    @apply font-display text-2xl md:text-3xl font-medium leading-relaxed;
-    line-height: 1.3;
-    letter-spacing: -0.01em;
+    @apply font-display text-2xl md:text-3xl font-semibold leading-snug;
   }
 
   .section-py {
-    @apply py-20 md:py-32;
+    @apply py-16 md:py-24;
   }
 
   .trust-logo {
@@ -500,16 +488,16 @@
       animation: hero-shift 16s ease-in-out infinite;
     }
 
-    /* Modern partner badge */
+    /* Premium partner badge */
     .badge-premium {
-      @apply inline-flex items-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 font-semibold shadow-soft;
+      @apply inline-flex items-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 font-semibold shadow-premium;
       padding: 0.5rem 1rem;
       font-size: 0.95rem;
     }
 
-    /* Interactive cards - Lighter feel */
+    /* Interactive cards */
     .card-interactive {
-      @apply transition-all duration-300 border border-border/30 hover:border-primary/15 hover:shadow-medium hover:-translate-y-1;
+      @apply transition-all duration-300 border border-border/50 hover:border-primary/20 hover:shadow-premium hover:-translate-y-0.5;
       background: hsl(var(--card));
     }
 

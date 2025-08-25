@@ -1,5 +1,5 @@
-import RefreshedNavigation from "@/components/RefreshedNavigation";
-import RefreshedHeroSection from "@/components/RefreshedHeroSection";
+import Navigation from "@/components/Navigation";
+import HeroSection from "@/components/HeroSection";
 import ServicesSection from "@/components/ServicesSection";
 import ProcessSection from "@/components/ProcessSection";
 import FooterSection from "@/components/FooterSection";
@@ -8,8 +8,8 @@ import { SmartStickyButton } from "@/components/SmartStickyButton";
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
-      <RefreshedNavigation />
-      <RefreshedHeroSection />
+      <Navigation />
+      <HeroSection />
       <ServicesSection />
       <ProcessSection />
       <FooterSection />
