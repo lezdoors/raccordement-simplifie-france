@@ -72,12 +72,6 @@ const Login = () => {
     try {
       console.log('🔐 Attempting login for:', email, `(attempt #${loginAttempts + 1})`);
       
-      // First, try to sign out any existing session
-      await supabase.auth.signOut();
-      
-      // Wait a moment for cleanup
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
       const { data, error } = await supabase.auth.signInWithPassword({
         email: email.trim().toLowerCase(),
         password,
