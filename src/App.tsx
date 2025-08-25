@@ -43,6 +43,7 @@ import { MobilePerformanceProvider } from "./components/mobile/MobilePerformance
 import { SEOBreadcrumb } from "./components/SEOBreadcrumb";
 import { SEOEnhancer } from "./components/SEOEnhancer";
 import { initWebVitals } from "./utils/webVitals";
+import { initAllAnimations } from "./utils/animations";
 
 // Simple loading component without animation
 const PageLoader = () => (
@@ -56,6 +57,7 @@ const queryClient = new QueryClient();
 const AppContent = () => {
   React.useEffect(() => {
     initWebVitals();
+    initAllAnimations();
   }, []);
 
   return (
