@@ -693,6 +693,14 @@ export type Database = {
         }
         Returns: boolean
       }
+      get_current_admin_user: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          email: string
+          is_active: boolean
+          role: string
+        }[]
+      }
       get_leads_for_traiteur: {
         Args: Record<PropertyKey, never>
         Returns: {
