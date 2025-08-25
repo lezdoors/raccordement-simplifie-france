@@ -34,7 +34,7 @@ export const SupportSection = () => {
               onClick={handleGetHelp}
               size="lg"
               className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-8 py-3 touch-feedback mobile-button"
-              aria-label="Appeler le support au 01 89 70 12 00"
+              aria-label="Appeler le support au 09 70 70 95 70"
             >
               Obtenir de l'aide
             </Button>

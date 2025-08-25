@@ -174,11 +174,11 @@ const Login = () => {
       {/* Phone Header */}
       <div className="bg-primary text-primary-foreground py-2 px-4 text-center">
         <a 
-          href="tel:+33189701200" 
+          href="tel:+33970709570" 
           className="inline-flex items-center gap-2 hover:underline font-medium"
         >
           <Phone className="h-4 w-4" />
-          Téléphone : 01 89 70 12 00
+          Téléphone : 09 70 70 95 70
         </a>
       </div>
 
@@ -314,8 +314,8 @@ const Login = () => {
                 Problème d'accès ? Contactez le support technique
               </p>
               <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground">
-                <a href="tel:+33189701200" className="hover:underline">
-                  📞 01 89 70 12 00
+                <a href="tel:+33970709570" className="hover:underline">
+                  📞 09 70 70 95 70
                 </a>
                 <span>•</span>
                 <a href="mailto:support@raccordement-elec.fr" className="hover:underline">
