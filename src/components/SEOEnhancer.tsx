@@ -13,12 +13,12 @@ interface SEOData {
 
 const pageData: Record<string, SEOData> = {
   '/': {
-    title: 'Raccordement Électrique Enedis - Service Expert France | raccordement-connect.com',
+    title: 'MonElec.net - Raccordement Électrique Enedis Expert France | €120K/mois',
     description: 'Service expert en raccordement électrique Enedis. Maison neuve, photovoltaïque, modification branchement. Processus simplifié, suivi personnalisé, conformité garantie. Appelez 09 77 40 50 60',
     keywords: ['raccordement électrique', 'Enedis', 'maison neuve', 'photovoltaïque', 'modification branchement'],
   },
   '/raccordement-enedis': {
-    title: 'Raccordement Enedis Définitif - Nouvelle Construction | raccordement-connect.com',
+    title: 'Raccordement Enedis Définitif - Nouvelle Construction | MonElec.net',
     description: 'Raccordement électrique Enedis pour nouvelle construction. Service expert, démarches simplifiées, suivi personnalisé. Obtenez votre raccordement rapidement.',
     keywords: ['raccordement Enedis', 'nouvelle construction', 'compteur Linky', 'raccordement définitif'],
     structuredData: {
@@ -28,12 +28,12 @@ const pageData: Record<string, SEOData> = {
       "description": "Service de raccordement électrique Enedis pour nouvelle construction",
       "provider": {
         "@type": "Organization",
-        "name": "raccordement-connect.com"
+        "name": "MonElec.net"
       }
     }
   },
   '/photovoltaique': {
-    title: 'Raccordement Photovoltaïque - Installation Solaire | raccordement-connect.com',
+    title: 'Raccordement Photovoltaïque - Installation Solaire | MonElec.net',
     description: 'Raccordement de votre installation photovoltaïque au réseau Enedis. Injection et autoconsommation. Service expert en énergie solaire.',
     keywords: ['raccordement photovoltaïque', 'installation solaire', 'injection réseau', 'autoconsommation'],
     structuredData: {
@@ -44,22 +44,22 @@ const pageData: Record<string, SEOData> = {
     }
   },
   '/maison-neuve': {
-    title: 'Raccordement Électrique Maison Neuve - Construction | raccordement-connect.com',
+    title: 'Raccordement Électrique Maison Neuve - Construction | MonElec.net',
     description: 'Raccordement électrique pour maison neuve. Accompagnement complet du permis de construire à la mise en service. Expertise construction.',
     keywords: ['raccordement maison neuve', 'construction neuve', 'permis de construire', 'mise en service'],
   },
   '/modification-branchement': {
-    title: 'Modification Branchement Électrique - Changement Puissance | raccordement-connect.com',
+    title: 'Modification Branchement Électrique - Changement Puissance | MonElec.net',
     description: 'Modification de branchement électrique existant. Changement de puissance, déplacement compteur, mise aux normes. Service expert.',
     keywords: ['modification branchement', 'changement puissance', 'déplacement compteur', 'mise aux normes'],
   },
   '/contact': {
-    title: 'Contact - raccordement-connect.com | Experts Raccordement Électrique',
+    title: 'Contact - MonElec.net | Experts Raccordement Électrique',
     description: 'Contactez nos experts en raccordement électrique Enedis. Conseil personnalisé, devis gratuit. Appelez le 09 77 40 50 60.',
     keywords: ['contact', 'devis gratuit', 'conseil raccordement', 'expert électrique'],
   },
   '/faq': {
-    title: 'FAQ - Questions Fréquentes Raccordement Électrique | raccordement-connect.com',
+    title: 'FAQ - Questions Fréquentes Raccordement Électrique | MonElec.net',
     description: 'Réponses aux questions fréquentes sur le raccordement électrique Enedis. Délais, coûts, démarches, documents requis.',
     keywords: ['FAQ raccordement', 'questions fréquentes', 'délais raccordement', 'coût raccordement'],
   }
@@ -82,7 +82,7 @@ export const SEOEnhancer: React.FC = () => {
     // Update Open Graph tags
     updateMetaTag('og:title', currentPageData.title, 'property');
     updateMetaTag('og:description', currentPageData.description, 'property');
-    updateMetaTag('og:url', `https://www.raccordement-connect.com${location.pathname}`, 'property');
+    updateMetaTag('og:url', `https://www.monelec.net${location.pathname}`, 'property');
     updateMetaTag('og:type', currentPageData.type || 'website', 'property');
     
     if (currentPageData.image) {
@@ -92,7 +92,7 @@ export const SEOEnhancer: React.FC = () => {
     // Update Twitter Card tags
     updateMetaTag('twitter:title', currentPageData.title);
     updateMetaTag('twitter:description', currentPageData.description);
-    updateMetaTag('twitter:url', `https://www.raccordement-connect.com${location.pathname}`);
+    updateMetaTag('twitter:url', `https://www.monelec.net${location.pathname}`);
     
     if (currentPageData.image) {
       updateMetaTag('twitter:image', currentPageData.image);
@@ -104,7 +104,7 @@ export const SEOEnhancer: React.FC = () => {
     }
 
     // Update canonical URL
-    updateLinkTag('canonical', `https://www.raccordement-connect.com${location.pathname}`);
+    updateLinkTag('canonical', `https://www.monelec.net${location.pathname}`);
 
     // Add structured data if provided
     if (currentPageData.structuredData) {
@@ -120,11 +120,11 @@ export const SEOEnhancer: React.FC = () => {
         "description": currentPageData.description,
         "author": {
           "@type": "Organization",
-          "name": "raccordement-connect.com"
+          "name": "MonElec.net"
         },
         "publisher": {
           "@type": "Organization",
-          "name": "raccordement-connect.com"
+          "name": "MonElec.net"
         }
       };
       addStructuredData(articleSchema, 'article-schema');
