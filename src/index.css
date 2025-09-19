@@ -576,42 +576,93 @@
 @media (max-width: 768px) {
   /* Enhanced mobile typography */
   .mobile-h1 {
-    @apply text-2xl font-bold leading-tight tracking-tight;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.025em;
   }
   
   .mobile-h2 {
-    @apply text-xl font-bold leading-tight;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.25;
   }
   
   .mobile-h3 {
-    @apply text-lg font-semibold leading-tight;
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.25;
   }
   
   .mobile-body {
-    @apply text-base leading-relaxed;
+    font-size: 1rem;
+    line-height: 1.625;
   }
   
   .mobile-caption {
-    @apply text-sm text-muted-foreground leading-relaxed;
+    font-size: 0.875rem;
+    color: hsl(var(--muted-foreground));
+    line-height: 1.625;
   }
 
   /* Better touch targets */
   .mobile-touch-target {
-    @apply min-h-[48px] min-w-[48px] cursor-pointer;
+    min-height: 48px;
+    min-width: 48px;
+    cursor: pointer;
   }
 
   /* Enhanced mobile form styling */
   .mobile-input-enhanced {
-    @apply h-14 text-base rounded-xl border-2 px-4 py-3;
-    @apply transition-all duration-200 touch-manipulation;
-    @apply focus:border-primary focus:ring-2 focus:ring-primary/20;
+    height: 3.5rem;
+    font-size: 1rem;
+    border-radius: var(--radius);
+    border: 2px solid hsl(var(--border));
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    touch-action: manipulation;
+  }
+  
+  .mobile-input-enhanced:focus {
+    border-color: hsl(var(--primary));
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px hsl(var(--ring));
   }
   
   /* Better mobile buttons */
   .mobile-button-enhanced {
-    @apply h-12 px-6 text-base font-medium rounded-xl min-h-[48px];
-    @apply transition-all duration-200 touch-manipulation;
-    @apply active:scale-95 hover:scale-105;
+    height: 3rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: var(--radius);
+    min-height: 48px;
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    border: 1px solid hsl(var(--primary));
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    touch-action: manipulation;
+  }
+  
+  .mobile-button-enhanced:hover {
+    background-color: hsl(var(--primary) / 0.9);
+    transform: scale(1.02);
+  }
+  
+  .mobile-button-enhanced:active {
+    transform: scale(0.98);
+  }
+  
+  .mobile-button-enhanced:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
   }
 
   .space-luxury {
