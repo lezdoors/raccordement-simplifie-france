@@ -246,7 +246,7 @@ const FooterSection = () => {
               }}
             >
               ©
-            </a> 2024 raccordement-connect.com. Tous droits réservés.
+            </a> 2024 MonElec.net. Tous droits réservés.
           </p>
           <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6 text-sm md:text-base text-gray-400 text-center">
             <a href="/mentions-legales" className="hover:text-blue-400 hover:underline transition-colors duration-200">Mentions légales</a>
