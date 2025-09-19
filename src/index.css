@@ -601,7 +601,7 @@
   
   .mobile-caption {
     font-size: 0.875rem;
-    color: hsl(215.4 16.3% 46.9%);
+    color: hsl(var(--muted-foreground));
     line-height: 1.625;
   }
 
@@ -616,20 +616,23 @@
   .mobile-input-enhanced {
     height: 3.5rem;
     font-size: 1rem;
-    border-radius: 0.75rem;
-    border-width: 2px;
+    border-radius: var(--radius);
+    border: 2px solid hsl(var(--border));
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
     padding-left: 1rem;
     padding-right: 1rem;
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
-    transition-property: all;
-    transition-duration: 200ms;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     touch-action: manipulation;
   }
   
   .mobile-input-enhanced:focus {
-    border-color: hsl(221.2 83.2% 53.3%);
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    border-color: hsl(var(--primary));
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px hsl(var(--ring));
   }
   
   /* Better mobile buttons */
@@ -639,19 +642,27 @@
     padding-right: 1.5rem;
     font-size: 1rem;
     font-weight: 500;
-    border-radius: 0.75rem;
+    border-radius: var(--radius);
     min-height: 48px;
-    transition-property: all;
-    transition-duration: 200ms;
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    border: 1px solid hsl(var(--primary));
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     touch-action: manipulation;
   }
   
-  .mobile-button-enhanced:active {
-    transform: scale(0.95);
+  .mobile-button-enhanced:hover {
+    background-color: hsl(var(--primary) / 0.9);
+    transform: scale(1.02);
   }
   
-  .mobile-button-enhanced:hover {
-    transform: scale(1.05);
+  .mobile-button-enhanced:active {
+    transform: scale(0.98);
+  }
+  
+  .mobile-button-enhanced:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
   }
 
   .space-luxury {
