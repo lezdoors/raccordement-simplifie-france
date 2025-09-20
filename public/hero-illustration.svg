@@ -1,0 +1,134 @@
+<svg viewBox="0 0 1200 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">MonElec.net - Raccordement Électrique Expert</title>
+  <desc id="desc">Professional electrical connection services - house, EV charging, technician expertise</desc>
+  
+  <defs>
+    <!-- MonElec.net Brand Gradients -->
+    <linearGradient id="primaryGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1e40af;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e40af;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="goldAccent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FFD77A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F2B736;stop-opacity:1" />
+    </linearGradient>
+    
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g stroke="url(#primaryGradient)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+
+    <!-- Enhanced Ground Line with Gradient -->
+    <line x1="50" y1="420" x2="1150" y2="420" stroke-width="4"/>
+
+    <!-- Power Infrastructure with Glow Effect -->
+    <g filter="url(#glow)">
+      <!-- Main Power Pole -->
+      <line x1="150" y1="180" x2="150" y2="420" stroke-width="6"/>
+      <line x1="120" y1="220" x2="180" y2="220" stroke-width="4"/>
+      
+      <!-- Power Lines with Enhanced Curves -->
+      <path d="M150 220 C400 170, 700 170, 950 220" stroke="url(#goldAccent)" stroke-width="3"/>
+      <path d="M150 230 C400 190, 700 190, 950 240" stroke="url(#goldAccent)" stroke-width="3"/>
+      <path d="M150 240 C400 210, 700 210, 950 260" stroke="url(#goldAccent)" stroke-width="2"/>
+    </g>
+
+    <!-- Enhanced House with Premium Details -->
+    <path d="M400 420 V260 L550 160 L700 260 V420 Z" stroke-width="4"/>
+    
+    <!-- House Windows with Frames -->
+    <rect x="470" y="320" width="60" height="100" stroke-width="3"/>
+    <line x1="500" y1="320" x2="500" y2="420" stroke-width="2"/>
+    <line x1="470" y1="370" x2="530" y2="370" stroke-width="2"/>
+    
+    <rect x="580" y="320" width="60" height="100" stroke-width="3"/>
+    <line x1="610" y1="320" x2="610" y2="420" stroke-width="2"/>
+    <line x1="580" y1="370" x2="640" y2="370" stroke-width="2"/>
+    
+    <!-- Front Door -->
+    <rect x="530" y="300" width="40" height="120" stroke-width="3"/>
+    <circle cx="560" cy="360" r="3" fill="url(#goldAccent)"/>
+
+    <!-- Premium Electric Meter Box -->
+    <rect x="370" y="320" width="30" height="60" stroke-width="3" fill="rgba(30, 64, 175, 0.1)"/>
+    <text x="385" y="340" font-family="Arial, sans-serif" font-size="8" text-anchor="middle" fill="url(#primaryGradient)" font-weight="bold">kWh</text>
+    <path d="M375 350 L385 360 M375 360 L385 350" stroke="url(#goldAccent)" stroke-width="2"/>
+
+    <!-- Enhanced EV Charger Station -->
+    <rect x="730" y="310" width="60" height="100" rx="8" stroke-width="4" fill="rgba(30, 64, 175, 0.05)"/>
+    <circle cx="760" cy="340" r="12" fill="url(#goldAccent)" stroke="url(#primaryGradient)" stroke-width="2"/>
+    <path d="M755 335 L760 340 L765 335" stroke="white" stroke-width="2" fill="none"/>
+    
+    <!-- Charging Cable -->
+    <path d="M760 352 Q770 370, 760 390 Q750 400, 830 405" stroke="url(#goldAccent)" stroke-width="4"/>
+
+    <!-- Enhanced Electric Vehicle -->
+    <path d="M820 400 h150 a15 15 0 0 1 15 15 v10 H800 v-10 a15 15 0 0 1 15-15 Z" stroke-width="4" fill="rgba(59, 130, 246, 0.1)"/>
+    
+    <!-- Wheels with Rims -->
+    <circle cx="840" cy="425" r="12" fill="url(#primaryGradient)"/>
+    <circle cx="840" cy="425" r="8" fill="none" stroke="url(#goldAccent)" stroke-width="2"/>
+    <circle cx="940" cy="425" r="12" fill="url(#primaryGradient)"/>
+    <circle cx="940" cy="425" r="8" fill="none" stroke="url(#goldAccent)" stroke-width="2"/>
+    
+    <!-- EV Logo/Badge -->
+    <text x="895" y="415" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="url(#goldAccent)" font-weight="bold">EV</text>
+
+    <!-- Professional Technician Figure -->
+    <g transform="translate(720, 260)" stroke-width="3">
+      <!-- Head with Hard Hat -->
+      <circle cx="0" cy="0" r="12" fill="rgba(255, 215, 122, 0.3)"/>
+      <path d="M-12 -5 Q0 -15, 12 -5" fill="url(#goldAccent)" stroke="url(#goldAccent)"/>
+      
+      <!-- Body -->
+      <path d="M0 12 v40" stroke-width="4"/>
+      
+      <!-- Arms with Tools -->
+      <line x1="-15" y1="25" x2="15" y2="25" stroke-width="3"/>
+      <rect x="12" y="20" width="8" height="10" rx="2" fill="url(#goldAccent)" stroke="url(#primaryGradient)"/>
+      
+      <!-- Legs -->
+      <path d="M-15 40 L-5 52" stroke-width="3"/>
+      <path d="M15 40 L5 52" stroke-width="3"/>
+    </g>
+
+    <!-- Happy Family Group -->
+    <g transform="translate(1000, 280)" stroke-width="2">
+      <!-- Adult 1 -->
+      <circle cx="0" cy="0" r="10" fill="rgba(255, 215, 122, 0.3)"/>
+      <path d="M0 10 v35 M0 25 l-12 10 M0 25 l12 10" stroke-width="3"/>
+      
+      <!-- Adult 2 -->
+      <circle cx="40" cy="0" r="10" fill="rgba(255, 215, 122, 0.3)"/>
+      <path d="M40 10 v35 M40 25 l-12 10 M40 25 l12 10" stroke-width="3"/>
+      
+      <!-- Child -->
+      <circle cx="20" cy="10" r="8" fill="rgba(255, 215, 122, 0.3)"/>
+      <path d="M20 18 v25 M20 30 l-10 8 M20 30 l10 8" stroke-width="2"/>
+    </g>
+
+    <!-- Energy Flow Indicators -->
+    <g stroke="url(#goldAccent)" stroke-width="2" opacity="0.8">
+      <!-- Lightning bolts showing energy flow -->
+      <path d="M200 250 L210 270 L205 270 L215 290 L205 270 L200 270 Z" fill="url(#goldAccent)"/>
+      <path d="M500 200 L510 220 L505 220 L515 240 L505 220 L500 220 Z" fill="url(#goldAccent)"/>
+      <path d="M800 250 L810 270 L805 270 L815 290 L805 270 L800 270 Z" fill="url(#goldAccent)"/>
+    </g>
+
+  </g>
+  
+  <!-- MonElec.net Branding Badge -->
+  <g transform="translate(1050, 50)">
+    <rect x="0" y="0" width="140" height="40" rx="20" fill="url(#primaryGradient)" stroke="url(#goldAccent)" stroke-width="2"/>
+    <text x="70" y="20" font-family="Inter, Arial, sans-serif" font-size="14" text-anchor="middle" fill="white" font-weight="700">MonElec.net</text>
+    <text x="70" y="32" font-family="Inter, Arial, sans-serif" font-size="8" text-anchor="middle" fill="url(#goldAccent)">Expert Électrique</text>
+  </g>
+</svg>
