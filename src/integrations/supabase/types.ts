@@ -10,771 +10,576 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "12.2.3 (519615d)"
+    PostgrestVersion: "13.0.4"
   }
   public: {
     Tables: {
-      admin_audit_log: {
+      billing_addresses: {
         Row: {
-          action: string
-          admin_email: string
-          created_at: string
-          details: Json | null
+          address: string
+          city: string
+          country: string | null
+          customer_id: string
           id: string
-          ip_address: unknown | null
-          new_values: Json | null
-          old_values: Json | null
-          resource: string
-          resource_id: string | null
-          resource_type: string | null
+          zip_code: string
+        }
+        Insert: {
+          address: string
+          city: string
+          country?: string | null
+          customer_id: string
+          id?: string
+          zip_code: string
+        }
+        Update: {
+          address?: string
+          city?: string
+          country?: string | null
+          customer_id?: string
+          id?: string
+          zip_code?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "billing_addresses_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_messages: {
+        Row: {
+          content: string
+          created_at: string
+          error: string | null
+          id: string
+          latency_ms: number | null
+          retrieved_doc_ids: string[] | null
+          role: string
+          session_id: string
+          tokens_in: number | null
+          tokens_out: number | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          error?: string | null
+          id?: string
+          latency_ms?: number | null
+          retrieved_doc_ids?: string[] | null
+          role: string
+          session_id: string
+          tokens_in?: number | null
+          tokens_out?: number | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          error?: string | null
+          id?: string
+          latency_ms?: number | null
+          retrieved_doc_ids?: string[] | null
+          role?: string
+          session_id?: string
+          tokens_in?: number | null
+          tokens_out?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "chat_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_sessions: {
+        Row: {
+          created_at: string
+          ended_at: string | null
+          id: string
+          lead_id: string | null
+          session_data: Json | null
           user_agent: string | null
         }
         Insert: {
-          action: string
-          admin_email: string
           created_at?: string
-          details?: Json | null
+          ended_at?: string | null
           id?: string
-          ip_address?: unknown | null
-          new_values?: Json | null
-          old_values?: Json | null
-          resource: string
-          resource_id?: string | null
-          resource_type?: string | null
+          lead_id?: string | null
+          session_data?: Json | null
           user_agent?: string | null
         }
         Update: {
-          action?: string
-          admin_email?: string
           created_at?: string
-          details?: Json | null
+          ended_at?: string | null
           id?: string
-          ip_address?: unknown | null
-          new_values?: Json | null
-          old_values?: Json | null
-          resource?: string
-          resource_id?: string | null
-          resource_type?: string | null
+          lead_id?: string | null
+          session_data?: Json | null
           user_agent?: string | null
         }
-        Relationships: []
-      }
-      admin_users: {
-        Row: {
-          can_export_data: boolean | null
-          can_manage_users: boolean | null
-          can_see_all_leads: boolean | null
-          can_see_payments: boolean | null
-          created_at: string | null
-          department: string | null
-          email: string
-          id: string
-          is_active: boolean | null
-          role: string
-        }
-        Insert: {
-          can_export_data?: boolean | null
-          can_manage_users?: boolean | null
-          can_see_all_leads?: boolean | null
-          can_see_payments?: boolean | null
-          created_at?: string | null
-          department?: string | null
-          email: string
-          id?: string
-          is_active?: boolean | null
-          role: string
-        }
-        Update: {
-          can_export_data?: boolean | null
-          can_manage_users?: boolean | null
-          can_see_all_leads?: boolean | null
-          can_see_payments?: boolean | null
-          created_at?: string | null
-          department?: string | null
-          email?: string
-          id?: string
-          is_active?: boolean | null
-          role?: string
-        }
-        Relationships: []
-      }
-      email_templates: {
-        Row: {
-          body_html: string
-          body_text: string | null
-          created_at: string | null
-          id: string
-          is_active: boolean | null
-          name: string
-          subject: string
-          updated_at: string | null
-          variables: Json | null
-        }
-        Insert: {
-          body_html: string
-          body_text?: string | null
-          created_at?: string | null
-          id?: string
-          is_active?: boolean | null
-          name: string
-          subject: string
-          updated_at?: string | null
-          variables?: Json | null
-        }
-        Update: {
-          body_html?: string
-          body_text?: string | null
-          created_at?: string | null
-          id?: string
-          is_active?: boolean | null
-          name?: string
-          subject?: string
-          updated_at?: string | null
-          variables?: Json | null
-        }
-        Relationships: []
-      }
-      lead_emails: {
-        Row: {
-          bcc_emails: string[] | null
-          body_html: string | null
-          body_text: string | null
-          cc_emails: string[] | null
-          created_at: string | null
-          direction: string
-          from_email: string
-          id: string
-          lead_id: string
-          provider_message_id: string | null
-          sent_by: string | null
-          status: string
-          subject: string
-          to_email: string
-          updated_at: string | null
-        }
-        Insert: {
-          bcc_emails?: string[] | null
-          body_html?: string | null
-          body_text?: string | null
-          cc_emails?: string[] | null
-          created_at?: string | null
-          direction: string
-          from_email: string
-          id?: string
-          lead_id: string
-          provider_message_id?: string | null
-          sent_by?: string | null
-          status?: string
-          subject: string
-          to_email: string
-          updated_at?: string | null
-        }
-        Update: {
-          bcc_emails?: string[] | null
-          body_html?: string | null
-          body_text?: string | null
-          cc_emails?: string[] | null
-          created_at?: string | null
-          direction?: string
-          from_email?: string
-          id?: string
-          lead_id?: string
-          provider_message_id?: string | null
-          sent_by?: string | null
-          status?: string
-          subject?: string
-          to_email?: string
-          updated_at?: string | null
-        }
         Relationships: [
           {
-            foreignKeyName: "lead_emails_lead_id_fkey"
+            foreignKeyName: "chat_sessions_lead_id_fkey"
             columns: ["lead_id"]
             isOneToOne: false
-            referencedRelation: "leads_raccordement"
+            referencedRelation: "leads"
             referencedColumns: ["id"]
           },
         ]
       }
-      lead_emails_internal: {
+      customers: {
         Row: {
-          body_html: string | null
-          body_text: string | null
-          created_at: string
-          direction: string
-          from_user_id: string | null
-          id: string
-          lead_id: string
-          subject: string
-          updated_at: string
-        }
-        Insert: {
-          body_html?: string | null
-          body_text?: string | null
-          created_at?: string
-          direction: string
-          from_user_id?: string | null
-          id?: string
-          lead_id: string
-          subject: string
-          updated_at?: string
-        }
-        Update: {
-          body_html?: string | null
-          body_text?: string | null
-          created_at?: string
-          direction?: string
-          from_user_id?: string | null
-          id?: string
-          lead_id?: string
-          subject?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "lead_emails_internal_lead_id_fkey"
-            columns: ["lead_id"]
-            isOneToOne: false
-            referencedRelation: "leads_raccordement"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      lead_events: {
-        Row: {
-          actor_id: string | null
-          created_at: string
-          id: string
-          lead_id: string
-          payload: Json | null
-          type: string
-        }
-        Insert: {
-          actor_id?: string | null
-          created_at?: string
-          id?: string
-          lead_id: string
-          payload?: Json | null
-          type: string
-        }
-        Update: {
-          actor_id?: string | null
-          created_at?: string
-          id?: string
-          lead_id?: string
-          payload?: Json | null
-          type?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "lead_events_lead_id_fkey"
-            columns: ["lead_id"]
-            isOneToOne: false
-            referencedRelation: "leads_raccordement"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      lead_files: {
-        Row: {
-          created_at: string | null
-          description: string | null
-          file_name: string
-          file_path: string
-          file_size: number
-          id: string
-          is_deleted: boolean | null
-          lead_id: string
-          mime_type: string
-          updated_at: string | null
-          uploaded_by: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          description?: string | null
-          file_name: string
-          file_path: string
-          file_size: number
-          id?: string
-          is_deleted?: boolean | null
-          lead_id: string
-          mime_type: string
-          updated_at?: string | null
-          uploaded_by?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          description?: string | null
-          file_name?: string
-          file_path?: string
-          file_size?: number
-          id?: string
-          is_deleted?: boolean | null
-          lead_id?: string
-          mime_type?: string
-          updated_at?: string | null
-          uploaded_by?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "lead_files_lead_id_fkey"
-            columns: ["lead_id"]
-            isOneToOne: false
-            referencedRelation: "leads_raccordement"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      lead_notes: {
-        Row: {
-          admin_email: string | null
-          created_at: string | null
-          id: string
-          lead_id: string | null
-          note: string
-          note_type: string | null
-        }
-        Insert: {
-          admin_email?: string | null
-          created_at?: string | null
-          id?: string
-          lead_id?: string | null
-          note: string
-          note_type?: string | null
-        }
-        Update: {
-          admin_email?: string | null
-          created_at?: string | null
-          id?: string
-          lead_id?: string | null
-          note?: string
-          note_type?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "lead_notes_admin_email_fkey"
-            columns: ["admin_email"]
-            isOneToOne: false
-            referencedRelation: "admin_users"
-            referencedColumns: ["email"]
-          },
-          {
-            foreignKeyName: "lead_notes_lead_id_fkey"
-            columns: ["lead_id"]
-            isOneToOne: false
-            referencedRelation: "leads_raccordement"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      lead_status_history: {
-        Row: {
-          admin_email: string | null
-          changed_at: string | null
-          id: string
-          lead_id: string | null
-          new_status: string | null
-          old_status: string | null
-        }
-        Insert: {
-          admin_email?: string | null
-          changed_at?: string | null
-          id?: string
-          lead_id?: string | null
-          new_status?: string | null
-          old_status?: string | null
-        }
-        Update: {
-          admin_email?: string | null
-          changed_at?: string | null
-          id?: string
-          lead_id?: string | null
-          new_status?: string | null
-          old_status?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "lead_status_history_admin_email_fkey"
-            columns: ["admin_email"]
-            isOneToOne: false
-            referencedRelation: "admin_users"
-            referencedColumns: ["email"]
-          },
-          {
-            foreignKeyName: "lead_status_history_lead_id_fkey"
-            columns: ["lead_id"]
-            isOneToOne: false
-            referencedRelation: "leads_raccordement"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      leads_raccordement: {
-        Row: {
-          adresse_chantier: string | null
-          amount: number | null
-          assigned_to: string | null
-          assigned_to_email: string | null
-          civilite: string | null
-          code_postal: string | null
-          commentaires: string | null
-          consent_accepted: boolean | null
-          created_at: string | null
-          delai_souhaite: string | null
-          email: string
-          etat_projet: string | null
-          form_step: number | null
-          form_type: string
-          id: string
-          nom: string
-          numero_pdl: string | null
-          payment_status: string | null
-          prenom: string
-          priority: number | null
-          puissance: string | null
-          raison_sociale: string | null
-          siren: string | null
-          status: string | null
-          stripe_session_id: string | null
-          telephone: string
-          type_alimentation: string | null
-          type_client: string
-          type_facturation: string | null
-          type_projet: string | null
-          type_raccordement: string | null
-          updated_at: string | null
-          ville: string | null
-        }
-        Insert: {
-          adresse_chantier?: string | null
-          amount?: number | null
-          assigned_to?: string | null
-          assigned_to_email?: string | null
-          civilite?: string | null
-          code_postal?: string | null
-          commentaires?: string | null
-          consent_accepted?: boolean | null
-          created_at?: string | null
-          delai_souhaite?: string | null
-          email: string
-          etat_projet?: string | null
-          form_step?: number | null
-          form_type?: string
-          id?: string
-          nom: string
-          numero_pdl?: string | null
-          payment_status?: string | null
-          prenom: string
-          priority?: number | null
-          puissance?: string | null
-          raison_sociale?: string | null
-          siren?: string | null
-          status?: string | null
-          stripe_session_id?: string | null
-          telephone: string
-          type_alimentation?: string | null
-          type_client: string
-          type_facturation?: string | null
-          type_projet?: string | null
-          type_raccordement?: string | null
-          updated_at?: string | null
-          ville?: string | null
-        }
-        Update: {
-          adresse_chantier?: string | null
-          amount?: number | null
-          assigned_to?: string | null
-          assigned_to_email?: string | null
-          civilite?: string | null
-          code_postal?: string | null
-          commentaires?: string | null
-          consent_accepted?: boolean | null
-          created_at?: string | null
-          delai_souhaite?: string | null
-          email?: string
-          etat_projet?: string | null
-          form_step?: number | null
-          form_type?: string
-          id?: string
-          nom?: string
-          numero_pdl?: string | null
-          payment_status?: string | null
-          prenom?: string
-          priority?: number | null
-          puissance?: string | null
-          raison_sociale?: string | null
-          siren?: string | null
-          status?: string | null
-          stripe_session_id?: string | null
-          telephone?: string
-          type_alimentation?: string | null
-          type_client?: string
-          type_facturation?: string | null
-          type_projet?: string | null
-          type_raccordement?: string | null
-          updated_at?: string | null
-          ville?: string | null
-        }
-        Relationships: []
-      }
-      messages: {
-        Row: {
+          auth_user_id: string | null
+          client_type: string | null
+          company_name: string | null
           created_at: string
           email: string
+          full_name: string | null
           id: string
-          message: string | null
-          name: string
           phone: string | null
-          request_type: string
+          siren: string | null
         }
         Insert: {
+          auth_user_id?: string | null
+          client_type?: string | null
+          company_name?: string | null
           created_at?: string
           email: string
+          full_name?: string | null
           id?: string
-          message?: string | null
-          name: string
           phone?: string | null
-          request_type?: string
+          siren?: string | null
         }
         Update: {
+          auth_user_id?: string | null
+          client_type?: string | null
+          company_name?: string | null
           created_at?: string
           email?: string
+          full_name?: string | null
           id?: string
-          message?: string | null
-          name?: string
           phone?: string | null
-          request_type?: string
+          siren?: string | null
         }
         Relationships: []
       }
-      notifications: {
+      documents: {
         Row: {
           created_at: string
-          data: Json | null
-          email_sent: boolean | null
           id: string
-          message: string
-          read_at: string | null
-          title: string
-          type: string
+          kind: string | null
+          path: string
+          request_id: string
         }
         Insert: {
           created_at?: string
-          data?: Json | null
-          email_sent?: boolean | null
           id?: string
-          message: string
-          read_at?: string | null
-          title: string
-          type: string
+          kind?: string | null
+          path: string
+          request_id: string
         }
         Update: {
           created_at?: string
-          data?: Json | null
-          email_sent?: boolean | null
           id?: string
-          message?: string
-          read_at?: string | null
+          kind?: string | null
+          path?: string
+          request_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documents_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          created_at: string
+          id: number
+          name: string
+          payload: Json | null
+          request_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          name: string
+          payload?: Json | null
+          request_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          name?: string
+          payload?: Json | null
+          request_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "events_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      kb_docs: {
+        Row: {
+          chunk_index: number
+          content: string
+          created_at: string
+          id: string
+          metadata: Json | null
+          title: string
+          updated_at: string
+          url: string
+          xai_doc_id: string | null
+        }
+        Insert: {
+          chunk_index?: number
+          content: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          title: string
+          updated_at?: string
+          url: string
+          xai_doc_id?: string | null
+        }
+        Update: {
+          chunk_index?: number
+          content?: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
           title?: string
-          type?: string
+          updated_at?: string
+          url?: string
+          xai_doc_id?: string | null
         }
         Relationships: []
+      }
+      leads: {
+        Row: {
+          ab_variant: string | null
+          billing: string | null
+          created_at: string
+          customer_id: string | null
+          email: string
+          full_name: string | null
+          gclid: string | null
+          id: string
+          page: string | null
+          payment_status: string | null
+          phone: string | null
+          postal_code: string | null
+          power: string | null
+          service: string | null
+          source: string | null
+          status: string | null
+          type_client: string | null
+          updated_at: string
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+        }
+        Insert: {
+          ab_variant?: string | null
+          billing?: string | null
+          created_at?: string
+          customer_id?: string | null
+          email: string
+          full_name?: string | null
+          gclid?: string | null
+          id?: string
+          page?: string | null
+          payment_status?: string | null
+          phone?: string | null
+          postal_code?: string | null
+          power?: string | null
+          service?: string | null
+          source?: string | null
+          status?: string | null
+          type_client?: string | null
+          updated_at?: string
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+        }
+        Update: {
+          ab_variant?: string | null
+          billing?: string | null
+          created_at?: string
+          customer_id?: string | null
+          email?: string
+          full_name?: string | null
+          gclid?: string | null
+          id?: string
+          page?: string | null
+          payment_status?: string | null
+          phone?: string | null
+          postal_code?: string | null
+          power?: string | null
+          service?: string | null
+          source?: string | null
+          status?: string | null
+          type_client?: string | null
+          updated_at?: string
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       payments: {
         Row: {
-          amount: number
+          amount_cents: number
           created_at: string | null
-          currency: string | null
-          customer_email: string | null
-          customer_name: string | null
-          failure_reason: string | null
+          currency: string
           id: string
-          paid_at: string | null
-          payment_method: string | null
-          status: string
-          stripe_payment_intent_id: string
+          lead_id: string | null
+          paid: boolean
+          raw: Json | null
+          request_id: string | null
           stripe_session_id: string | null
-          submission_id: string | null
         }
         Insert: {
-          amount: number
+          amount_cents: number
           created_at?: string | null
-          currency?: string | null
-          customer_email?: string | null
-          customer_name?: string | null
-          failure_reason?: string | null
+          currency?: string
           id?: string
-          paid_at?: string | null
-          payment_method?: string | null
-          status: string
-          stripe_payment_intent_id: string
+          lead_id?: string | null
+          paid?: boolean
+          raw?: Json | null
+          request_id?: string | null
           stripe_session_id?: string | null
-          submission_id?: string | null
         }
         Update: {
-          amount?: number
+          amount_cents?: number
           created_at?: string | null
-          currency?: string | null
-          customer_email?: string | null
-          customer_name?: string | null
-          failure_reason?: string | null
+          currency?: string
           id?: string
-          paid_at?: string | null
-          payment_method?: string | null
-          status?: string
-          stripe_payment_intent_id?: string
+          lead_id?: string | null
+          paid?: boolean
+          raw?: Json | null
+          request_id?: string | null
           stripe_session_id?: string | null
-          submission_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "payments_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
       }
-      profiles: {
+      request_events: {
         Row: {
           created_at: string | null
-          email: string | null
+          details: Json | null
+          event_type: string | null
           id: string
-          nom: string | null
-          role: string | null
+          kind: string
+          lead_id: string | null
+          payload: Json | null
+          request_id: string | null
         }
         Insert: {
           created_at?: string | null
-          email?: string | null
-          id: string
-          nom?: string | null
-          role?: string | null
+          details?: Json | null
+          event_type?: string | null
+          id?: string
+          kind: string
+          lead_id?: string | null
+          payload?: Json | null
+          request_id?: string | null
         }
         Update: {
           created_at?: string | null
-          email?: string | null
+          details?: Json | null
+          event_type?: string | null
           id?: string
-          nom?: string | null
-          role?: string | null
+          kind?: string
+          lead_id?: string | null
+          payload?: Json | null
+          request_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "request_events_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "request_events_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
       }
-      rate_limits: {
+      requests: {
         Row: {
-          action: string
-          count: number
+          address: string | null
+          city: string | null
           created_at: string
+          customer_id: string
+          desired_start_date: string | null
           id: string
-          identifier: string
-          window_start: string
+          is_viabilise: boolean | null
+          lead_id: string | null
+          notes: string | null
+          payload: Json | null
+          payment_status: string | null
+          phase: string | null
+          power_kva: number | null
+          source: string | null
+          status: Database["public"]["Enums"]["request_status"]
+          type_raccordement: string | null
+          usage: string | null
+          zip_code: string | null
         }
         Insert: {
-          action: string
-          count?: number
+          address?: string | null
+          city?: string | null
           created_at?: string
+          customer_id: string
+          desired_start_date?: string | null
           id?: string
-          identifier: string
-          window_start?: string
+          is_viabilise?: boolean | null
+          lead_id?: string | null
+          notes?: string | null
+          payload?: Json | null
+          payment_status?: string | null
+          phase?: string | null
+          power_kva?: number | null
+          source?: string | null
+          status?: Database["public"]["Enums"]["request_status"]
+          type_raccordement?: string | null
+          usage?: string | null
+          zip_code?: string | null
         }
         Update: {
-          action?: string
-          count?: number
+          address?: string | null
+          city?: string | null
           created_at?: string
+          customer_id?: string
+          desired_start_date?: string | null
           id?: string
-          identifier?: string
-          window_start?: string
+          is_viabilise?: boolean | null
+          lead_id?: string | null
+          notes?: string | null
+          payload?: Json | null
+          payment_status?: string | null
+          phase?: string | null
+          power_kva?: number | null
+          source?: string | null
+          status?: Database["public"]["Enums"]["request_status"]
+          type_raccordement?: string | null
+          usage?: string | null
+          zip_code?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "requests_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "requests_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
-      [_ in never]: never
+      crm_activities: {
+        Row: {
+          created_at: string | null
+          details: Json | null
+          id: string | null
+          lead_id: string | null
+          type: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          details?: Json | null
+          id?: string | null
+          lead_id?: string | null
+          type?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          details?: Json | null
+          id?: string | null
+          lead_id?: string | null
+          type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_events_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
-      check_rate_limit: {
-        Args: {
-          p_action: string
-          p_identifier: string
-          p_max_requests?: number
-          p_window_minutes?: number
-        }
-        Returns: boolean
-      }
-      get_current_admin_user: {
-        Args: Record<PropertyKey, never>
-        Returns: {
-          email: string
-          is_active: boolean
-          role: string
-        }[]
-      }
-      get_leads_for_traiteur: {
-        Args: Record<PropertyKey, never>
-        Returns: {
-          adresse_chantier: string
-          amount: number
-          assigned_to: string
-          assigned_to_email: string
-          civilite: string
-          code_postal: string
-          commentaires: string
-          consent_accepted: boolean
-          created_at: string
-          delai_souhaite: string
-          email: string
-          etat_projet: string
-          form_step: number
-          form_type: string
-          id: string
-          nom: string
-          numero_pdl: string
-          payment_status: string
-          prenom: string
-          priority: number
-          puissance: string
-          raison_sociale: string
-          siren: string
-          status: string
-          stripe_session_id: string
-          telephone: string
-          type_alimentation: string
-          type_client: string
-          type_facturation: string
-          type_projet: string
-          type_raccordement: string
-          updated_at: string
-          ville: string
-        }[]
-      }
-      get_security_headers: {
-        Args: Record<PropertyKey, never>
-        Returns: Json
-      }
-      is_admin_email: {
-        Args: { email_to_check: string }
-        Returns: boolean
-      }
-      is_current_user_admin: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
-      is_current_user_admin_safe: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
-      is_manager_or_superadmin: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
-      is_session_valid: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
-      log_lead_event: {
-        Args: {
-          p_actor_id?: string
-          p_lead_id: string
-          p_payload?: Json
-          p_type: string
-        }
+      create_full_request: {
+        Args: { payload: Json }
         Returns: string
       }
     }
     Enums: {
-      [_ in never]: never
+      request_status:
+        | "draft"
+        | "submitted"
+        | "in_review"
+        | "validated"
+        | "scheduled"
+        | "completed"
+        | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -901,6 +706,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      request_status: [
+        "draft",
+        "submitted",
+        "in_review",
+        "validated",
+        "scheduled",
+        "completed",
+        "cancelled",
+      ],
+    },
   },
 } as const
