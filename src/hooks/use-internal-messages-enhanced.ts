@@ -28,11 +28,9 @@ export const useInternalMessagesEnhanced = (leadId: string) => {
 
   const fetchMessages = useCallback(async () => {
     try {
-      const { data, error } = await supabase
-        .from('lead_emails_internal')
-        .select('*')
-        .eq('lead_id', leadId)
-        .order('created_at', { ascending: false });
+      // Temporarily disable internal messages until proper tables are set up
+      console.log('Internal messages disabled - database schema not ready');
+      setMessages([]);
 
       if (error) throw error;
       setMessages(data || []);

@@ -112,15 +112,16 @@ const SpecializedServicesSection = () => {
                 onClick={async () => {
                   setIsContactingTeam(true);
                   try {
-                    // Insert message to Supabase
+                    // Insert lead to Supabase
                     const { error: messageError } = await supabase
-                      .from('messages')
+                      .from('leads')
                       .insert({
-                        name: 'Contact Rapide - Services Spécialisés',
+                        full_name: 'Contact Rapide - Services Spécialisés',
                         email: 'contact@raccordement-connect.com',
                         phone: '',
-                        message: 'Demande de contact depuis la section Services Spécialisés',
-                        request_type: 'contact'
+                        service: 'contact',
+                        status: 'new',
+                        source: 'services_section'
                       });
 
                     if (messageError) throw messageError;

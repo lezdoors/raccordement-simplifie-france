@@ -54,20 +54,16 @@ const CallbackRequestModal = ({ open, onOpenChange }: CallbackRequestModalProps)
     setIsSubmitting(true);
     
     try {
-      // Save to unified leads table
+      // Save to leads table
       const { error: leadError } = await supabase
-        .from('leads_raccordement')
+        .from('leads')
         .insert({
-          nom: data.lastName,
-          prenom: data.firstName,
           email: data.email,
-          telephone: data.phone,
+          full_name: `${data.firstName} ${data.lastName}`,
+          phone: data.phone,
           type_client: 'particulier',
-          commentaires: `DEMANDE DE RAPPEL - Créneau préféré: ${data.preferredTime}${data.message ? `. Message: ${data.message}` : ''}`,
-          form_type: 'callback',
-          etat_projet: 'nouveau',
-          consent_accepted: true,
-          amount: 0
+          service: 'callback',
+          status: 'new'
         });
 
       if (leadError) throw leadError;

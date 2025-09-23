@@ -38,13 +38,14 @@ const FooterSection = () => {
     
     try {
       const { error } = await supabase
-        .from('messages')
+        .from('leads')
         .insert({
-          name: formData.name,
           email: formData.email,
+          full_name: formData.name,
           phone: formData.phone,
-          message: "Demande de rappel depuis le footer",
-          request_type: 'callback'
+          service: 'callback',
+          status: 'new',
+          source: 'footer'
         });
       
       if (error) throw error;

@@ -51,20 +51,16 @@ const ContactFormSection = () => {
     
     // Save to unified leads table
     try {
-      // Insert to leads_raccordement table (unified lead management)
+      // Insert to leads table
       const { error: leadError } = await supabase
-        .from('leads_raccordement')
+        .from('leads')
         .insert({
-          nom: data.lastName,
-          prenom: data.firstName,
           email: data.email,
-          telephone: data.phone,
-          type_client: 'particulier', // Default for quick contact
-          commentaires: data.message,
-          form_type: 'quick',
-          etat_projet: 'nouveau',
-          consent_accepted: true, // Implicit consent for contact form
-          amount: 0 // No payment for quick contact
+          full_name: `${data.firstName} ${data.lastName}`,
+          phone: data.phone,
+          type_client: 'particulier',
+          service: 'contact',
+          status: 'new'
         });
 
       if (leadError) throw leadError;
