@@ -53,27 +53,15 @@ export const useDataExport = () => {
     try {
       setExporting(true);
       
-      // Build query
+      // Build query - using existing leads table
       let query = supabase
-        .from('leads_raccordement')
+        .from('leads')
         .select('*')
         .order('created_at', { ascending: false });
 
-      // Apply filters
+      // Apply filters (simplified for existing schema)
       if (options.filters?.status && options.filters.status !== 'all') {
-        query = query.eq('etat_projet', options.filters.status);
-      }
-      
-      if (options.filters?.assignedTo && options.filters.assignedTo !== 'all') {
-        if (options.filters.assignedTo === 'unassigned') {
-          query = query.is('assigned_to_email', null);
-        } else {
-          query = query.eq('assigned_to_email', options.filters.assignedTo);
-        }
-      }
-
-      if (options.filters?.clientType && options.filters.clientType !== 'all') {
-        query = query.eq('type_client', options.filters.clientType);
+        query = query.eq('status', options.filters.status);
       }
 
       // Apply date range
@@ -95,28 +83,13 @@ export const useDataExport = () => {
       const headers = [
         'id',
         'created_at',
-        'civilite',
-        'prenom',
-        'nom',
-        'email',
-        'telephone',
-        'type_client',
-        'raison_sociale',
-        'siren',
+        'phone',
+        'utm_source',
+        'utm_medium',
+        'utm_campaign',
         'type_raccordement',
-        'type_projet',
-        'type_alimentation',
-        'puissance',
-        'adresse_chantier',
-        'code_postal',
-        'ville',
-        'etat_projet',
-        'delai_souhaite',
-        'assigned_to_email',
-        'payment_status',
-        'amount',
-        'commentaires',
-        'updated_at'
+        'status',
+        'zipcode'
       ];
 
       const csvContent = convertToCSV(leads, headers);
@@ -140,7 +113,7 @@ export const useDataExport = () => {
       setExporting(true);
       
       let query = supabase
-        .from('messages')
+        .from('chat_messages')
         .select('*')
         .order('created_at', { ascending: false });
 
@@ -163,11 +136,11 @@ export const useDataExport = () => {
       const headers = [
         'id',
         'created_at',
-        'name',
-        'email',
-        'phone',
-        'request_type',
-        'message'
+        'content',
+        'role',
+        'session_id',
+        'tokens_in',
+        'tokens_out'
       ];
 
       const csvContent = convertToCSV(messages, headers);

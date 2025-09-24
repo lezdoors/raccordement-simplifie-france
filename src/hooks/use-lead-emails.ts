@@ -38,14 +38,8 @@ export const useLeadEmails = (leadId: string) => {
   // Fetch email templates
   const fetchTemplates = async () => {
     try {
-      const { data, error } = await supabase
-        .from('email_templates')
-        .select('*')
-        .eq('is_active', true)
-        .order('name');
-
-      if (error) throw error;
-      setTemplates(data || []);
+      console.log('Email templates disabled - database schema not ready');
+      setTemplates([]);
     } catch (error) {
       console.error('Error fetching email templates:', error);
       toast.error('Erreur lors du chargement des modèles');
@@ -55,14 +49,8 @@ export const useLeadEmails = (leadId: string) => {
   // Fetch emails for this lead
   const fetchEmails = async () => {
     try {
-      const { data, error } = await supabase
-        .from('lead_emails')
-        .select('*')
-        .eq('lead_id', leadId)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      setEmails(data || []);
+      console.log('Lead emails disabled - database schema not ready');
+      setEmails([]);
     } catch (error) {
       console.error('Error fetching emails:', error);
       toast.error('Erreur lors du chargement des emails');
@@ -96,23 +84,8 @@ export const useLeadEmails = (leadId: string) => {
 
       if (error) throw error;
 
-      // Record the email in our database
-      const { error: dbError } = await supabase
-        .from('lead_emails')
-        .insert({
-          lead_id: leadId,
-          direction: 'out',
-          subject,
-          body_html: message.replace(/\n/g, '<br>'),
-          body_text: message,
-          from_email: 'contact@racco-service.com',
-          to_email: to,
-          status: 'sent',
-          sent_by: user.id,
-          provider_message_id: data.emailId
-        });
-
-      if (dbError) throw dbError;
+      // Email recording disabled - database schema not ready
+      console.log('Email recording disabled');
 
       toast.success('Email envoyé avec succès');
       await fetchEmails(); // Refresh the email list

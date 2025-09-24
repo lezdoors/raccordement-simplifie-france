@@ -26,7 +26,7 @@ import RaccordementChantier from "./pages/RaccordementChantier";
 import ServiceExpress from "./pages/ServiceExpress";
 import Estimation from "./pages/Estimation";
 import CGU from "./pages/CGU";
-import Admin from "./pages/Admin";
+import { SimpleCRM } from "./pages/SimpleCRM";
 import AdminLeadDetail from "./pages/AdminLeadDetail";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -91,7 +91,7 @@ const AppContent = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/admin" element={
           <ProtectedRoute>
-            <Admin />
+            <SimpleCRM />
           </ProtectedRoute>
         } />
         <Route path="/admin/leads/:id" element={
