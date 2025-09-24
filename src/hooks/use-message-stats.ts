@@ -1,34 +1,42 @@
-
 import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+
+export interface MessageStats {
+  totalMessages: number;
+  unreadMessages: number;
+  todayMessages: number;
+  weekMessages: number;
+  inboundMessageCount: number;
+}
 
 export const useMessageStats = () => {
-  const [inboundMessageCount, setInboundMessageCount] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<MessageStats>({
+    totalMessages: 0,
+    unreadMessages: 0,
+    todayMessages: 0,
+    weekMessages: 0,
+    inboundMessageCount: 0
+  });
+  const [loading, setLoading] = useState(false);
 
-  const fetchMessageStats = async () => {
-    try {
-      const { count, error } = await supabase
-        .from('lead_emails_internal')
-        .select('*', { count: 'exact', head: true })
-        .eq('direction', 'inbound');
-
-      if (error) throw error;
-      setInboundMessageCount(count || 0);
-    } catch (error) {
-      console.error('Error fetching message stats:', error);
-    } finally {
-      setLoading(false);
-    }
+  const fetchStats = async () => {
+    console.log('Message stats disabled - schema not ready');
+    setStats({
+      totalMessages: 0,
+      unreadMessages: 0,
+      todayMessages: 0,
+      weekMessages: 0,
+      inboundMessageCount: 0
+    });
+    setLoading(false);
   };
 
   useEffect(() => {
-    fetchMessageStats();
+    fetchStats();
   }, []);
 
   return {
-    inboundMessageCount,
+    stats,
     loading,
-    refetch: fetchMessageStats
+    refetch: fetchStats
   };
 };

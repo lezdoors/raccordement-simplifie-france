@@ -125,13 +125,14 @@ export const FilesTab: React.FC<FilesTabProps> = ({ leadId }) => {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => downloadFile(file)}
-                    >
-                      <Download className="h-4 w-4" />
-                    </Button>
+      {/* Download handled by onClick */}
+      <Button 
+        variant="outline" 
+        size="sm" 
+        onClick={() => downloadFile(file.id)}
+      >
+        <Download className="h-4 w-4" />
+      </Button>
                     
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
@@ -150,7 +151,7 @@ export const FilesTab: React.FC<FilesTabProps> = ({ leadId }) => {
                         <AlertDialogFooter>
                           <AlertDialogCancel>Annuler</AlertDialogCancel>
                           <AlertDialogAction
-                            onClick={() => deleteFile(file.id, file.file_name)}
+                            onClick={() => deleteFile(file.id)}
                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                           >
                             Supprimer

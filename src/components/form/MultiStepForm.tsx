@@ -22,7 +22,7 @@ interface FormData {
   description: string;
 }
 
-export default function MultiStepForm() {
+export const MultiStepForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
@@ -158,4 +158,4 @@ export default function MultiStepForm() {
       </div>
     </div>
   );
-}
+};

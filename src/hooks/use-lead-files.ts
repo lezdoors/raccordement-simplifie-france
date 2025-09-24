@@ -9,6 +9,7 @@ interface LeadFile {
   content_type: string;
   uploaded_by?: string;
   created_at: string;
+  description?: string;
 }
 
 export const useLeadFiles = (leadId: string) => {
@@ -32,6 +33,10 @@ export const useLeadFiles = (leadId: string) => {
     console.log('File deletion disabled - schema not ready');
   };
 
+  const downloadFile = async (fileId: string) => {
+    console.log('File download disabled - schema not ready');
+  };
+
   useEffect(() => {
     if (leadId) {
       fetchFiles();
@@ -44,6 +49,7 @@ export const useLeadFiles = (leadId: string) => {
     uploading,
     uploadFile,
     deleteFile,
+    downloadFile,
     refetch: fetchFiles
   };
 };
